@@ -118,8 +118,6 @@
     <div class="menu-container">
         <nav>
             <ul>
-                <li><a href="/lista-pedidos"><i class="bi bi-arrow-left-right"></i> Modificar Usuario</a></li>
-                <li><a href="javascript:void(0)" onclick="toggleFormularioBuscar()"><i class="bi bi-search"></i> Buscar Usuario</a></li>
                 <li><a href="/reservas/listaReserva"><i class="fas fa-calendar-check"></i> Lista de Reservas</a></li>
                 <li><a href="/listaPedidos"><i class="fas fa-utensils"></i> Lista de Pedidos</a></li>
                 <li><a href="/adminMenu/listar"><i class='bx bx-bowl-hot'></i> Registrar Menú</a></li>
@@ -137,7 +135,7 @@
                 <input type="number" id="userId" name="userId" required>
                 <button type="submit">Buscar</button>
             </form>
-            
+             
 
             <!-- Mostrar el resultado de la búsqueda (si existe un usuario encontrado) -->
 <div th:if="${usuario != null}">

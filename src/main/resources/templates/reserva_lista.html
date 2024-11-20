@@ -20,12 +20,12 @@
         }
 
         header {
-            background-color: #241f1e;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            width: 100%;
-        }
+    background-color: #241f1e;
+    color: white;
+    padding: 20px 100px 20px 80px; /* Ajustar el padding: top, right, bottom, left */
+    text-align: center;
+    width: 100%;
+}
 
         .main-container {
             display: flex;
@@ -33,15 +33,15 @@
         }
 
         .menu-container {
-            background-color: #333;
-            padding: 20px;
             width: 250px;
-            overflow-y: auto;
+            background-color: #343a40;
+            height: 100vh;
+            padding-top: 20px;
         }
 
         nav ul {
             list-style-type: none;
-            padding: 0;
+            padding: 20px;
             margin: 0;
         }
 
@@ -155,6 +155,10 @@
     <div class="menu-container">
         <nav>
             <ul>
+                
+                <li><a href="/listaPedidos"><i class="fas fa-utensils"></i> Lista de Pedidos</a></li>
+                <li><a href="/usuarios"><i class="fas fa-users"></i> Lista de Usuarios</a></li>
+                <li><a href="/adminMenu/listar"><i class='bx bx-bowl-hot'></i> Registrar Menú</a></li>
                 <li><a href="/opcionAdmin"><i class='bx bx-arrow-back'></i> Salir</a></li>
             </ul>
         </nav>

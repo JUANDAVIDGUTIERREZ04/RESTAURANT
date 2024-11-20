@@ -85,7 +85,7 @@ public class IndexController {
             pedidoService.guardarPedido(pedido);
             
             model.addAttribute("mensaje", "Pedido realizado con éxito!");
-            return "index"; // Redirigir a la página de inicio con el mensaje de éxito
+            return "redirect:/restaurante"; // Redirigir a la página de inicio con el mensaje de éxito
         } else {
             model.addAttribute("error", "Menú no encontrado.");
             return "index"; // Si no se encuentra el menú, mostrar un error

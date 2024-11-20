@@ -45,7 +45,15 @@ public String createUser(@RequestParam String nombre,
                          @RequestParam String telefono,
                          @RequestParam String username,
                          @RequestParam String password,
-                         @RequestParam String role) {
+                         @RequestParam String role,
+                         Model model) {
+    // Verificar si el username ya existe
+    if (userService.existsByNombre(username)) {
+        model.addAttribute("error", "El nombre de usuario ya está en uso. Por favor, elige otro.");
+        return "registro_usuario"; // Volver al formulario de registro con el mensaje de error
+    }
+
+    // Si no existe, proceder con el registro del nuevo usuario
     User user = new User();
     user.setNombre(nombre);
     user.setCorreo(correo);
@@ -54,10 +62,11 @@ public String createUser(@RequestParam String nombre,
     user.setPassword("{noop}" + password); // Añadir {noop} a la contraseña
     user.setRole(role);
 
-    userService.saveUser(user); // Guarda el usuario
+    userService.saveUser(user); // Guardar el usuario
 
-    return "index"; // Redirige a la página de inicio
+    return "index"; // Redirigir a la página de inicio después de registrar
 }
+
 
 
     //obtener lista de usuarios

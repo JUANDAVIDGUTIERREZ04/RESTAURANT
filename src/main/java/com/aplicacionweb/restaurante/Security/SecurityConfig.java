@@ -21,7 +21,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
     http
         .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF si es necesario (ten cuidado con esto)
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/registro", "/login", "/", "/css/**", "/js/**", "/registrar", "/images/**", "/restaurante", "/imagenes/**").permitAll() // Permitir acceso a estas rutas sin autenticación
+            .requestMatchers("/registro", "/login", "/", "/css/**", "/js/**", "/registrar", "/images/**", "/restaurante", "/imagenes/**", "/reservas").permitAll() // Permitir acceso a estas rutas sin autenticación
             .requestMatchers("/pedidos","/perfil").hasAnyRole("USER","ADMIN") // Solo admin puede acceder a rutas específicas
             .requestMatchers("/opcionAdmin").hasRole("ADMIN") // Solo usuario normal
             .anyRequest().authenticated() // Resto de las rutas requieren autenticación

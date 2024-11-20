@@ -19,7 +19,7 @@
                 <li><a href="/">Inicio</a></li>
                 <li><a href="#menu">Menú</a></li>
                 <li><a href="/reservas">Reservas</a></li>
-                <li><a href="/opcionAdmin">Administrador</a></li>
+                
             </ul>
             <ul class="menu-derecha">
                 <li><a href="/login" class="btn">Iniciar Sesión</a></li>
@@ -41,6 +41,7 @@
     </header>
     
     <main>
+        
         <!-- Bienvenida -->
         <section class="bienvenida">
             <h2>¡Bienvenidos a Nuestro Restaurante!</h2>
@@ -80,6 +81,9 @@
                             <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
                             <button type="submit" class="btn-realizar-pedido">Realizar Pedido</button>
                         </form>
+                        <div th:if="${mensaje}" class="alert alert-success">
+                            <p th:text="${mensaje}"></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -212,5 +216,8 @@
 
         setInterval(showNextImage, 3000);
     </script>
+ 
+
+
 </body>
 </html>
