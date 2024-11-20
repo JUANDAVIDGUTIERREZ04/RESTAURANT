@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Reserva</title>
+    <link rel="stylesheet" href="/css/form_reservas.css">
+    <style>
+        /* Estilos para mostrar mensajes de error */
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="/images/LOGO.jpg" alt="Logo del Restaurante" />
+            </div>
+            <ul class="menu-izquierda">
+                <li><a href="/restaurante">Inicio</a></li>
+                
+                
+                
+            </ul>
+            <ul class="menu-derecha">
+                <li><a href="/login" class="btn">Iniciar Sesión</a></li>
+                <li><a href="/registro" class="btn">Registrarse</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="card">
+            <h1 class="title">Formulario de Reserva</h1>
+            <form id="reservaForm" action="/reservas" method="POST">
+
+                <div class="field">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" class="input-field" required aria-label="Nombre del cliente">
+                    <div id="nombreError" class="error"></div>
+                </div>
+
+                <div class="field">
+                    <label for="telefono">Teléfono:</label>
+                    <input type="tel" id="telefono" name="telefono" class="input-field" required aria-label="Teléfono de contacto">
+                    <div id="telefonoError" class="error"></div>
+                </div>
+
+                <div class="field">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" class="input-field" required aria-label="Correo electrónico">
+                    <div id="emailError" class="error"></div>
+                </div>
+
+                <div class="field">
+                    <label for="fecha">Fecha y Hora:</label>
+                    <input type="datetime-local" id="fecha" name="fecha" class="input-field" required aria-label="Fecha y hora de la reserva">
+                    <div id="fechaError" class="error"></div>
+                </div>
+
+                <div class="field">
+                    <label for="numeroPersonas">Número de Personas:</label>
+                    <input type="number" id="numeroPersonas" name="numeroPersonas" class="input-field" required min="1" aria-label="Número de personas para la reserva">
+                    <div id="numeroPersonasError" class="error"></div>
+                </div>
+
+                <div class="field">
+                    <label for="motivo">Motivo:</label>
+                    <input type="text" id="motivo" name="motivo" class="input-field" aria-label="Motivo de la reserva">
+                </div>
+
+                <div class="field">
+                    <label for="restricciones">Restricciones:</label>
+                    <input type="text" id="restricciones" name="restricciones" class="input-field" aria-label="Restricciones dietéticas u otras">
+                </div>
+
+                <div class="field">
+                    <label for="comentarios">Comentarios:</label>
+                    <textarea id="comentarios" name="comentarios" class="input-field" aria-label="Comentarios adicionales"></textarea>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn" disabled>Enviar Reserva</button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Obtener los elementos del formulario
+        const nombre = document.getElementById('nombre');
+        const telefono = document.getElementById('telefono');
+        const email = document.getElementById('email');
+        const fecha = document.getElementById('fecha');
+        const numeroPersonas = document.getElementById('numeroPersonas');
+        const reservaForm = document.getElementById('reservaForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Función para validar el correo electrónico
+        function validarEmail() {
+            const emailValue = email.value;
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailRegex.test(emailValue)) {
+                document.getElementById('emailError').textContent = 'Por favor, ingresa un correo electrónico válido.';
+                return false;
+            } else {
+                document.getElementById('emailError').textContent = '';
+                return true;
+            }
+        }
+
+        // Función para validar el teléfono
+        function validarTelefono() {
+            const telefonoValue = telefono.value;
+            const telefonoRegex = /^[0-9]{9}$/;
+            if (!telefonoRegex.test(telefonoValue)) {
+                document.getElementById('telefonoError').textContent = 'El teléfono debe tener 9 dígitos.';
+                return false;
+            } else {
+                document.getElementById('telefonoError').textContent = '';
+                return true;
+            }
+        }
+
+        // Función para validar el número de personas
+        function validarNumeroPersonas() {
+            const numeroValue = numeroPersonas.value;
+            if (numeroValue < 1) {
+                document.getElementById('numeroPersonasError').textContent = 'El número de personas debe ser mayor que 0.';
+                return false;
+            } else {
+                document.getElementById('numeroPersonasError').textContent = '';
+                return true;
+            }
+        }
+
+        // Función para validar la fecha
+        function validarFecha() {
+            const fechaValue = new Date(fecha.value);
+            const fechaActual = new Date();
+            if (fechaValue <= fechaActual) {
+                document.getElementById('fechaError').textContent = 'La fecha y hora deben ser futuras.';
+                return false;
+            } else {
+                document.getElementById('fechaError').textContent = '';
+                return true;
+            }
+        }
+
+        // Función para habilitar/deshabilitar el botón de submit
+        function validarFormulario() {
+            if (
+                validarEmail() &&
+                validarTelefono() &&
+                validarNumeroPersonas() &&
+                validarFecha()
+            ) {
+                submitBtn.disabled = false;  // Habilitar el botón de envío si todo es válido
+            } else {
+                submitBtn.disabled = true;   // Deshabilitar el botón de envío si algún campo es inválido
+            }
+        }
+
+        // Añadir los eventos de validación en tiempo real
+        nombre.addEventListener('input', validarFormulario);
+        telefono.addEventListener('input', validarFormulario);
+        email.addEventListener('input', validarFormulario);
+        fecha.addEventListener('input', validarFormulario);
+        numeroPersonas.addEventListener('input', validarFormulario);
+
+        // Validación inicial
+        validarFormulario();
+    </script>
+</body>
+</html>

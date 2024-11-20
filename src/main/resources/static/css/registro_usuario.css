@@ -1,0 +1,166 @@
+body {
+    background-image: url('/images/otro_fondo.jpg'); /* Ruta a tu imagen de fondo */
+    background-size: cover; /* Ajusta la imagen para cubrir todo el fondo */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    color: #d3d3d3; /* Color del texto general */
+    font-family: "Times New Roman", Times, serif; /* Cambia la fuente a Times New Roman */
+}
+
+header {
+    position: relative; /* Permite que el texto se superponga */
+    min-height: 50px; /* Altura mínima del encabezado aumentada */
+    color: #fff;
+    text-align: center; /* Centrar el texto */
+    overflow: hidden; /* Oculta el desbordamiento */
+
+        background: linear-gradient(to right, rgba(51, 83, 211, 0.5), rgba(255, 165, 0, 0.5), rgba(12, 108, 79, 0.5));
+    
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative; /* Asegura que la navegación esté en la parte superior */
+    
+}
+
+.logo img {
+    width: 80px; /* Ajusta el ancho según necesites */
+    height: 80px; /* Asegúrate de que la altura sea igual para que sea un círculo */
+    border-radius: 50%; /* Hace que el logo tenga forma de círculo */
+    object-fit: cover; /* Asegura que la imagen cubra el área del círculo sin distorsión */
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.menu-izquierda {
+    flex: 1;
+}
+
+.menu-izquierda li {
+    margin-right: 20px;
+}
+
+.menu-derecha li {
+    margin-left: 20px;
+}
+
+a {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px; /* Espaciado alrededor del texto */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Transiciones suaves */
+}
+
+a:hover {
+    background-color: rgba(255, 215, 0, 0.7); /* Fondo dorado al pasar el mouse */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 1); /* Sombra luminosa */
+}
+
+
+h1 {
+    color: #FFD700; /* Título en dorado */
+    text-align: center; /* Centrado */
+}
+
+.card {
+    max-width: 500px; /* Ancho máximo del formulario */
+    margin: 20px auto; /* Centramos el formulario */
+    padding: 1.5rem; /* Espaciado interno */
+    background-color: rgba(42, 43, 56, 0.8); /* Fondo oscuro con opacidad */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra */
+}
+
+/* botón de inicio de sesión y registro */
+.btn {
+    font-size: 0.9rem; /* Tamaño de fuente */
+    padding: 0.3rem 1rem; /* Espaciado interno */
+    border: none;
+    outline: none;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    background-color: rgb(14, 14, 26);
+    color: rgb(234, 234, 234);
+    font-weight: 700;
+    transition: 0.6s;
+    box-shadow: 0px 0px 60px #1f4c65;
+    -webkit-box-reflect: below 10px linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.4));
+}
+
+.btn:active {
+    scale: 0.92;
+}
+
+.btn:hover {
+    background: rgb(2,29,78);
+    background: linear-gradient(270deg, rgba(2, 29, 78, 0.681) 0%, rgba(31, 215, 232, 0.873) 60%);
+    color: rgb(4, 4, 38);
+}
+
+.menu-izquierda a {
+    font-family: 'Times New Roman', serif; /* Cambiar la fuente */
+    text-transform: uppercase; /* Poner en mayúsculas */
+    color: #fff; /* Color del texto */
+    text-decoration: none; /* Sin subrayado */
+    transition: color 0.3s; /* Transición suave para el color */
+}
+
+.menu-izquierda a:hover {
+    color: rgba(255, 215, 0, 0.7); /* Color al pasar el mouse */
+}
+
+.menu-derecha a {
+    font-family: 'Times New Roman', serif; /* Cambiar la fuente */
+}
+
+/* Estilo para los labels */
+label {
+    color: #FFD700; /* Color dorado */
+    font-weight: bold; /* Opcional: negrita para resaltar */
+}
+
+/* Estilos para los inputs */
+input, select, textarea {
+    width: 100%; /* Ancho completo */
+    padding: 0.5rem; /* Espaciado interno */
+    margin: 0.5rem 0; /* Margen vertical */
+    border: none; /* Sin borde */
+    border-radius: 4px; /* Bordes redondeados */
+    background-color: #1f2029; /* Fondo de los inputs */
+    color: #d3d3d3; /* Color del texto en inputs */
+    font-family: "Times New Roman", Times, serif; /* Cambiar fuente de inputs a Times New Roman */
+}
+
+textarea {
+    resize: vertical; /* Permitir redimensionar verticalmente */
+}
+
+/* Botón manteniendo el estilo original */
+button {
+    width: 100%; /* Ancho completo */
+    padding: 0.6em; /* Espaciado interno */
+    background-color: rgba(255, 215, 0, 0.8); /* Fondo dorado más opaco */
+    color: #1f2029; /* Texto en oscuro */
+    border: none; /* Sin borde */
+    border-radius: 4px; /* Bordes redondeados */
+    font-size: 1em; /* Tamaño de fuente */
+    cursor: pointer; /* Cambia el cursor al pasar el ratón */
+    transition: all 0.3s ease; /* Transición suave */
+    font-family: "Times New Roman", Times, serif; /* Cambiar fuente del botón a Times New Roman */
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.6); /* Sombra dorada */
+}
+
+button:hover {
+    background-color: rgba(255, 193, 7, 0.8); /* Color dorado más oscuro al pasar el ratón */
+    box-shadow: 0 6px 30px rgba(255, 215, 0, 1); /* Sombra más intensa al pasar el ratón */
+    transform: scale(1.05); /* Efecto de aumento al pasar el ratón */
+}

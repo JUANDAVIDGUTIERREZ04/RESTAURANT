@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/inicio_sesion.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <div class="image-section"></div>
+        <div class="form-section">
+            <h2 class="title">Iniciar Sesión</h2>
+            <form action="#" th:action="@{/login}" method="post">
+                <div class="form-group">
+                    <div class="field">
+                        <input type="text" id="username" name="username" class="input-field" placeholder="Usuario" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="field">
+                        <input type="password" id="password" name="password" class="input-field" placeholder="Contraseña" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn">Iniciar Sesión</button>
+                </div>
+            </form>
+        </div>
+        <a href="/restaurante" class="back-button">
+            <i class='bx bx-arrow-back'></i> Regresar a Inicio
+        </a>
+        <!-- Botón de regresar -->
+    </div>
+</body>
+</html>
