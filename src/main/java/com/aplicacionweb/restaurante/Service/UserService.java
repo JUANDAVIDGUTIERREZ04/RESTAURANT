@@ -43,6 +43,8 @@ public class UserService {
             .collect(Collectors.toList());
     }
 
+
+
     // Eliminar usuario por id
     public void eliminarUsuario(Long id) {
         userRepository.deleteById(id);
@@ -67,6 +69,29 @@ public class UserService {
             userRepository.save(updatedUser); // Guarda el usuario modificado
         }
     }
+
+        // Buscar usuario por ID y devolver como DTO
+    public UserDto buscarUsuarioPorId(Long id) {
+        Optional<User> userOpt = userRepository.findById(id);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            UserDto userDto = new UserDto();
+            userDto.setId(user.getId());
+            userDto.setNombre(user.getNombre());
+            userDto.setCorreo(user.getCorreo());
+            userDto.setTelefono(user.getTelefono());
+            userDto.setUsername(user.getUsername());
+            userDto.setRole(user.getRole());
+            return userDto;
+        }
+        return null;
+    
+    
+
+}
+
+     // Obtener todos los usuarios y mapearlos a DTOs
+    
 
      // Método para obtener el usuario actualmente autenticado por ID
    /*   public User getUsuarioActual() {

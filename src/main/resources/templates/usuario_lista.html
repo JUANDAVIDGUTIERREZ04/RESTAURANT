@@ -91,12 +91,20 @@
         tr:hover {
             background-color: #555;
         }
-        #formEliminar {
+        #formBuscarUsuario {
             display: none;
             margin-top: 20px;
+            background-color: #444;
+            padding: 15px;
+            border-radius: 5px;
         }
-        #formEliminar label {
-            color: white;
+        #formBuscarUsuario input {
+            padding: 10px;
+            width: 80%;
+            margin-right: 10px;
+        }
+        #formBuscarUsuario button {
+            padding: 10px;
         }
     </style>
 </head>
@@ -110,9 +118,8 @@
     <div class="menu-container">
         <nav>
             <ul>
-                
                 <li><a href="/lista-pedidos"><i class="bi bi-arrow-left-right"></i> Modificar Usuario</a></li>
-                <li><a href="/usuarios"><i class="bi bi-search"></i> Buscar Usuario</a></li>
+                <li><a href="javascript:void(0)" onclick="toggleFormularioBuscar()"><i class="bi bi-search"></i> Buscar Usuario</a></li>
                 <li><a href="/reservas/listaReserva"><i class="fas fa-calendar-check"></i> Lista de Reservas</a></li>
                 <li><a href="/listaPedidos"><i class="fas fa-utensils"></i> Lista de Pedidos</a></li>
                 <li><a href="/adminMenu/listar"><i class='bx bx-bowl-hot'></i> Registrar Menú</a></li>
@@ -125,6 +132,30 @@
         <div class="container">
             <h1>Lista de Usuarios Registrados</h1>
             
+            <form action="/usuarios/buscar/resultados" method="GET">
+                <label for="userId">ID del Usuario:</label>
+                <input type="number" id="userId" name="userId" required>
+                <button type="submit">Buscar</button>
+            </form>
+            
+
+            <!-- Mostrar el resultado de la búsqueda (si existe un usuario encontrado) -->
+<div th:if="${usuario != null}">
+    <h3>Resultado de la Búsqueda:</h3>
+    <p><strong>ID:</strong> <span th:text="${usuario.id}"></span></p>
+    <p><strong>Nombre:</strong> <span th:text="${usuario.nombre}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${usuario.correo}"></span></p>
+    <p><strong>Teléfono:</strong> <span th:text="${usuario.telefono}"></span></p>
+    <p><strong>Username:</strong> <span th:text="${usuario.username}"></span></p>
+    <p><strong>Rol:</strong> <span th:text="${usuario.role}"></span></p>
+</div>
+
+<!-- Mensaje de error si no se encontró el usuario -->
+<div th:if="${mensaje != null}">
+    <p th:text="${mensaje}" style="color: red;"></p>
+</div>
+
+
             <table>
                 <thead>
                     <tr>
@@ -134,7 +165,7 @@
                         <th>Teléfono</th>
                         <th>Username</th>
                         <th>Rol</th>
-                        <th>Acciones</th> <!-- Columna para el botón de eliminar -->
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -155,28 +186,16 @@
                     </tr>
                 </tbody>
             </table>
-            
-
-            <!-- Formulario para eliminar usuario -->
-            <div id="formEliminar">
-                <h2>Eliminar Usuario</h2>
-                <form action="/usuarios/eliminar" method="POST">
-                    <label for="userId">ID del Usuario a Eliminar:</label>
-                    <input type="number" id="userId" name="userId" required>
-                    <button type="submit">Eliminar Usuario</button>
-                </form>
-                <button type="button" onclick="document.getElementById('formEliminar').style.display='none'">Cancelar</button>
-            </div>
         </div>
     </div>
 </div>
 
 <script>
-    document.getElementById('eliminarUsuarioBtn').addEventListener('click', function(event) {
-        event.preventDefault();
-        const form = document.getElementById('formEliminar');
-        form.style.display = form.style.display === 'block' ? 'none' : 'block';
-    });
+    // Función para mostrar/ocultar el formulario de búsqueda
+    function toggleFormularioBuscar() {
+        var formulario = document.getElementById('formBuscarUsuario');
+        formulario.style.display = formulario.style.display === 'block' ? 'none' : 'block';
+    }
 </script>
 
 </body>

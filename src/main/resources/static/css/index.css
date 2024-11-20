@@ -409,3 +409,11 @@ footer {
 }
 
 
+/* Estilos para los botones de selección de categorías */
+.categorias-menu {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    background-color: #333;
+}

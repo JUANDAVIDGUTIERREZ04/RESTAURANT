@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Set;
 
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,6 +40,11 @@ public class User {
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private Set<Pedido> pedidos;
+
+   
+
+    // Método para manejar la búsqueda de usuarios
+   
 
 
 

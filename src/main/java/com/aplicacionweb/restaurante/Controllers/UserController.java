@@ -112,6 +112,29 @@ public String modifyUser(@PathVariable Long id, @RequestParam String nombre,
     return "redirect:/usuarios"; // Redirige a la lista de usuarios
 }
 
+// Método para mostrar el formulario de búsqueda de usuarios
+@GetMapping("/usuarios/buscar")
+public String showSearchForm() {
+    return "usuario_lista"; // Nombre de la vista que tendrá el formulario de búsqueda
+}
+
+// Método para buscar usuarios por ID
+@GetMapping("/usuarios/buscar/resultados")
+public String searchUsers(@RequestParam("userId") Long userId, Model model) {
+    UserDto usuarioDto = userService.buscarUsuarioPorId(userId);
+    if (usuarioDto == null) {
+        model.addAttribute("mensaje", "Usuario no encontrado.");
+    } else {
+        model.addAttribute("usuario", usuarioDto);  // Agregar el usuario encontrado al modelo
+    }
+    List<UserDto> usuarios = userService.obtenerTodosLosUsuarios(); // Obtener todos los usuarios
+    model.addAttribute("usuarios", usuarios); // Agregar la lista de usuarios al modelo
+    return "usuario_lista";  // Devolver la misma vista con el resultado de la búsqueda
+}
+
+
+
+
 
 
 
