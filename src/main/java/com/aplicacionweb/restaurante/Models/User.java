@@ -35,11 +35,20 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false, length = 3)
+    private int edad;
+
+    @Column(nullable = false, unique = true, length = 30)
+    private String sexo;
+
     @Column(name= "tipo_rol", nullable = false)
     private String role;
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private Set<Pedido> pedidos;
+
+    
+
 
    
 

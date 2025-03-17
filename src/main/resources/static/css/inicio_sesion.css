@@ -99,3 +99,21 @@ body {
     background-color: #5e6681; /* Color de fondo al pasar el ratón */
     color: #ffeba7; /* Color del texto al pasar el ratón */
 }
+
+.btn-carrito {
+    background-color: #007bff; /* Azul */
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-carrito:hover {
+    background-color: #0056b3; /* Azul más oscuro */
+}
+

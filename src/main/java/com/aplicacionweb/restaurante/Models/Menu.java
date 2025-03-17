@@ -34,4 +34,7 @@ public class Menu {
     // Nueva propiedad categoria
     @Column(length = 100) // Puedes ajustar la longitud según sea necesario
     private String categoria;  // Para almacenar la categoría del menú
+
+    @Column(nullable = true)
+    private Double calificacionPromedio; 
 }

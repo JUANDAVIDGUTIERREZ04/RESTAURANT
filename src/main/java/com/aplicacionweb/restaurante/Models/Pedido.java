@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 
@@ -30,6 +32,9 @@ public class Pedido {
     private Date fecha;
 
     @Column(nullable = false)
+    private String diaSemana;
+
+    @Column(nullable = false)
     private String estado = "Pendiente"; // Valor predeterminado
 
     @Column(nullable = false)
@@ -48,7 +53,15 @@ public class Pedido {
 
     @PrePersist
     protected void onCreate() {
-        fecha = new Date(); // Establece la fecha y hora actuales
+        fecha = new Date();// Establece la fecha y hora actuales
+
+
+        LocalDate localDate = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        diaSemana = localDate.getDayOfWeek().getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.getDefault());
     }
-}
+    }
+
+
+     
+
 

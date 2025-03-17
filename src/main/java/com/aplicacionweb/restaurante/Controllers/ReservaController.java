@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -19,27 +20,36 @@ public class ReservaController {
     @GetMapping
     public String mostrarFormulario(Model model) {
         model.addAttribute("reserva", new Reserva());
-        return "form_reserva"; // Devuelve la vista con el formulario
+        return "form_reserva"; // Vista del formulario
     }
 
-    @PostMapping
-    public String guardarReserva(@ModelAttribute Reserva reserva) {
-        reservaService.guardarReserva(reserva);
-        return "index"; // Redirige después de guardar
+    @PostMapping("/registrar")
+    public String guardarReserva(@ModelAttribute Reserva reserva, RedirectAttributes redirectAttributes) {
+        try {
+            // Guardar la reserva en la base de datos
+            reservaService.guardarReserva(reserva);
+
+            // Mensaje de éxito
+            String mensaje = "¡Reserva realizada con éxito!";
+            redirectAttributes.addFlashAttribute("registroReserva", mensaje);
+        } catch (Exception e) {
+            String errorMensaje = "Hubo un problema al realizar la reserva. Intente nuevamente.";
+            redirectAttributes.addFlashAttribute("errorReserva", errorMensaje);
+        }
+
+        return "redirect:/reservas"; // Redirigir de nuevo al formulario
     }
 
     @GetMapping("/listaReserva")
     public String listaReserva(Model model) {
-        // Obtener todas las reservas desde el servicio
         List<Reserva> reservas = reservaService.obtenerTodasLasReservas();
-        // Añadir las reservas al modelo
         model.addAttribute("reservas", reservas);
-        return "reserva_lista"; // Vista donde se mostrarán las reservas
+        return "reserva_lista"; // Vista para mostrar la lista de reservas
     }
 
     @PostMapping("/eliminar/{id}")
     public String eliminarReserva(@PathVariable Long id) {
-        reservaService.eliminarReserva(id);  // Llamamos al servicio para eliminar la reserva
-        return "redirect:/reservas/listaReserva";  // Redirigimos a la lista de reservas después de eliminar
+        reservaService.eliminarReserva(id);
+        return "redirect:/reservas/listaReserva";  // Redirigir a la lista
     }
 }

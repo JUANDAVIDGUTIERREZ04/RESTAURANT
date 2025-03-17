@@ -46,7 +46,11 @@ public String createUser(@RequestParam String nombre,
                          @RequestParam String username,
                          @RequestParam String password,
                          @RequestParam String role,
+                         @RequestParam int edad,
+                         @RequestParam String sexo,
                          Model model) {
+
+                            try{
     // Verificar si el username ya existe
     if (userService.existsByNombre(username)) {
         model.addAttribute("error", "El nombre de usuario ya está en uso. Por favor, elige otro.");
@@ -59,19 +63,27 @@ public String createUser(@RequestParam String nombre,
     user.setCorreo(correo);
     user.setTelefono(telefono);
     user.setUsername(username);
-    user.setPassword("{noop}" + password); // Añadir {noop} a la contraseña
+    user.setPassword("{noop}" + password); 
+    user.setSexo(sexo);
+    user.setEdad(edad);// Añadir {noop} a la contraseña
     user.setRole(role);
 
     userService.saveUser(user); // Guardar el usuario
 
     return "index"; // Redirigir a la página de inicio después de registrar
+ }
+ catch(Exception e){
+    return "Error al registrar el usuario" + e.getMessage();
+
+
+ }
 }
 
 
 
     //obtener lista de usuarios
     @GetMapping("/usuarios")
-    public String getAllUsers(Model model) {
+    public String mostrarListaUsuarios(Model model) {
         List<UserDto> usuarios = userService.obtenerTodosLosUsuarios(); // Obtener la lista de usuarios
         model.addAttribute("usuarios", usuarios); // Agregar la lista al modelo
         return "usuario_lista"; // Nombre del archivo HTML sin extensión
@@ -90,7 +102,7 @@ public String eliminarUsuario(@RequestParam Long userId, RedirectAttributes redi
 }
 
 @GetMapping("/usuarios/modificar/{id}")
-public String showModifyUserForm(@PathVariable Long id, Model model) {
+public String obtenerUsuarioId(@PathVariable Long id, Model model) {
     User user = userService.getById(id).orElse(null);
     if (user == null) {
         model.addAttribute("error", "Usuario no encontrado.");
@@ -101,7 +113,7 @@ public String showModifyUserForm(@PathVariable Long id, Model model) {
 }
 
 @PostMapping("/usuarios/modificar/{id}")
-public String modifyUser(@PathVariable Long id, @RequestParam String nombre,
+public String modificarUsuario(@PathVariable Long id, @RequestParam String nombre,
                          @RequestParam String correo,
                          @RequestParam String telefono,
                          @RequestParam String username,
@@ -123,13 +135,13 @@ public String modifyUser(@PathVariable Long id, @RequestParam String nombre,
 
 // Método para mostrar el formulario de búsqueda de usuarios
 @GetMapping("/usuarios/buscar")
-public String showSearchForm() {
+public String mostrarFormularioDeBusquedaUsuario() {
     return "usuario_lista"; // Nombre de la vista que tendrá el formulario de búsqueda
 }
 
 // Método para buscar usuarios por ID
 @GetMapping("/usuarios/buscar/resultados")
-public String searchUsers(@RequestParam("userId") Long userId, Model model) {
+public String buscarUsuarios(@RequestParam Long userId, Model model) {
     UserDto usuarioDto = userService.buscarUsuarioPorId(userId);
     if (usuarioDto == null) {
         model.addAttribute("mensaje", "Usuario no encontrado.");

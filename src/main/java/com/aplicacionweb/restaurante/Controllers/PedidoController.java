@@ -33,11 +33,26 @@ public class PedidoController {
 
     // Eliminar un pedido
     @PostMapping("/pedidos/eliminar/{id}")
-    public String eliminarPedido(@PathVariable("id") Long id) {
+    public String eliminarPedido(@PathVariable Long id) {
         // Llamar al servicio para eliminar el pedido
         pedidoService.eliminarPedido(id);
         
         // Redirigir a la lista de pedidos después de eliminar
         return "redirect:/listaPedidos";
     }
+
+    // Endpoint para cambiar el estado de un pedido
+    @PostMapping("/cambiarEstado/{id}")
+public String cambiarEstado(@PathVariable Long id) {
+    Pedido pedido = pedidoService.obtenerPedidoPorId(id);
+    if (pedido != null) {
+        if ("Pendiente".equals(pedido.getEstado())) {
+            pedido.setEstado("Entregado");
+        } else {
+            pedido.setEstado("Pendiente");
+        }
+        pedidoService.guardarPedido(pedido); // Guardar el cambio de estado
+    }
+    return "redirect:/listaPedidos"; // Redirige a la lista de pedidos después de cambiar el estado
+}
 }

@@ -18,7 +18,31 @@ public class UserDto implements Serializable{
     
     public String username;
 
+    public int getEdad() {
+        return edad;
+    }
+
+
+    public void setEdad(int edad) {
+        this.edad = edad;
+    }
+
+
+    public String getSexo() {
+        return Sexo;
+    }
+
+
+    public void setSexo(String sexo) {
+        Sexo = sexo;
+    }
+
+
     public String role;
+
+    public int edad;
+
+    public String Sexo;
 
 
     public String getRole() {

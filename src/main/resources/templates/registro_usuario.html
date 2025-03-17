@@ -13,15 +13,12 @@
                 <img src="/images/LOGO.jpg" alt="Logo" />
             </div>
             <ul class="menu-izquierda">
-                <li><a href="/">Inicio</a></li>
+                <li><a href="/restaurante">Inicio</a></li>
                 <li><a href="#menu">Menú</a></li>
                 <li><a href="/reservas">Reservas</a></li>
                 <li><a href="#pedidos">Pedidos</a></li>
             </ul>
-            <ul class="menu-derecha">
-                <li><a href="/login" class="btn">Iniciar Sesión</a></li>
-                <li><a href="/registro" class="btn">Registrarse</a></li>
-            </ul>
+            
         </nav>
     </header>
     <div class="container">
@@ -33,7 +30,7 @@
             </div>
             <form action="/registrar" method="POST">
                 <div class="form-group">
-                    <label for="nombre">Nombre:</label>
+                    <label for="nombre">Nombre Completo:</label>
                     <input type="text" id="nombre" name="nombre" required>
                 </div>
                 <div class="form-group">
@@ -52,6 +49,20 @@
                     <label for="password">Contraseña:</label>
                     <input type="password" id="password" name="password" required>
                 </div>
+
+                <div class="form-group">
+                    <label for="edad">Edad:</label>
+                    <input type="int" id="edad" name="edad" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="sexo">Sexo:</label>
+                    <select id="sexo" name="sexo" required>
+                        <option value="Mujer">Mujer</option>
+                        <option value="Hombre">Hombre</option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label for="role">Rol:</label>
                     <select id="role" name="role" required>

@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
@@ -62,7 +61,7 @@ public class MenuController {
             }
 
             // Guarda el archivo en el directorio
-            Path rutaDestino = Paths.get(directorioImagenes, nombreArchivo);
+            Path rutaDestino = Path.of(directorioImagenes, nombreArchivo);
             archivo.transferTo(rutaDestino.toFile());
 
             // Establecer la URL o ruta relativa de la imagen
@@ -88,7 +87,7 @@ public class MenuController {
 
     // Método para eliminar un menú por su ID
     @GetMapping("/eliminar/{id}")
-    public String eliminarMenu(@PathVariable("id") Long id, Model model) {
+    public String eliminarMenu(@PathVariable Long id, Model model) {
         try {
             menuService.eliminarMenu(id);  // Llamamos al servicio para eliminar el menú
             model.addAttribute("message", "Menú eliminado con éxito.");

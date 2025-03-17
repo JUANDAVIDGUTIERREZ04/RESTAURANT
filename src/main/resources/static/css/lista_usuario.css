@@ -12,12 +12,12 @@ body {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 30px auto;
     background: #ffffff; /* Fondo blanco */
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    padding: 30px;
+    padding: 1000px;
 }
 
 h1 {
@@ -76,10 +76,12 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    table-layout: fixed;
+    overflow-x: auto; 
 }
 
 th, td {
-    padding: 12px;
+    padding: 1px;
     text-align: left;
     border-bottom: 1px solid #ddd; /* Línea gris */
 }

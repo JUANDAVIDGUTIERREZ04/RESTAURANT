@@ -3,10 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Restaurante</title>
-    <link rel="stylesheet" href="/css/index.css">
+    <title>TecnoRestaurant</title>
+    <link rel="stylesheet" href="/css/modoInvitado.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Estilo para el modal */
+        .modal {
+            display: none; /* Oculto por defecto */
+            position: fixed;
+            z-index: 10000; /* Asegura que esté por encima de todo */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Centra el modal */
+            width: 70%;
+            max-width: 500px; /* Máximo tamaño del modal */
+            background-color: rgba(255, 255, 255, 1); /* Fondo blanco */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content {
+            color: black; /* Cambia el color del texto a negro */
+        }
+
+        /* Estilo para los enlaces (que imitan los botones) */
+        .modal-button {
+            display: inline-block;
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            text-decoration: none; /* Eliminar subrayado */
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 80%;
+            text-align: center;
+        }
+
+        .modal-button:hover {
+            background-color: #444;
+        }
+
+        /* Estilo para la capa bloqueada */
+        .contenido-bloqueado {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, rgba(128, 128, 128, 1) 0%, rgba(128, 128, 128, 0) 100%);
+            z-index: 9999; /* Asegura que la capa esté por debajo del modal */
+            display: none; /* Oculto por defecto */
+        }
+
+        /* Estilo para el fondo oscuro (modal) */
+        .modal-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+            z-index: 9998; /* Asegura que esté por debajo del modal */
+            display: none; /* Oculto por defecto */
+        }
+
+        /* Asegurar que el contenido de la página se vea debajo de la capa */
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Estilo para el botón de cierre */
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 30px;
+            cursor: pointer;
+            color: black;
+        }
+
+        
+
+    </style>
 </head>
 <body>
     <header>
@@ -17,15 +110,15 @@
             <ul class="menu-izquierda">
                 <li><a href="/perfil">Mi Perfil</a></li>
                 <li><a href="/">Inicio</a></li>
-                <li><a href="#menu">Menú</a></li>
+                <li><a href="/carrito/agregar">Menú</a></li>
                 <li><a href="/reservas">Reservas</a></li>
-                
+                <li><a href="/carrito/agregar">carro de compras</a></li>
             </ul>
             <ul class="menu-derecha">
-                <li><a href="/login" class="btn">Iniciar Sesión</a></li>
-                <li><a href="/registro" class="btn">Registrarse</a></li>
+                <li><a href="/logout" class="btn" id="logoutBtn" style="display: none;">Cerrar Sesión</a></li>
             </ul>
         </nav>
+
         <div class="carrusel">
             <div class="imagen-carrusel active">
                 <img src="/images/encabezado1.jpg" alt="Imagen 1" />
@@ -37,12 +130,11 @@
                 <img src="/images/encabezado3.jpg" alt="Imagen 3" />
             </div>
         </div>
-        <h1 class="titulo">Restaurante</h1>
+        <h1 class="titulo">TecnoRestaurant</h1>
     </header>
-    
+
     <main>
-        
-        <!-- Bienvenida -->
+        <!-- Contenido visible -->
         <section class="bienvenida">
             <h2>¡Bienvenidos a Nuestro Restaurante!</h2>
             <p>Disfruta de una experiencia culinaria única con nuestros deliciosos platos.</p>
@@ -54,170 +146,83 @@
         </section>
 
         <!-- Menú -->
-        <section id="menu">
+        <section id="menu" class="contenido-visible">
             <h1>Menú</h1>
+            <div class="categorias-menu">
+                <a href="#entrada" class="btn-categoria">ENTRADA <i class='bx bx-bowl-hot'></i> </a>
+                <a href="#plato-principal" class="btn-categoria">PLATO PRINCIPAL <i class='bx bx-bowl-rice'></i></a>
+                <a href="#postre" class="btn-categoria">POSTRE <i class='bx bx-cake'></i></a>
+                <a href="#bebidas" class="btn-categoria">BEBIDAS <i class="bi bi-cup-straw"></i></a>
+            </div>
 
-            <!-- Botones de selección de categorías -->
-    <div class="categorias-menu">
-        <a href="#entrada" class="btn-categoria">ENTRADA <i class='bx bx-bowl-hot'></i> </i></a>
-        <a href="#plato-principal" class="btn-categoria"> </i>PLATO PRINCIPAL <i class='bx bx-bowl-rice'></i></a>
-        <a href="#postre" class="btn-categoria">POSTRE <i class='bx bx-cake'></i></a>
-        <a href="#bebidas" class="btn-categoria">BEBIDAS <i class="bi bi-cup-straw"></i></a>
-    </div>
-
-            <!-- Sección Entradas -->
-            <div id= "entrada" class="menu-category">
-                <h2>Entradas</h2>
-                <div class="menu-container">
-                    <div th:each="menu : ${menus}" th:if="${menu.categoria == 'Entradas'}" class="menu-card">
-                        <h3 th:text="${menu.nombreDePlato}"></h3>
-                        <p>Precio: $<span th:text="${menu.precio}"></span></p>
-                        <p th:text="${menu.descripcion}"></p>
-                        <div>
-                            <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                        </div>
-                        <form th:action="@{/pedidos}" method="post">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <button type="submit" class="btn-realizar-pedido">Realizar Pedido</button>
-                        </form>
-                        <div th:if="${mensaje}" class="alert alert-success">
-                            <p th:text="${mensaje}"></p>
-                        </div>
+            <!-- Modal de Iniciar Sesión / Registrarse -->
+            <div id="myModal" class="modal">
+                <span class="close">&times;</span> <!-- Botón de cerrar -->
+                <div class="modal-content">
+                    <h2>¿Qué deseas hacer?</h2>
+                    <div> 
+                        <p> Si quieres ver nuestros exquisitos platos y hacer tus pedidos,
+                        por favor inicia sesión, y si no te has registrado, regístrate.
+                        </p>
                     </div>
+                    <!-- Usamos enlaces <a> para simular los botones -->
+                    <a href="/login" class="modal-button">Iniciar Sesión</a>
+                    <a href="/registro" class="modal-button">Registrarse</a>
                 </div>
             </div>
 
-            <!-- Sección Platos Principales -->
-            <div class="menu-category">
-                <h2>Platos Principales</h2>
-                <div id= "plato-principal" class="menu-container">
-                    <div th:each="menu : ${menus}" th:if="${menu.categoria == 'Platos principales'}" class="menu-card">
-                        <h3 th:text="${menu.nombreDePlato}"></h3>
-                        <p>Precio: $<span th:text="${menu.precio}"></span></p>
-                        <p th:text="${menu.descripcion}"></p>
-                        <div>
-                            <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                        </div>
-                        <form th:action="@{/pedidos}" method="post">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <button type="submit" class="btn-realizar-pedido">Realizar Pedido</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sección Postres -->
-            <div id = "postre" class="menu-category">
-                <h2>Postres</h2>
-                <div class="menu-container">
-                    <div th:each="menu : ${menus}" th:if="${menu.categoria == 'Postres'}" class="menu-card">
-                        <h3 th:text="${menu.nombreDePlato}"></h3>
-                        <p>Precio: $<span th:text="${menu.precio}"></span></p>
-                        <p th:text="${menu.descripcion}"></p>
-                        <div>
-                            <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                        </div>
-                        <form th:action="@{/pedidos}" method="post">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <button type="submit" class="btn-realizar-pedido">Realizar Pedido</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sección Bebidas -->
-            <div id= "bebidas" class="menu-category">
-                <h2>Bebidas</h2>
-                <div class="menu-container">
-                    <div th:each="menu : ${menus}" th:if="${menu.categoria == 'Bebidas'}" class="menu-card">
-                        <h3 th:text="${menu.nombreDePlato}"></h3>
-                        <p>Precio: $<span th:text="${menu.precio}"></span></p>
-                        <p th:text="${menu.descripcion}"></p>
-                        <div>
-                            <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                        </div>
-                        <form th:action="@{/pedidos}" method="post">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <button type="submit" class="btn-realizar-pedido">Realizar Pedido</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
+            <!-- Fondo oscuro para el modal -->
+            <div id="modalBackground" class="modal-background"></div>
         </section>
 
-        <!-- Testimonios -->
-        <section id="testimonios">
-            <h1>Lo que dicen nuestros clientes</h1>
-            <div class="testimonios-container">
-                <div class="testimonio">
-                    <p>"El mejor restaurante que he visitado. Comida deliciosa y excelente servicio!"</p>
-                    <p>- Juan Pérez</p>
-                </div>
-                <div class="testimonio">
-                    <p>"Ambiente acogedor y comida increíblemente fresca. ¡Volveré sin duda!"</p>
-                    <p>- María López</p>
-                </div>
-                <div class="testimonio">
-                    <p>"Me encantaron los platos. Muy sabrosos y presentados con mucho cuidado."</p>
-                    <p>- Ana García</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contacto -->
-        <section id="contacto">
-            <h1>Contáctanos</h1>
-            <p>¿Tienes alguna duda o comentario? ¡Nos encantaría saber de ti!</p>
-            <form action="/contacto" method="POST">
-                <input type="text" name="nombre" placeholder="Tu nombre" required />
-                <input type="email" name="email" placeholder="Tu correo" required />
-                <textarea name="mensaje" placeholder="Tu mensaje" required></textarea>
-                <button type="submit" class="btn-realizar-pedido">Enviar</button>
-            </form>
-        </section>
-
-        <!-- Redes Sociales -->
-        <section id="redes-sociales">
-            <h1>¡Síguenos en nuestras redes sociales!</h1>
-            <div class="social-icons">
-                <a href="https://facebook.com" target="_blank">
-                    <i class="bi bi-facebook"></i> FACEBOOK
-                </a>
-                <a href="https://instagram.com" target="_blank">
-                    <i class="bi bi-instagram"></i> INSTAGRAM
-                </a>
-                <a href="https://twitter.com" target="_blank">
-                    <i class="bi bi-twitter"></i> TWITTER
-                </a>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer>
-            <p>&copy; 2024 Mi Restaurante | Todos los derechos reservados</p>
-        </footer>
+        <!-- Degradado en la parte inferior -->
+        <div id="contenido-bloqueado" class="contenido-bloqueado"></div>
     </main>
 
     <script>
-        let index = 0;
-        const images = document.querySelectorAll('.imagen-carrusel');
-        const totalImages = images.length;
-
-        function showNextImage() {
-            images[index].classList.remove('active');
-            index = (index + 1) % totalImages;
-            images[index].classList.add('active');
+        // Mostrar el modal y el fondo oscuro automáticamente al cargar la página
+        var modal = document.getElementById("myModal");
+        var modalBackground = document.getElementById("modalBackground");
+        
+        // Mostrar el modal y fondo oscuro de inmediato
+        modal.style.display = "block";
+        modalBackground.style.display = "block";
+        
+        // Cerrar el modal
+        var closeModal = document.getElementsByClassName("close")[0];
+        closeModal.onclick = function() {
+            modal.style.display = "none";
+            modalBackground.style.display = "none";
         }
-
-        setInterval(showNextImage, 3000);
+    
+        window.onclick = function(event) {
+            if (event.target == modalBackground) {
+                modal.style.display = "none";
+                modalBackground.style.display = "none";
+            }
+        }
+    
+        // Simulación de estado de autenticación
+        let usuarioAutenticado = false; // Cambiar a 'true' si el usuario está autenticado
+    
+        // Mostrar u ocultar la capa bloqueada y el botón de login
+        if (usuarioAutenticado) {
+            document.getElementById('contenido-bloqueado').style.display = 'none'; // Ocultar la capa bloqueada
+            document.getElementById('loginBtn').style.display = 'none'; // Ocultar Iniciar Sesión
+            document.getElementById('registerBtn').style.display = 'none'; // Ocultar Registrarse
+            document.getElementById('logoutBtn').style.display = 'inline'; // Mostrar Cerrar Sesión
+        } else {
+            document.getElementById('contenido-bloqueado').style.display = 'block'; // Mostrar capa de bloqueo
+            document.getElementById('loginBtn').style.display = 'inline'; // Mostrar Iniciar Sesión
+            document.getElementById('registerBtn').style.display = 'inline'; // Mostrar Registrarse
+            document.getElementById('logoutBtn').style.display = 'none'; // Ocultar Cerrar Sesión
+        }
+    
+        // Función para simular cierre de sesión
+        document.getElementById('logoutBtn')?.addEventListener('click', function() {
+            usuarioAutenticado = false;
+            location.reload(); // Recargar la página para actualizar el estado
+        });
     </script>
- 
-
-
 </body>
 </html>

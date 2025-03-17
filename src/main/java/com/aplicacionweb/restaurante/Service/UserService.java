@@ -35,6 +35,9 @@ public class UserService {
                 dto.setId(user.getId());
                 dto.setNombre(user.getNombre());
                 dto.setCorreo(user.getCorreo());
+                dto.setEdad(user.getEdad());
+                dto.setSexo(user.getSexo());
+
                 dto.setTelefono(user.getTelefono());
                 dto.setUsername(user.getUsername());
                 dto.setRole(user.getRole());

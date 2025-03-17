@@ -150,13 +150,15 @@
                 <thead>
                     <tr>
                         <th>ID Pedido</th>
-                        <th>Fecha</th>
+                        <th>Fecha y hora</th>
+                        <th>Dia</th>
                         <th>Estado</th>
+                        <th>Cambiar estado</th>
                         <th>Cantidad</th>
                         <th>Total</th>
                         <th>Menú</th>
                         <th>Usuario Id</th>
-                        <th>Nombre</th>
+                        <th>Nombre de cliente</th>
 
                         <th>Acciones</th> <!-- Columna de acciones -->
                     </tr>
@@ -166,7 +168,19 @@
                     <tr th:each="pedido : ${pedidos}">
                         <td th:text="${pedido.id_pedido}"></td>
                         <td th:text="${#dates.format(pedido.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td th:text="${pedido.diaSemana}"></td>
                         <td th:text="${pedido.estado}"></td>
+                        <td>
+                            <form th:action="@{/cambiarEstado/{id}(id=${pedido.id_pedido})}" method="post">
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-sync-alt"></i> Cambiar Estado
+                                </button>
+                            </form>
+                            
+                        
+                        </td>
+                        
+                        
                         <td th:text="${pedido.cantidad}"></td>
                         <td th:text="${pedido.total}"></td>
                         <td th:text="${pedido.menu.nombreDePlato}"></td>

@@ -164,3 +164,33 @@ button:hover {
     box-shadow: 0 6px 30px rgba(255, 215, 0, 1); /* Sombra más intensa al pasar el ratón */
     transform: scale(1.05); /* Efecto de aumento al pasar el ratón */
 }
+
+#mensajeExito {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    display: none; /* Inicialmente está oculto */
+    width: 80%; /* Ajusta el ancho (puedes cambiarlo a lo que necesites) */
+    max-width: 600px; /* Puedes establecer un ancho máximo */
+    padding: 20px; /* Aumenta el espacio interno */
+    font-size: 18px; /* Tamaño de la fuente, ajusta según el tamaño que quieras */
+    text-align: center; /* Centra el texto dentro del div */
+    border-radius: 10px; /* Opcional: para redondear los bordes */
+}
+
+#mensajeError {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    display: none; /* Inicialmente está oculto */
+    width: 80%; /* Ajusta el ancho (puedes cambiarlo a lo que necesites) */
+    max-width: 600px; /* Puedes establecer un ancho máximo */
+    padding: 20px; /* Aumenta el espacio interno */
+    font-size: 18px; /* Tamaño de la fuente, ajusta según el tamaño que quieras */
+    text-align: center; /* Centra el texto dentro del div */
+    border-radius: 10px; /* Opcional: para redondear los bordes */
+}

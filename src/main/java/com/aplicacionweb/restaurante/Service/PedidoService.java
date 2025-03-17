@@ -28,6 +28,29 @@ public class PedidoService {
     public void eliminarPedido(Long idPedido) {
         pedidoRepository.deleteById(idPedido); // Elimina el pedido con el ID proporcionado
     }
+    
+    //estado  
+    public void cambiarEstado(Long idPedido) {
+        // Buscar el pedido por su ID
+        Pedido pedido = pedidoRepository.findById(idPedido).orElse(null);
+
+        if (pedido != null) {
+            // Alternar el estado entre 'Pendiente' y 'Entregado'
+            if ("Pendiente".equals(pedido.getEstado())) {
+                pedido.setEstado("Entregado");
+            } else if ("Entregado".equals(pedido.getEstado())) {
+                pedido.setEstado("Pendiente");
+            }
+            
+            // Guardar el cambio en la base de datos
+            pedidoRepository.save(pedido);
+        }
+    }
+
+    // Obtener un pedido por su ID
+    public Pedido obtenerPedidoPorId(Long idPedido) {
+        return pedidoRepository.findById(idPedido).orElse(null); // Devuelve el pedido si existe, o null si no se encuentra
+    }
 
     // Obtener los pedidos de un usuario específico
     public List<Pedido> obtenerPedidosPorUsuario(User usuario) {

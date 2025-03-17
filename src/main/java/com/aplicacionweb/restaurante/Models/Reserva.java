@@ -8,9 +8,8 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-
 @Entity
-@Table(name = "reservas") // Asegúrate de que el nombre de la tabla sea correcto
+@Table(name = "reservas")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -31,12 +30,12 @@ public class Reserva {
     private String email;
 
     @Column(nullable = false)
-    private LocalDateTime fecha; // Cambiado a Date para manejar fecha y hora
+    private LocalDateTime fecha;
 
     @Column(nullable = false)
     private Integer numeroPersonas;
 
-    private String motivo;  // Ejemplo: "confirmada", "cancelada"
+    private String motivo;
     private String restricciones;
     private String comentarios;
 }

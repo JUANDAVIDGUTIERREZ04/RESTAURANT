@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+</head>
+<body>
+    <h1>Mi Carrito</h1>
+    <div th:if="${carrito != null}">
+        <ul>
+            <li th:each="item : ${items}">
+                <p th:text="${item.menu.nombreDePlato} + ' - ' + ${item.cantidad} + ' x $' + ${item.total}"></p>
+                <form th:action="@{/carrito/eliminar}" method="post">
+                    <input type="hidden" name="itemId" th:value="${item.id}" />
+                    <button type="submit">Eliminar</button>
+                </form>
+            </li>
+        </ul>
+        <p>Total: $<span th:text="${#numbers.formatDecimal(carrito.total, 2, 'POINT')}"></span></p>
+    </div>
+</body>
+</html>

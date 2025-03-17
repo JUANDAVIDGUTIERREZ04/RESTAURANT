@@ -17,18 +17,20 @@ public class SecurityConfig {
     private UserDetailsImpl userDetailsImpl; // Referencia a tu servicio de detalles de usuario
 
     @Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF si es necesario (ten cuidado con esto)
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/registro", "/login", "/", "/css/**", "/js/**", "/registrar", "/images/**", "/restaurante", "/imagenes/**", "/reservas").permitAll() // Permitir acceso a estas rutas sin autenticación
-            .requestMatchers("/pedidos","/perfil").hasAnyRole("USER","ADMIN") // Solo admin puede acceder a rutas específicas
-            .requestMatchers("/opcionAdmin").hasRole("ADMIN") // Solo usuario normal
+            .requestMatchers("/registro", "/login", "/", "/css/**",
+             "/js/**", "/registrar", "/images/**", "/modoInvitado", "/imagenes/**", 
+             "/reservas/registrar**","/reservas/**").permitAll() // Permitir acceso a estas rutas sin autenticación
+            .requestMatchers("/pedidos","/perfil","/restaurante").hasAnyRole("USER","ADMIN") // Solo admin puede acceder a rutas específicas
+            .requestMatchers("/opcionAdmin","/cambiarEstado").hasRole("ADMIN") // Solo usuario normal
             .anyRequest().authenticated() // Resto de las rutas requieren autenticación
         )
         .formLogin(form -> form
             .loginPage("/login") // Página de inicio de sesión personalizada
-            .defaultSuccessUrl("/perfil", true) // Redirige a /perfil después del login exitoso (si es un usuario normal)
+            .defaultSuccessUrl("/restaurante", true) // Redirige a /perfil después del login exitoso (si es un usuario normal)
             .permitAll() // Permitir el acceso a la página de inicio de sesión
         )
         .logout(logout -> logout

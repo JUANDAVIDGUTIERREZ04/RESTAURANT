@@ -60,6 +60,7 @@ public class ClienteController {
         usuario.setNombre(nombre);
         usuario.setCorreo(email);
 
+
         // Guardar los cambios en la base de datos
         userService.saveUser(usuario);
 
