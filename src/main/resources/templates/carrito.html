@@ -12,7 +12,7 @@
             <li th:each="item : ${items}">
                 <p th:text="${item.menu.nombreDePlato} + ' - ' + ${item.cantidad} + ' x $' + ${item.total}"></p>
                 <form th:action="@{/carrito/eliminar}" method="post">
-                    <input type="hidden" name="itemId" th:value="${item.id}" />
+                    <input type="hidden" name="itemId" th:value="${item.id}" />  
                     <button type="submit">Eliminar</button>
                 </form>
             </li>

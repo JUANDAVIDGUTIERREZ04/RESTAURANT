@@ -65,7 +65,7 @@ public String createUser(@RequestParam String nombre,
     user.setUsername(username);
     user.setPassword("{noop}" + password); 
     user.setSexo(sexo);
-    user.setEdad(edad);// Añadir {noop} a la contraseña
+    user.setEdad(edad);// Añadir {noop} a la contraseña 
     user.setRole(role);
 
     userService.saveUser(user); // Guardar el usuario

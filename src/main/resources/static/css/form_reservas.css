@@ -130,7 +130,7 @@ label {
 
 /* Estilos para los inputs */
 input, select, textarea {
-    width: 100%; /* Ancho completo */
+    width: 97%; /* Ancho completo */
     padding: 0.5rem; /* Espaciado interno */
     margin: 0.5rem 0; /* Margen vertical */
     border: none; /* Sin borde */
