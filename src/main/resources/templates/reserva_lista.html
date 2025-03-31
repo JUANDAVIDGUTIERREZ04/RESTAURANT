@@ -7,143 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    <style>
-        /* Estilos Generales */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #FFFFFF; /* Fondo blanco */
-            color: #000000; /* Texto negro */
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        header {
-    background-color: #241f1e;
-    color: white;
-    padding: 20px 100px 20px 80px; /* Ajustar el padding: top, right, bottom, left */
-    text-align: center;
-    width: 100%;
-}
-
-        .main-container {
-            display: flex;
-            flex-grow: 1;
-        }
-
-        .menu-container {
-            width: 250px;
-            background-color: #343a40;
-            height: 100vh;
-            padding-top: 20px;
-        }
-
-        nav ul {
-            list-style-type: none;
-            padding: 20px;
-            margin: 0;
-        }
-
-        nav ul li {
-            margin: 10px 0;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            display: block;
-            padding: 10px;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        nav ul li a:hover {
-            background-color: #444;
-        }
-
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-            margin-left: 50px;
-        }
-
-        .container {
-            background-color: #333; /* Fondo gris oscuro */
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            width: 120%;
-            max-width: 1200px;
-            margin: 0 auto;
-            border-radius: 0px;
-        }
-
-        h1 {
-            text-align: center;
-            color: white;
-        }
-
-        h2 {
-            text-align: center;
-            color: #fcfbfa; /* Color dorado para el título */
-        }
-
-        table {
-            width: 100%;
-            margin: 0px 0;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 2px;
-            border: 1px solid #FFFFFF; /* Borde blanco */
-            text-align: left;
-            color: white; /* Texto blanco */
-        }
-
-        th {
-            background-color: #444; /* Fondo gris oscuro para encabezados */
-        }
-
-        tr:nth-child(even) {
-            background-color: #111; /* Fondo gris oscuro para filas pares */
-        }
-
-        tr:hover {
-            background-color: #555; /* Fondo gris claro al pasar el ratón */
-        }
-
-        .button {
-            background-color: #FFFFFF; /* Botón blanco */
-            color: #000; /* Texto negro */
-            padding: 10px 15px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            text-decoration: none; /* Sin subrayado */
-        }
-
-        .button:hover {
-            background-color: #CCCCCC; /* Fondo gris claro al pasar el ratón */
-        }
-
-        /* Estilos para el botón de eliminar */
-        button {
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        button:hover {
-            background-color: darkred;
-        }
-
-    </style>
+    <link rel="stylesheet" href="/css/lista_reservas.css">
 </head>
 <body>
 
@@ -179,7 +43,11 @@
                         <th>MOTIVO</th>
                         <th>RESTRICCIONES</th>
                         <th>COMENTARIOS</th>
-                        <th>ACCIONES</th> <!-- Nueva columna para el botón eliminar -->
+                        <th>ID MESA</th>
+                        <th>SECCIÓN</th>
+                        <th>ACCIONES</th>
+                        
+                         <!-- Nueva columna para el botón eliminar -->
                     </tr>
                 </thead>
                 <tbody>
@@ -194,6 +62,9 @@
                         <td th:text="${reserva.motivo}"></td>
                         <td th:text="${reserva.restricciones}"></td>
                         <td th:text="${reserva.comentarios}"></td>
+                        <td th:text="${reserva.mesa.idMesa}"></td>
+                        <td th:text="${reserva.mesa.seccion}"></td>
+
                         
                         <!-- Botón de eliminar -->
                         <td>

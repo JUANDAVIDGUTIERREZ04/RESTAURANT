@@ -34,7 +34,7 @@
             <h1 class="title">Formulario de Reserva</h1>
             <form id="reservaForm" action="/reservas/registrar" method="POST">
                 <div class="field">
-                    <label for="nombre">Nombre:</label>
+                    <label for="nombre">Nombre:</label> 
                     <input type="text" id="nombre" name="nombre" class="input-field" required aria-label="Nombre del cliente">
                     <div id="nombreError" class="error"></div>
                 </div>
@@ -62,6 +62,20 @@
                     <input type="number" id="numeroPersonas" name="numeroPersonas" class="input-field" required min="1" aria-label="Número de personas para la reserva">
                     <div id="numeroPersonasError" class="error"></div>
                 </div>
+
+                <div class="field">
+                    <label for="mesa">Mesa (Opcional):</label>
+                    <select id="mesa" name="mesa.idMesa" class="input-field" required>
+                        <option value="" disabled selected>Selecciona una mesa</option>
+                        <!-- Thymeleaf para iterar sobre las mesas disponibles -->
+                        <tr th:each="mesa : ${mesas}">
+        <option th:value="${mesa.idMesa}" 
+        th:text="'Mesa ' + ${mesa.numeroMesa} + ' (Capacidad: ' + ${mesa.capacidad} + ', Precio: ' + ${mesa.precio} + ', Sección: ' + ${mesa.seccion} + ')'"/>
+    </tr>
+                    </select>
+                    <div id="mesaError" class="error"></div>
+                </div>
+                
 
                 <div class="field">
                     <label for="motivo">Motivo:</label>

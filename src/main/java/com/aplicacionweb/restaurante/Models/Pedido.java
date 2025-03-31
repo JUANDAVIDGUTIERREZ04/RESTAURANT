@@ -43,6 +43,9 @@ public class Pedido {
     @Column(nullable = false)
     private Integer cantidad;
 
+    @Column(nullable = false)
+    private TipoEntregaPedido tipoEntregaPedido;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user", nullable = false)
     private User usuario;
@@ -59,6 +62,26 @@ public class Pedido {
         LocalDate localDate = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         diaSemana = localDate.getDayOfWeek().getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.getDefault());
     }
+
+    // Método para establecer el precio según el tipo de entrega
+    public void tipoEntrega() {
+        if (this.tipoEntregaPedido != null) {
+            switch (this.tipoEntregaPedido) {
+                case DOMICILIO:
+                    // Si el tipo de entrega es Domicilio, asignamos un precio adicional (por ejemplo, 5.0)
+                    this.total = this.cantidad * this.menu.getPrecio() + 5000;
+                    break;
+                case PERSONALMENTE:
+                    // Si el tipo de entrega es Personalmente, no hay costo adicional
+                    this.total = this.cantidad * this.menu.getPrecio();
+                    break;
+                default:
+                    this.total = this.cantidad * this.menu.getPrecio();
+                    break;
+            }
+        }
+    }
+
     }
 
 

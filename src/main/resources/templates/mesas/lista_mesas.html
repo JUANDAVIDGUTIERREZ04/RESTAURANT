@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/lista_mesas.css">
+    <title>Mesas Disponibles</title>
+</head>
+<body>
+    <header>
+        <h1>Mesas Disponibles</h1>
+        <nav>
+            <ul class="menu-container">
+                <li><a href="/modoInvitado">Inicio</a></li>
+                <li><a href="/mesas/nuevo">Agregar Nueva Mesa</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Número de Mesa</th>
+                <th>Capacidad</th>
+                <th>Sección</th>
+                <th>Precio</th>
+                <th>Disponible</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="mesa : ${mesas}">
+                <td th:text="${mesa.numeroMesa}"></td>
+                <td th:text="${mesa.capacidad}"></td>
+                <td th:text="${mesa.seccion != null ? mesa.seccion.nombre : 'No asignada'}"></td>
+                <td th:text="${mesa.precio}"></td>
+                <td th:text="${mesa.disponible ? 'Sí' : 'No'}"></td>
+                <td>
+                    <!-- Formulario para cambiar la disponibilidad -->
+                    <form th:action="@{/mesas/cambiarDisponibilidad/{id}(id=${mesa.idMesa})}" method="post">
+                        <!-- Campo oculto para enviar el valor 'disponible' -->
+                        <input type="hidden" name="disponible" th:value="${mesa.disponible ? 'false' : 'true'}"/>
+                        <button type="submit" th:text="${mesa.disponible ? 'Marcar como no disponible' : 'Marcar como disponible'}"></button>
+                    </form>
+                    
+                    <!-- Formulario para eliminar la mesa -->
+                    <form th:action="@{/mesas/eliminar/{id}(id=${mesa.idMesa})}" method="post">
+                        <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar esta mesa?');">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

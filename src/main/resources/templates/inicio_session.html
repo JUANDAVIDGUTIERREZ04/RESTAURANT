@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Restaurante</title>
+    <title>Tu Restaurante</title>
     <link rel="stylesheet" href="/css/inicioSession.css">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
@@ -24,7 +24,7 @@
                 
                 <li><a href="#menu">Menú</a></li>
                 <li><a href="/reservas">Reservas</a></li>
-                <li><a href="/carrito">carrito</a></li>
+                <li><a href="/mesas/nuevo">carrito</a></li>
                  
             
                     
@@ -105,6 +105,15 @@
                         <form th:action="@{/pedidos}" method="post">
                             <input type="hidden" name="menuId" th:value="${menu.id}" />
                             <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
+                             <!-- Selección del tipo de entrega -->
+                        <label for="tipoEntrega">Selecciona el tipo de entrega:</label>
+                            <select name="tipoEntrega" id="tipoEntrega" class="tipo-entrega-select">
+                            <option value="DOMICILIO">Domicilio</option>
+                            <option value="PERSONALMENTE">Personalmente</option>
+                            </select>
+
+
+                            
                             <button type="submit" class="btn-realizar-pedido">Realizar Pedido</button>
 
                             <form th:action="@{/agregar-al-carrito}" method="post" class="form-carrito">

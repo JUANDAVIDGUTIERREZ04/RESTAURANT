@@ -1,0 +1,156 @@
+/* Estilo general del cuerpo */
+body {
+    background: linear-gradient(to bottom, #1a1a1a, #2c2c2c);
+    color: #FFD700; /* Dorado */
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column; /* Alinear elementos en columna */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+header {
+    position: relative; /* Permite que el texto se superponga */
+    min-height: 50px; /* Altura mínima del encabezado aumentada */
+    color: #fff;
+    text-align: center; /* Centrar el texto */
+    overflow: hidden; /* Oculta el desbordamiento */
+
+        background: linear-gradient(to right, rgba(51, 83, 211, 0.5), rgba(255, 165, 0, 0.5),
+         rgba(12, 108, 79, 0.5));
+    
+    margin-top: 75px;
+    
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative; /* Asegura que la navegación esté en la parte superior */
+    
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.menu-izquierda {
+    flex: 1;
+}
+
+.menu-izquierda li {
+    margin-right: 20px;
+}
+
+.menu-derecha li {
+    margin-left: 20px;
+}
+
+.menu-izquierda a {
+    font-family: 'Times New Roman', serif; /* Cambiar la fuente */
+    text-transform: uppercase; /* Poner en mayúsculas */
+    color: #fff; /* Color del texto */
+    text-decoration: none; /* Sin subrayado */
+    transition: color 0.3s; /* Transición suave para el color */
+}
+
+.menu-izquierda a:hover {
+    color: rgba(255, 215, 0, 0.7); /* Color al pasar el mouse */
+}
+
+.menu-derecha a {
+    font-family: 'Times New Roman', serif; /* Cambiar la fuente */
+}
+
+a {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px; /* Espaciado alrededor del texto */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Transiciones suaves */
+}
+
+a:hover {
+    background-color: rgba(255, 215, 0, 0.7); /* Fondo dorado al pasar el mouse */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 1); /* Sombra luminosa */
+}
+
+h1 {
+    text-align: center;
+    color: #FFD700; /* Dorado */
+    margin-bottom: 40px; /* Separación del formulario */
+}
+
+/* Estilo del formulario */
+form {
+    background: #2B2B3B; /* Azul grisáceo oscuro */
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Estilo de los campos del formulario */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 10px;
+    background: #1f1f2f; /* Negro grisáceo */
+    color: #FFD700; /* Dorado */
+    outline: none;
+}
+
+input:focus, select:focus {
+    border: 1px solid #FFD700; /* Resaltar en dorado */
+}
+
+/* Estilo del botón */
+button {
+    background: linear-gradient(to right, #FFD700, #FFA500); /* Dorado a amarillo */
+    color: #1a1a1a; /* Negro oscuro */
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.2s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 15px rgba(255, 215, 0, 0.5);
+}
+
+/* Mensaje de confirmación */
+.mensaje {
+    text-align: center;
+    margin-top: 20px;
+    color: #32CD32; /* Verde lima para éxito */
+} 
+
+/* Responsividad */
+@media (max-width: 480px) {
+    form {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+}

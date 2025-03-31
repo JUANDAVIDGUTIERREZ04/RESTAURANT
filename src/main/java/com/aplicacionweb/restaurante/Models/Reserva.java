@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+import com.aplicacionweb.restaurante.Models.Mesas.Mesa;
+
 @Entity
 @Table(name = "reservas")
 @AllArgsConstructor
@@ -38,4 +40,9 @@ public class Reserva {
     private String motivo;
     private String restricciones;
     private String comentarios;
+
+     // Relación Many-to-One entre Reserva y Mesa
+     @ManyToOne
+     @JoinColumn(name = "mesa_id") // Foreign key a Mesa
+     private Mesa mesa;
 }

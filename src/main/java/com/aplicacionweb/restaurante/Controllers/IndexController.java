@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.aplicacionweb.restaurante.Models.Menu;
 import com.aplicacionweb.restaurante.Models.Pedido;
+import com.aplicacionweb.restaurante.Models.TipoEntregaPedido;
 import com.aplicacionweb.restaurante.Models.User; 
 import com.aplicacionweb.restaurante.Service.MenuService;
 import com.aplicacionweb.restaurante.Service.PedidoService;
@@ -66,7 +67,7 @@ public class IndexController {
 
     // Método que maneja la realización de un pedido
     @PostMapping("/pedidos")
-    public String realizarPedido(@RequestParam Long menuId, @RequestParam Integer cantidad, Model model , RedirectAttributes redirectAttributes) {
+    public String realizarPedido(@RequestParam Long menuId, @RequestParam Integer cantidad, @RequestParam TipoEntregaPedido tipoEntrega, Model model , RedirectAttributes redirectAttributes) {
         // Obtener el usuario autenticado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName(); // Nombre del usuario autenticado
@@ -90,6 +91,7 @@ public class IndexController {
             Pedido pedido = new Pedido();
             pedido.setFecha(new Date());
             pedido.setCantidad(cantidad);
+            pedido.setTipoEntregaPedido(tipoEntrega);
             pedido.setTotal(menu.getPrecio() * cantidad);
             pedido.setMenu(menu);
             pedido.setUsuario(usuario); // Asociar el pedido al usuario autenticado

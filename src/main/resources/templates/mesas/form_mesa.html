@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/form_mesas.css">
+    <title>Registrar Nueva Mesa</title>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <ul class="menu-izquierda">
+                <li><a href="/modoInvitado">Inicio</a></li>
+            </ul>
+            <ul class="menu-derecha">
+                <li><a href="/login" class="btn">Iniciar Sesión</a></li>
+                <li><a href="/registro" class="btn">Registrarse</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <h1>Registrar Nueva Mesa</h1>
+
+    <form th:action="@{/mesas/guardar}" th:object="${mesa}" method="post">
+        <!-- Campo para el número de mesa -->
+        <div>
+            <label for="numeroMesa">Número de Mesa:</label>
+            <input type="number" th:field="*{numeroMesa}" required>
+        </div>
+
+        <!-- Campo para la capacidad -->
+        <div>
+            <label for="capacidad">Capacidad:</label>
+            <input type="number" th:field="*{capacidad}" required>
+        </div>
+
+        <!-- Campo para la disponibilidad -->
+        <div>
+            <label for="disponible">Disponible:</label>
+            <select th:field="*{disponible}" required>
+                <option value="true">Sí</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <!-- Campo para seleccionar la sección -->
+        <div>
+            <label for="seccion">Sección:</label>
+            <select th:field="*{seccion}" required>
+                <option th:each="seccion : ${secciones}" th:value="${seccion}" th:text="${seccion.nombre}"></option>
+            </select>
+        </div>
+
+        <!-- Mostrar el precio según la sección seleccionada -->
+        <div>
+            <label>Precio de la Mesa:</label>
+            <span th:text="${mesa.precio}"></span> <!-- Mostrar el precio calculado -->
+        </div>
+
+        <button type="submit">Registrar Mesa</button>
+    </form>
+
+    <div th:if="${mensaje}" style="color: green;">
+        <p th:text="${mensaje}"></p>
+    </div>
+
+</body>
+</html>
