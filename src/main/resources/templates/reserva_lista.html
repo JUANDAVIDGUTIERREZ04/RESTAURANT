@@ -19,7 +19,6 @@
     <div class="menu-container">
         <nav>
             <ul>
-                
                 <li><a href="/listaPedidos"><i class="fas fa-utensils"></i> Lista de Pedidos</a></li>
                 <li><a href="/usuarios"><i class="fas fa-users"></i> Lista de Usuarios</a></li>
                 <li><a href="/adminMenu/listar"><i class='bx bx-bowl-hot'></i> Registrar Menú</a></li>
@@ -45,9 +44,9 @@
                         <th>COMENTARIOS</th>
                         <th>ID MESA</th>
                         <th>SECCIÓN</th>
+                        <th>CAMBIAR ESTADO DE RESERVA</th>
+                        <th>ESTADO</th> <!-- Nueva columna para el estado -->
                         <th>ACCIONES</th>
-                        
-                         <!-- Nueva columna para el botón eliminar -->
                     </tr>
                 </thead>
                 <tbody>
@@ -64,10 +63,24 @@
                         <td th:text="${reserva.comentarios}"></td>
                         <td th:text="${reserva.mesa.idMesa}"></td>
                         <td th:text="${reserva.mesa.seccion}"></td>
-
-                        
-                        <!-- Botón de eliminar -->
                         <td>
+                            <form th:action="@{/reservas/actualizarEstado/{id}(id=${reserva.id})}" method="post">
+                                <select name="estado" th:value="${reserva.estadoReserva}">
+                                    <option value="no pagada">No pagada</option>
+                                    <option value="cancelada">Cancelada</option>
+                                </select>
+                                <button type="submit" class="button">Actualizar Estado</button>
+                            </form>
+                        </td>
+
+                        <!-- Mostrar el estado actual de la reserva -->
+                        <td th:text="${reserva.estadoReserva}"></td>
+
+                        <!-- Formulario para cambiar el estado de la reserva -->
+                        <td>
+                            
+
+                            <!-- Formulario para eliminar la reserva -->
                             <form th:action="@{/reservas/eliminar/{id}(id=${reserva.id})}" method="post">
                                 <button type="submit" class="button" style="background-color: red; color: white;">Eliminar</button>
                             </form>

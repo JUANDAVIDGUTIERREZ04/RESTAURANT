@@ -41,6 +41,11 @@ public class Reserva {
     private String restricciones;
     private String comentarios;
 
+    @Column(nullable = false)
+    private String estadoReserva = "no pagada";  // Estado predeterminado es "no pagada"
+
+
+
      // Relación Many-to-One entre Reserva y Mesa
      @ManyToOne
      @JoinColumn(name = "mesa_id") // Foreign key a Mesa

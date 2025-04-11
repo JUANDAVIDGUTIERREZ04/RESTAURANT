@@ -61,4 +61,16 @@ public String mostrarFormulario(Model model) {
         reservaService.eliminarReserva(id);
         return "redirect:/reservas/listaReserva";  // Redirigir a la lista
     }
+
+    // Nuevo método para cambiar el estado de la reserva
+    @PostMapping("/actualizarEstado/{id}")
+    public String actualizarEstadoReserva(@PathVariable Long id, @RequestParam String estado, RedirectAttributes redirectAttributes) {
+        try {
+            reservaService.actualizarEstadoReserva(id, estado);  // Cambia el estado de la reserva
+            redirectAttributes.addFlashAttribute("estadoActualizado", "Estado actualizado a: " + estado);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorEstado", "Hubo un error al actualizar el estado.");
+        }
+        return "redirect:/reservas/listaReserva";  // Redirigir a la lista de reservas
+    }
 }

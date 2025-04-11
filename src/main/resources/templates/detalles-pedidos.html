@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Pedido</title>
+    <!-- Agregar Bootstrap desde CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Restaurante</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/restaurante">Menú</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/carrito">Carrito</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Detalles del Pedido</h1>
+
+        
+
+        <!-- Tabla con los detalles del pedido -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Descripción</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Total</th>
+                    <th>Fecha y Hora</th>
+                    <th>Día de la Semana</th>
+                    <th>Tipo de Entrega</th> <!-- Nueva columna para el tipo de entrega -->
+                    <th>Acción</th> <!-- Columna para el botón de eliminar -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="detalle : ${detallesPedido}">
+                    <td>
+                        <span th:text="${detalle.carritoItem.menu.nombreDePlato}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${detalle.carritoItem.menu.descripcion}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${detalle.carritoItem.cantidad}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${detalle.carritoItem.menu.precio}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${detalle.carritoItem.subtotal}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${detalle.fechaHora}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${detalle.diaSemana}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${detalle.tipoEntrega}"></span> <!-- Mostrar el tipo de entrega aquí -->
+                    </td>
+                    <td>
+                        <!-- Botón para eliminar el artículo del carrito -->
+                        <form th:action="@{/carrito/eliminar/{id}(id=${detalle.carritoItem.id})}" method="post">
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+
+        <!-- Volver al menú -->
+        <a href="/carrito/lista" class="btn btn-secondary">Volver al carrito de compras</a>
+        
+    </div>
+
+    <!-- Agregar Bootstrap JS desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

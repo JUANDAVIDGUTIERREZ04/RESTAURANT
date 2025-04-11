@@ -5,53 +5,37 @@ body {
     font-family: 'Arial', sans-serif;
     display: flex;
     flex-direction: column; /* Alinear elementos en columna */
-    justify-content: center;
+    justify-content: flex-start; /* Alinear el contenido desde arriba */
     align-items: center;
     height: 100vh;
     margin: 0;
+    padding-top: 80px; /* Ajusta el valor para que haya suficiente espacio debajo del menú fijo */
 }
 
-header {
-    position: relative; /* Permite que el texto se superponga */
-    min-height: 50px; /* Altura mínima del encabezado aumentada */
-    color: #fff;
-    text-align: center; /* Centrar el texto */
-    overflow: hidden; /* Oculta el desbordamiento */
-
-        background: linear-gradient(to right, rgba(51, 83, 211, 0.5), rgba(255, 165, 0, 0.5),
-         rgba(12, 108, 79, 0.5));
-    
-    margin-top: 75px;
-    
-}
-
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative; /* Asegura que la navegación esté en la parte superior */
-    
-}
-
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-}
-
+/* Menú Izquierda */
 .menu-izquierda {
-    flex: 1;
+    background-color: #333;
+    width: 100%; /* Ocupará todo el ancho de la pantalla */
+    height: 60px; /* Ajusta la altura según necesites */
+    position: fixed;
+    top: 0; /* Asegura que el menú esté en la parte superior */
+    left: 0; /* Se alinea al borde izquierdo */
+    z-index: 10; /* Asegura que esté por encima de otros elementos */
+    margin-top: 0; /* No es necesario tener margin-top aquí */
 }
 
 .menu-izquierda li {
     margin-right: 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
 }
 
 .menu-derecha li {
     margin-left: 20px;
 }
 
+/* Estilo de los enlaces */
 .menu-izquierda a {
     font-family: 'Times New Roman', serif; /* Cambiar la fuente */
     text-transform: uppercase; /* Poner en mayúsculas */
@@ -64,27 +48,16 @@ ul {
     color: rgba(255, 215, 0, 0.7); /* Color al pasar el mouse */
 }
 
+/* Menú Derecha */
 .menu-derecha a {
     font-family: 'Times New Roman', serif; /* Cambiar la fuente */
-}
-
-a {
-    color: #fff;
-    text-decoration: none;
-    padding: 5px 10px; /* Espaciado alrededor del texto */
-    border-radius: 5px; /* Bordes redondeados */
-    transition: background-color 0.3s, box-shadow 0.3s; /* Transiciones suaves */
-}
-
-a:hover {
-    background-color: rgba(255, 215, 0, 0.7); /* Fondo dorado al pasar el mouse */
-    box-shadow: 0 0 15px rgba(255, 215, 0, 1); /* Sombra luminosa */
 }
 
 h1 {
     text-align: center;
     color: #FFD700; /* Dorado */
     margin-bottom: 40px; /* Separación del formulario */
+    margin-top: 0; /* Ya no es necesario margin-top aquí, el padding del body lo maneja */
 }
 
 /* Estilo del formulario */
@@ -142,7 +115,7 @@ button:hover {
     text-align: center;
     margin-top: 20px;
     color: #32CD32; /* Verde lima para éxito */
-} 
+}
 
 /* Responsividad */
 @media (max-width: 480px) {
@@ -151,6 +124,18 @@ button:hover {
     }
 
     h1 {
-        font-size: 24px;
+        text-align: center;
+        color: #FFD700; /* Dorado */
+        margin-bottom: 40px; /* Separación del formulario */
+        margin-top: 120px; /* Asegura que el título esté más abajo, alejado del menú */
     }
 }
+
+/* Estilo específico para el mensaje de éxito */
+#mensaje-exito {
+    background-color: #fff;
+  
+    
+}
+
+

@@ -6,6 +6,7 @@ import com.aplicacionweb.restaurante.Models.Reserva;
 import com.aplicacionweb.restaurante.Repository.ReservaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,5 +26,15 @@ public class ReservaService {
     
     public void eliminarReserva(Long id) {
         reservaRepository.deleteById(id);  // Elimina la reserva por su ID
+    }
+
+     // Nuevo método para actualizar el estado de una reserva
+     public void actualizarEstadoReserva(Long id, String nuevoEstado) {
+        Optional<Reserva> reservaOptional = reservaRepository.findById(id);
+        if (reservaOptional.isPresent()) {
+            Reserva reserva = reservaOptional.get();
+            reserva.setEstadoReserva(nuevoEstado);  // Actualiza el estado de la reserva
+            reservaRepository.save(reserva);  // Guarda los cambios
+        }
     }
 }

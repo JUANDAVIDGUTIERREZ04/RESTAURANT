@@ -11,11 +11,7 @@
     <header>
         <nav>
             <ul class="menu-izquierda">
-                <li><a href="/modoInvitado">Inicio</a></li>
-            </ul>
-            <ul class="menu-derecha">
-                <li><a href="/login" class="btn">Iniciar Sesión</a></li>
-                <li><a href="/registro" class="btn">Registrarse</a></li>
+                <li><a href="/mesas/disponibles">regresar</a></li>
             </ul>
         </nav>
     </header>
@@ -34,6 +30,11 @@
             <label for="capacidad">Capacidad:</label>
             <input type="number" th:field="*{capacidad}" required>
         </div>
+
+        <!-- Mensaje de éxito -->
+    <div id="mensaje-exito" th:if="${mensaje}" style="color: green;">
+        <p th:text="${mensaje}"></p>
+    </div>
 
         <!-- Campo para la disponibilidad -->
         <div>
@@ -61,9 +62,25 @@
         <button type="submit">Registrar Mesa</button>
     </form>
 
-    <div th:if="${mensaje}" style="color: green;">
-        <p th:text="${mensaje}"></p>
-    </div>
 
+
+    
+
+    
+<script>
+    window.onload = function() {
+        var mensajeDiv = document.getElementById('mensaje-exito');
+        
+        // Verifica si el div tiene contenido
+        if (mensajeDiv.innerHTML.trim() !== '') {
+            mensajeDiv.style.display = 'block'; // Muestra el mensaje
+
+            // Ocultar el mensaje después de 2 segundos
+            setTimeout(function() {
+                mensajeDiv.style.display = 'none';
+            }, 3000);
+        }
+    };
+</script>
 </body>
 </html>
