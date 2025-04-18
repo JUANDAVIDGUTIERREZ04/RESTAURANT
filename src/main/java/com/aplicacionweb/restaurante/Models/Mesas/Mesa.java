@@ -1,9 +1,8 @@
 package com.aplicacionweb.restaurante.Models.Mesas;
 
-
 import java.util.List;
 
-import com.aplicacionweb.restaurante.Models.Reserva;
+import com.aplicacionweb.restaurante.Models.Reservas.Reserva;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,7 +22,7 @@ public class Mesa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMesa;
 
-    @Column(nullable = false , unique = true)
+    @Column(nullable = false, unique = true)
     private Integer numeroMesa;
 
     @Column(nullable = false)
@@ -32,12 +31,12 @@ public class Mesa {
     @Column(nullable = false)
     private Boolean disponible;
 
-    @Enumerated(EnumType.STRING)  // Para almacenar el valor del enum en la base de datos como una cadena.
+    @Enumerated(EnumType.STRING) // Para almacenar el valor del enum en la base de datos como una cadena.
     @Column(nullable = false)
-    private SeccionesDeMesas seccion;  // Sección de la mesa
+    private SeccionesDeMesas seccion; // Sección de la mesa
 
-    @Column(nullable = false)  // Guardamos el precio en la base de datos
-    private int precio;  // Precio de la sección de la mesa
+    @Column(nullable = false) // Guardamos el precio en la base de datos
+    private Double precio; // Precio de la sección de la mesa
 
     @OneToMany(mappedBy = "mesa")
     private List<Reserva> reservas;
@@ -45,12 +44,11 @@ public class Mesa {
     // Método para establecer el precio según la sección seleccionada
     public void setPrecio() {
         if (this.seccion != null) {
-            this.precio = this.seccion.getPrecio();
+            System.out.println("Sección seleccionada: " + this.seccion); // Verifica el valor de seccion
+            this.precio = (double) this.seccion.getPrecio();
+        } else {
+            System.out.println("Error: La sección es nula."); // Verifica si seccion es null
         }
     }
 
-
-
-
-    
 }

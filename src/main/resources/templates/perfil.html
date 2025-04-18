@@ -1,112 +1,78 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Perfil de Usuario</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEJrT7h4H7+8pO4lYgnxYx5IXg35hgrP2PJlthYDLw5qOem+2EJNG17Y0uwYj" crossorigin="anonymous">
-
-    <!-- Estilos personalizados -->
-    <link rel="stylesheet" href="/css/perfil.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/perfil.css" />
 </head>
 <body>
 
-    <!-- Navbar con el nombre Restaurante -->
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-            <div class="container">
-                <a class="navbar-brand" href="/">Restaurante</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Sección debajo del menú con los enlaces de Inicio, Perfil y Cerrar sesión -->
-    <section class="bg-light py-4 mt-5">
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-negro fixed-top shadow">
         <div class="container">
-            <div class="row text-center">
-                <div class="col">
-                    <a class="btn btn-secondary" href="/restaurante">Inicio</a>
-                </div>
-                <div class="col">
-                    <a class="btn btn-secondary" href="/opcionAdmin"> Solo Administrador</a>
-                </div>
-                <div class="col">
-                    <a class="btn btn-secondary" href="/logout">Cerrar sesión</a>
-                </div>
+            <a class="navbar-brand" href="/">Restaurante</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+</header>
+
+<section class="opciones-usuario mt-5 pt-5">
+    <div class="container">
+        <div class="d-flex justify-content-center gap-4 flex-wrap">
+            <a class="btn btn-oro" href="/restaurante">Inicio</a>
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <a class="btn btn-azul" href="/opcionAdmin">Solo Administrador</a>
             </div>
+            <a class="btn btn-gris" href="/logout">Cerrar sesión</a>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Main content -->
-    <main class="container mt-5 pt-5">
-        <div class="text-center">
-            <h1 class="display-4 mb-4">Perfil de Usuario</h1>
-            <h3 class="text-muted mb-5">Bienvenido, <span th:text="${usuario.nombre}">Nombre Usuario</span></h3>
-        </div>
+<main class="container mt-4">
+    <div class="text-center text-light">
+        <h1 class="display-4 mb-3">Perfil de Usuario</h1>
+        <h4 class="text-muted">Bienvenido, <span th:text="${usuario.nombre}">Nombre Usuario</span></h4>
+    </div>
 
-        <!-- Mensajes de éxito/error -->
-        <div th:if="${mensaje}" class="alert alert-success mb-4" role="alert">
-            <p th:text="${mensaje}"></p>
-        </div>
+    <div th:if="${mensaje}" class="alert alert-success text-center my-3" role="alert">
+        <p th:text="${mensaje}"></p>
+    </div>
 
-        <div th:if="${error}" class="alert alert-danger mb-4" role="alert">
-            <p th:text="${error}"></p>
-        </div>
+    <div th:if="${error}" class="alert alert-danger text-center my-3" role="alert">
+        <p th:text="${error}"></p>
+    </div>
 
-        <!-- Formulario para actualizar perfil -->
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h4 class="card-title text-center mb-4">Actualizar Perfil</h4>
-                        <form action="/perfil/actualizar" method="post">
-                            <div class="mb-3">
-                                <label for="nombre" class="form-label">Nombre:</label>
-                                <input type="text" id="nombre" name="nombre" class="form-control" value="${usuario.nombre}" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Correo Electrónico:</label>
-                                <input type="email" id="email" name="email" class="form-control" value="${usuario.correo}" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Actualizar Perfil</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mis Pedidos -->
-        <div class="mt-5">
-            <h2 class="text-center mb-4">Mis Pedidos</h2>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                <div th:each="pedido : ${pedidos}" class="col">
-                    <div class="card shadow-lg">
-                        <div class="card-body">
-                            <h5 class="card-title">Pedido ID: <span th:text="${pedido.id_pedido}"></span></h5>
-                            <p><strong>Fecha:</strong> <span th:text="${pedido.fecha}"></span></p>
-                            <p><strong>Cantidad:</strong> <span th:text="${pedido.cantidad}"></span></p>
-                            <p><strong>Total:</strong> $<span th:text="${pedido.total}"></span></p>
-                            <p><strong>Menú:</strong> <span th:text="${pedido.menu.nombreDePlato}"></span></p>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card bg-gris text-white shadow">
+                <div class="card-body">
+                    <h4 class="text-center mb-4">Actualizar Perfil</h4>
+                    <form action="/perfil/actualizar" method="post">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre:</label>
+                            <input type="text" id="nombre" name="nombre" class="form-control" value="${usuario.nombre}" required>
                         </div>
-                    </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo Electrónico:</label>
+                            <input type="email" id="email" name="email" class="form-control" value="${usuario.correo}" required>
+                        </div>
+                        <button type="submit" class="btn btn-azul w-100">Actualizar Perfil</button>
+                    </form>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-center text-white py-4 mt-5">
-        <p>&copy; 2024 Restaurante</p>
-    </footer>
+<footer class="text-center text-white bg-negro py-3 mt-5">
+    <p>&copy; 2024 Restaurante</p>
+</footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybB7jD6jRovhNf6l06v6v5OdSZxG7xTk7lJk2p4lFhsO0xihJf" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8Fqv8lm6wNnKv6lQF8q5/6Q4E+8zAlhY9xQLTATy6x1xf5" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

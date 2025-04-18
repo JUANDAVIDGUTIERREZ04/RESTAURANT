@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,87 +10,107 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/lista_reservas.css">
 </head>
+
 <body>
 
-<header>
-    <h1>Panel de Administración - Reservas</h1>
-</header>
+    <header>
+        <h1>Panel de Administración - Reservas</h1>
+    </header>
 
-<div class="main-container">
-    <div class="menu-container">
-        <nav>
-            <ul>
-                <li><a href="/listaPedidos"><i class="fas fa-utensils"></i> Lista de Pedidos</a></li>
-                <li><a href="/usuarios"><i class="fas fa-users"></i> Lista de Usuarios</a></li>
-                <li><a href="/adminMenu/listar"><i class='bx bx-bowl-hot'></i> Registrar Menú</a></li>
-                <li><a href="/opcionAdmin"><i class='bx bx-arrow-back'></i> Salir</a></li>
-            </ul>
-        </nav>
+    <button id="toggle-menu">☰</button>
+
+
+    <div class="main-container">
+        <div id="menu-container">
+            <nav>
+                <ul>
+                    <li><a href="/listaPedidos"><i class="fas fa-utensils"></i> Lista de Pedidos</a></li>
+                    <li><a href="/usuarios"><i class="fas fa-users"></i> Lista de Usuarios</a></li>
+                    <li><a href="/adminMenu/listar"><i class='bx bx-bowl-hot'></i> Registrar Menú</a></li>
+                    <li><a href="/opcionAdmin"><i class='bx bx-arrow-back'></i> Salir</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            <div class="tabla-container">
+                <h2>LISTA DE RESERVAS</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>NOMBRE</th>
+                            <th>TELÉFONO</th>
+                            <th>EMAIL</th>
+                            <th>FECHA</th>
+                            <th>NÚMERO DE PERSONAS</th>
+                            <th>MOTIVO</th>
+                            <th>RESTRICCIONES</th>
+                            <th>COMENTARIOS</th>
+                            <th>ID MESA</th>
+                            <th>SECCIÓN</th>
+                            <th>CAMBIAR ESTADO DE RESERVA</th>
+                            <th>METODO DE PAGO</th> <!-- Nueva columna para el estado -->
+                            <th>PRECIO</th>
+                            <th>ESTADO</th> <!-- Nueva columna para el estado -->
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Thymeleaf para iterar sobre las reservas -->
+                        <tr th:each="reserva : ${reservas}">
+                            <td th:text="${reserva.id}"></td>
+                            <td th:text="${reserva.nombre}"></td>
+                            <td th:text="${reserva.telefono}"></td>
+                            <td th:text="${reserva.email}"></td>
+                            <td th:text="${reserva.fecha}"></td>
+                            <td th:text="${reserva.numeroPersonas}"></td>
+                            <td th:text="${reserva.motivo}"></td>
+                            <td th:text="${reserva.restricciones}"></td>
+                            <td th:text="${reserva.comentarios}"></td>
+                            <td th:text="${reserva.mesa.idMesa}"></td>
+                            <td th:text="${reserva.mesa.seccion}"></td>
+                            <td th:text="${reserva.metodoDePago}"></td>
+                            <td th:text="${reserva.mesa.precio}"></td>
+                            <td>
+                                <form th:action="@{/reservas/actualizarEstado/{id}(id=${reserva.id})}" method="post">
+                                    <select name="estado" th:value="${reserva.estadoReserva}">
+                                        <option value="no pagada">No pagada</option>
+                                        <option value="cancelada">Cancelada</option>
+                                    </select>
+                                    <button type="submit" class="button">Actualizar Estado</button>
+                                </form>
+                            </td>
+
+                            <!-- Mostrar el estado actual de la reserva -->
+                            <td th:text="${reserva.estadoReserva}"></td>
+
+                            <!-- Formulario para cambiar el estado de la reserva -->
+                            <td>
+
+
+                                <!-- Formulario para eliminar la reserva -->
+                                <form th:action="@{/reservas/eliminar/{id}(id=${reserva.id})}" method="post">
+                                    <button type="submit" class="button"
+                                        style="background-color: red; color: white;">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <div class="content">
-        <div class="container">
-            <h2>Lista de Reservas</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>NOMBRE</th>
-                        <th>TELÉFONO</th>
-                        <th>EMAIL</th>
-                        <th>FECHA</th>
-                        <th>NÚMERO DE PERSONAS</th>
-                        <th>MOTIVO</th>
-                        <th>RESTRICCIONES</th>
-                        <th>COMENTARIOS</th>
-                        <th>ID MESA</th>
-                        <th>SECCIÓN</th>
-                        <th>CAMBIAR ESTADO DE RESERVA</th>
-                        <th>ESTADO</th> <!-- Nueva columna para el estado -->
-                        <th>ACCIONES</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Thymeleaf para iterar sobre las reservas -->
-                    <tr th:each="reserva : ${reservas}">
-                        <td th:text="${reserva.id}"></td>
-                        <td th:text="${reserva.nombre}"></td>
-                        <td th:text="${reserva.telefono}"></td>
-                        <td th:text="${reserva.email}"></td>
-                        <td th:text="${reserva.fecha}"></td>
-                        <td th:text="${reserva.numeroPersonas}"></td>
-                        <td th:text="${reserva.motivo}"></td>
-                        <td th:text="${reserva.restricciones}"></td>
-                        <td th:text="${reserva.comentarios}"></td>
-                        <td th:text="${reserva.mesa.idMesa}"></td>
-                        <td th:text="${reserva.mesa.seccion}"></td>
-                        <td>
-                            <form th:action="@{/reservas/actualizarEstado/{id}(id=${reserva.id})}" method="post">
-                                <select name="estado" th:value="${reserva.estadoReserva}">
-                                    <option value="no pagada">No pagada</option>
-                                    <option value="cancelada">Cancelada</option>
-                                </select>
-                                <button type="submit" class="button">Actualizar Estado</button>
-                            </form>
-                        </td>
+    <script>
+        const toggleButton = document.getElementById('toggle-menu');
+        const menu = document.getElementById('menu-container');
 
-                        <!-- Mostrar el estado actual de la reserva -->
-                        <td th:text="${reserva.estadoReserva}"></td>
+        toggleButton.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+    </script>
 
-                        <!-- Formulario para cambiar el estado de la reserva -->
-                        <td>
-                            
-
-                            <!-- Formulario para eliminar la reserva -->
-                            <form th:action="@{/reservas/eliminar/{id}(id=${reserva.id})}" method="post">
-                                <button type="submit" class="button" style="background-color: red; color: white;">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>        
-    </div>
-</div>
 </body>
+
 </html>

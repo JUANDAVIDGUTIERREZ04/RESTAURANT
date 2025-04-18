@@ -1,8 +1,6 @@
 package com.aplicacionweb.restaurante.Service;
 
-
-
-import com.aplicacionweb.restaurante.Models.Reserva;
+import com.aplicacionweb.restaurante.Models.Reservas.Reserva;
 import com.aplicacionweb.restaurante.Repository.ReservaRepository;
 
 import java.util.List;
@@ -20,21 +18,22 @@ public class ReservaService {
     public void guardarReserva(Reserva reserva) {
         reservaRepository.save(reserva);
     }
+
     public List<Reserva> obtenerTodasLasReservas() {
         return reservaRepository.findAll();
     }
-    
+
     public void eliminarReserva(Long id) {
-        reservaRepository.deleteById(id);  // Elimina la reserva por su ID
+        reservaRepository.deleteById(id); // Elimina la reserva por su ID
     }
 
-     // Nuevo método para actualizar el estado de una reserva
-     public void actualizarEstadoReserva(Long id, String nuevoEstado) {
+    // Nuevo método para actualizar el estado de una reserva
+    public void actualizarEstadoReserva(Long id, String nuevoEstado) {
         Optional<Reserva> reservaOptional = reservaRepository.findById(id);
         if (reservaOptional.isPresent()) {
             Reserva reserva = reservaOptional.get();
-            reserva.setEstadoReserva(nuevoEstado);  // Actualiza el estado de la reserva
-            reservaRepository.save(reserva);  // Guarda los cambios
+            reserva.setEstadoReserva(nuevoEstado); // Actualiza el estado de la reserva
+            reservaRepository.save(reserva); // Guarda los cambios
         }
     }
 }

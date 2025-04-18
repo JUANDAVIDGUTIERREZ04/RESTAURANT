@@ -1,92 +1,44 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menú de Administración</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            display: flex;
-            height: 100vh; /* Altura completa de la ventana */
-            background-color: #f0f0f0; /* Color de fondo */
-            flex-direction: column; /* Para que el header esté arriba */
-        }
-        header {
-            background-color: #241f1e; /* Fondo negro */
-            color: white;
-            padding: 20px;
-            text-align: center;
-            width: 100%; /* Asegura que el header ocupe todo el ancho */
-        }
-        .main-container {
-            display: flex; /* Para que el menú esté a la izquierda */
-            flex-grow: 1; /* Permite que esta sección ocupe el resto del espacio */
-        }
-        .menu-container {
-            background-color: #333;
-            padding: 20px;
-            border-radius: 0px; /* Bordes redondeados */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
-            width: 250px; /* Ancho del contenedor */
-            margin: 0; /* Sin márgenes */
-        }
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0; /* Eliminar márgenes */
-        }
-        nav ul li {
-            margin: 10px 0; /* Espaciado entre elementos */
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            display: block; /* Hacer que el enlace ocupe todo el ancho */
-            padding: 10px; /* Espaciado interno */
-            border-radius: 4px; /* Bordes redondeados en los enlaces */
-            transition: background-color 0.3s; /* Transición suave para el hover */
-        }
-        nav ul li a:hover {
-            background-color: #444; /* Color de fondo al pasar el ratón */
-        }
-        .content {
-            flex-grow: 1; /* Permite que el contenido ocupe el resto del espacio */
-            padding: 20px; /* Espaciado interno del contenido */
-        }
-    </style>
+    <link rel="stylesheet" href="/css/opcionesAdmin.css">
 </head>
+
 <body>
 
-<header>
-    <h1>Panel de Administración</h1>
-</header>
+    <header>
+        <h1>Panel de Administración</h1>
+    </header>
 
-<div class="main-container">
-    <div class="menu-container">
-        <nav>
-            <ul>
-                <li><a href="/reservas/listaReserva"><i class="fas fa-calendar-check"></i> Lista de Reservas</a></li>
-                <li><a href="/listaPedidos"><i class="fas fa-utensils"></i> Lista de Pedidos</a></li>
-                <li><a href="/usuarios"><i class="fas fa-users"></i> Lista de Usuarios</a></li>
-                <li><a href="/adminMenu/listar"><i class='bx bx-bowl-hot'></i> Registrar Menú</a></li>
-                <li><a href="/mesas/disponibles"><i class='bx bx-table'></i> Mesas</a></li>
-                <li><a href="/restaurante"><i class='bx bx-arrow-back'></i> Salir</a></li>
-                
-            </ul>
-        </nav>
-    </div>
+    <div class="main-container">
+        <div class="menu-container">
+            <nav>
+                <ul>
+                    <li><a href="/reservas/listaReserva"><i class="fas fa-calendar-check"></i> Lista de Reservas</a>
+                    </li>
+                    <li><a href="/listaPedidos"><i class="fas fa-utensils"></i> Lista de Pedidos</a></li>
+                    <li><a href="/usuarios"><i class="fas fa-users"></i> Lista de Usuarios</a></li>
+                    <li><a href="/adminMenu/listar"><i class='bx bx-bowl-hot'></i> Registrar Menú</a></li>
+                    <li><a href="/mesas/disponibles"><i class='bx bx-table'></i> Mesas</a></li>
+                    <li><a href="/restaurante"><i class='bx bx-arrow-back'></i> Salir</a></li>
 
-    <div class="content">
-        <!-- Aquí puedes agregar el contenido principal del panel de administración -->
-        <h2>Bienvenido al Panel de Administración</h2>
-        <p>Aquí podrás gestionar todas las funcionalidades del sistema.</p>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            <!-- Aquí puedes agregar el contenido principal del panel de administración -->
+            <h2>Bienvenido al Panel de Administración</h2>
+            <p>Aquí podrás gestionar todas las funcionalidades del sistema.</p>
+        </div>
     </div>
-</div>
 
 </body>
+
 </html>

@@ -143,22 +143,46 @@ public String finalizarCompra(String tipoEntrega, Authentication authentication,
     // Guardar los detalles del pedido en la base de datos
     detallePedidoService.guardarDetallesPedido(detallesPedido);
 
-    // Limpiar el carrito después de finalizar la compra (sin eliminar los CarritoItems)
-    carritoService.limpiarCarrito(usuario); // Limpiar el carrito del usuario
+    // Limpiar el carrito después de finalizar la compra (marcar los CarritoItems como inactivos)
+    for (CarritoItem item : itemsCarrito) {
+        carritoService.eliminarCarritoItem(item.getId());  // Llamar al servicio para marcar como inactivo
+    }
 
     // Pasar los detalles del pedido y tipo de entrega a la vista
     model.addAttribute("detallesPedido", detallesPedido);
     model.addAttribute("tipoEntrega", tipoEntrega);
 
-    return "detalles-pedidos";  // Vista para mostrar los detalles de la compra
+    return "redirect:/carrito/listaDetallePedido";  // Vista para mostrar los detalles de la compra
 }
 
 
 
-    @GetMapping("/detallePedido")
-    public String mostrarDetallePedido() {
-        return "detalles-pedidos";
+// Método para ver los detalles de los pedidos de un usuario
+@GetMapping("/listaDetallePedido")
+public String verDetallesPedidos(Authentication authentication, Model model) {
+    if (authentication == null || !authentication.isAuthenticated()) {
+        return "redirect:/login"; // Redirigir al login si no está autenticado
     }
+
+    String username = authentication.getName();
+    Long usuarioId = userService.buscarByUsername(username).getId();
+
+    // Obtener los detalles de los pedidos del usuario
+    List<DetallePedido> detallesPedidos = detallePedidoService.obtenerDetallesPorUsuario(usuarioId);
+
+    model.addAttribute("detallesPedidos", detallesPedidos); // Pasamos los detalles a la vista
+    System.out.println("Detalles encontrados: " + detallesPedidos.size());
+
+    System.out.println("Detalles encontrados: " + detallesPedidos.size());
+    detallesPedidos.forEach(System.out::println);
+
+
+    return "detalles-pedidos";  // Vista donde se muestran los detalles de los pedidos
+}
+
+
+
+    
     
     
 

@@ -118,37 +118,58 @@ body {
         }
 
         /* Formulario para Agregar Menú */
+
+        /* Formulario para Agregar Menú */
         .form-container {
-            background-color: #444;
+            background-color: #483a3a; /* Fondo claro que contrasta con el negro */
             padding: 20px;
             margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            border-radius: 5px;
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra oscura ahora que el fondo es claro */
+            border: 1px solid #ccc;
         }
+        
 
-        .form-container input, .form-container textarea {
-            width: 97%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #fff;
-            border-radius: 5px;
-            background-color: #555;
-            color: white;
-        }
+/* Inputs y textarea */
+.form-container input,
+.form-container textarea {
+    width: 97%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #666;
+    border-radius: 5px;
+    background-color: #1c1818; /* Fondo más oscuro, pero no negro puro */
+    color: #f9f9f9;
+    font-size: 15px;
+    transition: border-color 0.3s, background-color 0.3s;
+}
 
-        .form-container button {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+.form-container input:focus,
+.form-container textarea:focus {
+    outline: none;
+    border-color: #28a745;
+    background-color: #262626;
+}
 
-        .form-container button:hover {
-            background-color: #218838;
-        }
+/* Botón */
+.form-container button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.form-container button:hover {
+    background-color: #218838;
+    transform: scale(1.02);
+}
+
+      
+
 
         /* Estilos para el botón de eliminar */
         button {

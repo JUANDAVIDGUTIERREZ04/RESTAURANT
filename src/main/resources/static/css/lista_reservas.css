@@ -1,136 +1,157 @@
+/* Estilos Generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #FFFFFF;
+    color: #000000;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
 
-        /* Estilos Generales */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #FFFFFF; /* Fondo blanco */
-            color: #000000; /* Texto negro */
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        header {
+header {
     background-color: #241f1e;
     color: white;
-    padding: 20px 100px 20px 80px; /* Ajustar el padding: top, right, bottom, left */
+    padding: 20px 100px 20px 80px;
     text-align: center;
     width: 100%;
 }
 
-        .main-container {
-            display: flex;
-            flex-grow: 1;
-        }
+.main-container {
+    display: flex;
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
 
-        .menu-container {
-            width: 250px;
-            background-color: #343a40;
-            height: 100vh;
-            padding-top: 20px;
-        }
+#menu-container {
+    width: 200px; /* Cambiá este valor si querés más ancho */
+    background-color: #343a40;
+    height: 100vh;
+    transition: transform 0.3s ease;
+    flex-shrink: 0; /* Impide que el menú se encoja */
+}
 
-        nav ul {
-            list-style-type: none;
-            padding: 20px;
-            margin: 0;
-        }
+nav ul {
+    list-style-type: none;
+    padding: 20px;
+    margin: 0;
+}
 
-        nav ul li {
-            margin: 10px 0;
-        }
+nav ul li {
+    margin: 10px 0;
+}
 
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            display: block;
-            padding: 10px;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
 
-        nav ul li a:hover {
-            background-color: #444;
-        }
+nav ul li a:hover {
+    background-color: #444;
+}
 
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-            margin-left: 50px;
-        }
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
 
-        .container {
-            background-color: #333; /* Fondo gris oscuro */
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            width: 120%;
-            max-width: 1200px;
-            margin: 0 auto;
-            border-radius: 0px;
-        }
+.tabla-container {
+    background-color: #333;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 0px;
+}
 
-        h1 {
-            text-align: center;
-            color: white;
-        }
+h1 {
+    text-align: center;
+    color: white;
+}
 
-        h2 {
-            text-align: center;
-            color: #fcfbfa; /* Color dorado para el título */
-        }
+h2 {
+    text-align: center;
+    color: #fcfbfa;
+}
 
-        table {
-            width: 100%;
-            margin: 0px 0;
-            border-collapse: collapse;
-        }
+table {
+    width: 100%; /* Arreglado */
+    margin: 0;
+    font-size: 12px;
+}
 
-        th, td {
-            padding: 2px;
-            border: 1px solid #FFFFFF; /* Borde blanco */
-            text-align: left;
-            color: white; /* Texto blanco */
-        }
+th, td {
+    padding: 2px;
+    border: 1px solid #FFFFFF;
+    text-align: left;
+    color: white;
+}
 
-        th {
-            background-color: #444; /* Fondo gris oscuro para encabezados */
-        }
+th {
+    background-color: #444;
+}
 
-        tr:nth-child(even) {
-            background-color: #111; /* Fondo gris oscuro para filas pares */
-        }
+tr:nth-child(even) {
+    background-color: #111;
+}
 
-        tr:hover {
-            background-color: #555; /* Fondo gris claro al pasar el ratón */
-        }
+tr:hover {
+    background-color: #555;
+}
 
-        .button {
-            background-color: #FFFFFF; /* Botón blanco */
-            color: #000; /* Texto negro */
-            padding: 10px 15px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            text-decoration: none; /* Sin subrayado */
-        }
+.button {
+    background-color: #FFFFFF;
+    color: #000;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    text-decoration: none;
+}
 
-        .button:hover {
-            background-color: #CCCCCC; /* Fondo gris claro al pasar el ratón */
-        }
+.button:hover {
+    background-color: #CCCCCC;
+}
 
-        /* Estilos para el botón de eliminar */
-        button {
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
+/* Estilos para el botón de eliminar */
+button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
 
-        button:hover {
-            background-color: darkred;
-        }
+button:hover {
+    background-color: darkred;
+}
 
+/* Botón para mostrar/ocultar menú */
+#toggle-menu {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    padding: 10px 15px;
+    font-size: 18px;
+    background-color: #343a40;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Estilo para ocultar el menú */
+#menu-container.hidden {
+    transform: translateX(-100%);
+}

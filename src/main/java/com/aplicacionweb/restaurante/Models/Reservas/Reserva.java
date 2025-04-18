@@ -1,10 +1,11 @@
-package com.aplicacionweb.restaurante.Models;
+package com.aplicacionweb.restaurante.Models.Reservas;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 import java.time.LocalDateTime;
 
@@ -41,13 +42,22 @@ public class Reserva {
     private String restricciones;
     private String comentarios;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String estadoReserva = "no pagada";  // Estado predeterminado es "no pagada"
+    private MetodoDePago metodoDePago;
 
+    
 
+    @Column(nullable = false)
+    private String estadoReserva = "no pagada"; // Estado predeterminado es "no pagada"
 
-     // Relación Many-to-One entre Reserva y Mesa
-     @ManyToOne
-     @JoinColumn(name = "mesa_id") // Foreign key a Mesa
-     private Mesa mesa;
+    // Relación Many-to-One entre Reserva y Mesa
+    @ManyToOne
+    @JoinColumn(name = "mesa_id") // Foreign key a Mesa
+    private Mesa mesa;
+
+    @Column(nullable = false)
+    private Double precio;
+
+    
 }

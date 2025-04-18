@@ -86,10 +86,15 @@ ul {
 .menu-izquierda li {
     margin-right:60px;
     margin-top: 20px;
+    transition: all 0.3s ease;
+    
 }
 
-.menu-derecha li {
-    margin-left: 20px;
+.menu-izquierda li:hover {
+
+    transform: scale(1.1);
+    
+    
 }
 
 

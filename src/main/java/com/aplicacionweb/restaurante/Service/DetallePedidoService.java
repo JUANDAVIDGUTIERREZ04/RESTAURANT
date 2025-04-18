@@ -4,6 +4,9 @@ package com.aplicacionweb.restaurante.Service;
 
 import com.aplicacionweb.restaurante.Models.DetallePedido;
 import com.aplicacionweb.restaurante.Repository.DetallePedidoRepository;
+
+import jakarta.transaction.Transactional;
+
 import com.aplicacionweb.restaurante.Models.CarritoItem;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,17 @@ public class DetallePedidoService {
     DetallePedidoRepository detallePedidoRepository;
 
 
+    // Método para obtener los detalles de pedido de un usuario
+    public List<DetallePedido> obtenerDetallesPorUsuario(Long userId) {
+        return detallePedidoRepository.findByCarritoItem_Usuario_Id(userId);
+    }
+
+    
+    
+
+
     // Método para guardar los detalles del pedido
+    @Transactional
     public void guardarDetallesPedido(List<DetallePedido> detallesPedido) {
         detallePedidoRepository.saveAll(detallesPedido);  // Guardar todos los detalles del pedido en la base de datos
     }

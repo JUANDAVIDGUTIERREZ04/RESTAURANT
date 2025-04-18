@@ -1,5 +1,6 @@
 package com.aplicacionweb.restaurante.Models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,6 +38,10 @@ public class CarritoItem {
     
 
     private Double subtotal;
+
+    @Column(nullable = false)
+    private boolean activo = true;  // Esto indica si el item está activo en el carrito o eliminado
+
 
     @PrePersist
     @PreUpdate

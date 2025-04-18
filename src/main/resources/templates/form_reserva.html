@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <nav>
@@ -34,32 +36,37 @@
             <h1 class="title">Formulario de Reserva</h1>
             <form id="reservaForm" action="/reservas/registrar" method="POST">
                 <div class="field">
-                    <label for="nombre">Nombre:</label> 
-                    <input type="text" id="nombre" name="nombre" class="input-field" required aria-label="Nombre del cliente">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" class="input-field" required
+                        aria-label="Nombre del cliente">
                     <div id="nombreError" class="error"></div>
                 </div>
 
                 <div class="field">
                     <label for="telefono">Teléfono:</label>
-                    <input type="tel" id="telefono" name="telefono" class="input-field" required aria-label="Teléfono de contacto">
+                    <input type="tel" id="telefono" name="telefono" class="input-field" required
+                        aria-label="Teléfono de contacto">
                     <div id="telefonoError" class="error"></div>
                 </div>
 
                 <div class="field">
                     <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" class="input-field" required aria-label="Correo electrónico">
+                    <input type="email" id="email" name="email" class="input-field" required
+                        aria-label="Correo electrónico">
                     <div id="emailError" class="error"></div>
                 </div>
 
                 <div class="field">
                     <label for="fecha">Fecha y Hora:</label>
-                    <input type="datetime-local" id="fecha" name="fecha" class="input-field" required aria-label="Fecha y hora de la reserva">
+                    <input type="datetime-local" id="fecha" name="fecha" class="input-field" required
+                        aria-label="Fecha y hora de la reserva">
                     <div id="fechaError" class="error"></div>
                 </div>
 
                 <div class="field">
                     <label for="numeroPersonas">Número de Personas:</label>
-                    <input type="number" id="numeroPersonas" name="numeroPersonas" class="input-field" required min="1" aria-label="Número de personas para la reserva">
+                    <input type="number" id="numeroPersonas" name="numeroPersonas" class="input-field" required min="1"
+                        aria-label="Número de personas para la reserva">
                     <div id="numeroPersonasError" class="error"></div>
                 </div>
 
@@ -69,13 +76,13 @@
                         <option value="" disabled selected>Selecciona una mesa</option>
                         <!-- Thymeleaf para iterar sobre las mesas disponibles -->
                         <tr th:each="mesa : ${mesas}">
-        <option th:value="${mesa.idMesa}" 
-        th:text="'Mesa ' + ${mesa.numeroMesa} + ' (Capacidad: ' + ${mesa.capacidad} + ', Precio: ' + ${mesa.precio} + ', Sección: ' + ${mesa.seccion} + ')'"/>
-    </tr>
+                            <option th:value="${mesa.idMesa}"
+                                th:text="'Mesa ' + ${mesa.numeroMesa} + ' (Capacidad: ' + ${mesa.capacidad} + ', Precio: ' + ${mesa.precio} + ', Sección: ' + ${mesa.seccion} + ')'" />
+                        </tr>
                     </select>
                     <div id="mesaError" class="error"></div>
                 </div>
-                
+
 
                 <div class="field">
                     <label for="motivo">Motivo:</label>
@@ -99,22 +106,36 @@
                         <option value="Mesa en terraza">Mesa en terraza</option>
                         <option value="Otro">Otro (especificar)</option>
                     </select>
-                    <input type="text" id="restriccionesTexto" name="restriccionesTexto" class="input-field" placeholder="Especificar restricciones" style="display: none;">
+                    <input type="text" id="restriccionesTexto" name="restriccionesTexto" class="input-field"
+                        placeholder="Especificar restricciones" style="display: none;">
                 </div>
 
                 <div class="field">
                     <label for="comentarios">Observaciones y/o Comentarios:</label>
-                    <textarea id="comentarios" name="comentarios" class="input-field" aria-label="Comentarios adicionales"></textarea>
+                    <textarea id="comentarios" name="comentarios" class="input-field"
+                        aria-label="Comentarios adicionales"></textarea>
                 </div>
 
-                <button type="submit" class="btn" id="submitBtn" disabled >Enviar Reserva</button>
+                <div class="field">
+                    <label for="metodoDePago">Método de Pago:</label>
+                    <select id="metodoDePago" name="metodoDePago" class="input-field" required>
+                        <option value="" disabled selected>Selecciona un método</option>
+                        <option value="EFECTIVO">Efectivo</option>
+                        <option value="TARJETA_CREDITO">Tarjeta de Crédito</option>
+                        <option value="TARJETA_DEBITO">Tarjeta Débito</option>
+                        <option value="TRANSFERENCIA">Transferencia</option>
+                        <option value="PAYPAL">PayPal</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn" disabled>Enviar Reserva</button>
             </form>
         </div>
 
         <div id="mensajeExito" class="alert alert-success" style="display:none;">
             <p>¡Reserva realizada con éxito!</p>
         </div>
-        
+
         <div id="mensajeError" class="alert alert-danger" style="display:none;">
             <p>Error al realizar la reserva. Intenta nuevamente.</p>
         </div>
@@ -192,36 +213,37 @@
         validarFormulario();
 
         // Mostrar mensaje de éxito o error según el caso
-        window.onload = function() {
+        window.onload = function () {
             var mensajeExitoDiv = document.getElementById('mensajeExito');
             var mensajeErrorDiv = document.getElementById('mensajeError');
 
             if (mensajeExitoDiv) {
                 mensajeExitoDiv.style.display = 'block';
-                setTimeout(function() {
+                setTimeout(function () {
                     mensajeExitoDiv.style.display = 'none';
                 }, 3000);
             }
 
             if (mensajeErrorDiv) {
                 mensajeErrorDiv.style.display = 'block';
-                setTimeout(function() {
+                setTimeout(function () {
                     mensajeErrorDiv.style.display = 'none';
                 }, 3000);
             }
         };
 
-        
-    function mostrarTextoRestricciones() {
-        const select = document.getElementById("restricciones");
-        const inputTexto = document.getElementById("restriccionesTexto");
-        if (select.value === "Otro") {
-            inputTexto.style.display = "block";
-        } else {
-            inputTexto.style.display = "none";
+
+        function mostrarTextoRestricciones() {
+            const select = document.getElementById("restricciones");
+            const inputTexto = document.getElementById("restriccionesTexto");
+            if (select.value === "Otro") {
+                inputTexto.style.display = "block";
+            } else {
+                inputTexto.style.display = "none";
+            }
         }
-    }
 
     </script>
 </body>
+
 </html>

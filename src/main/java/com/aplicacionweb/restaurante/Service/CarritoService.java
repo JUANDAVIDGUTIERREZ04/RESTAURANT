@@ -51,15 +51,19 @@ public class CarritoService {
 
     // Método para limpiar el carrito del usuario
     
-    public void limpiarCarrito(User usuario) {
-        List<CarritoItem> carritoItems = carritoRepository.findByUsuario(usuario);
-    
-        // Desvinculamos los items del usuario sin eliminar los CarritoItems
-        for (CarritoItem item : carritoItems) {
-            item.setUsuario(null);  // Desvinculamos el item del usuario
-            carritoRepository.save(item);  // Guardamos el item desvinculado
-        }
+    // Método para eliminar un CarritoItem (marcarlo como inactivo)
+    public void eliminarCarritoItem(Long itemId) {
+        // Buscar el CarritoItem por su ID
+        CarritoItem item = carritoRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("Item no encontrado"));
+
+        // Marcarlo como inactivo
+        item.setActivo(false);
+
+        // Guardar el CarritoItem con el campo "activo" actualizado
+        carritoRepository.save(item);
     }
+    
     
     
     
