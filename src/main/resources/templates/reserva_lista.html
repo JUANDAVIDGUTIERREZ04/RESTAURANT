@@ -19,7 +19,6 @@
 
     <button id="toggle-menu">☰</button>
 
-
     <div class="main-container">
         <div id="menu-container">
             <nav>
@@ -42,17 +41,17 @@
                             <th>NOMBRE</th>
                             <th>TELÉFONO</th>
                             <th>EMAIL</th>
-                            <th>FECHA</th>
+                            <th>FECHA DE CHECK-IN</th>
+                            <th>FECHA DE RESERVA</th>
                             <th>NÚMERO DE PERSONAS</th>
                             <th>MOTIVO</th>
                             <th>RESTRICCIONES</th>
                             <th>COMENTARIOS</th>
                             <th>ID MESA</th>
                             <th>SECCIÓN</th>
-                            <th>CAMBIAR ESTADO DE RESERVA</th>
-                            <th>METODO DE PAGO</th> <!-- Nueva columna para el estado -->
+                            <th>MÉTODO DE PAGO</th>
                             <th>PRECIO</th>
-                            <th>ESTADO</th> <!-- Nueva columna para el estado -->
+                            <th>ESTADO</th>
                             <th>ACCIONES</th>
                         </tr>
                     </thead>
@@ -64,6 +63,7 @@
                             <td th:text="${reserva.telefono}"></td>
                             <td th:text="${reserva.email}"></td>
                             <td th:text="${reserva.fecha}"></td>
+                            <td th:text="${reserva.fechaReserva}"></td>
                             <td th:text="${reserva.numeroPersonas}"></td>
                             <td th:text="${reserva.motivo}"></td>
                             <td th:text="${reserva.restricciones}"></td>
@@ -71,28 +71,22 @@
                             <td th:text="${reserva.mesa.idMesa}"></td>
                             <td th:text="${reserva.mesa.seccion}"></td>
                             <td th:text="${reserva.metodoDePago}"></td>
-                            <td th:text="${reserva.mesa.precio}"></td>
+                            <td th:text="${reserva.precio}"></td>
+                            <td th:text="${reserva.estadoReserva}"></td>
                             <td>
                                 <form th:action="@{/reservas/actualizarEstado/{id}(id=${reserva.id})}" method="post">
                                     <select name="estado" th:value="${reserva.estadoReserva}">
                                         <option value="no pagada">No pagada</option>
+                                        <option value="pagada">Pagada</option>
                                         <option value="cancelada">Cancelada</option>
                                     </select>
                                     <button type="submit" class="button">Actualizar Estado</button>
                                 </form>
                             </td>
-
-                            <!-- Mostrar el estado actual de la reserva -->
-                            <td th:text="${reserva.estadoReserva}"></td>
-
-                            <!-- Formulario para cambiar el estado de la reserva -->
                             <td>
-
-
                                 <!-- Formulario para eliminar la reserva -->
                                 <form th:action="@{/reservas/eliminar/{id}(id=${reserva.id})}" method="post">
-                                    <button type="submit" class="button"
-                                        style="background-color: red; color: white;">Eliminar</button>
+                                    <button type="submit" class="button" style="background-color: red; color: white;">Eliminar</button>
                                 </form>
                             </td>
                         </tr>

@@ -22,7 +22,7 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF si es necesario (ten cuidado con esto)
         .authorizeHttpRequests(authorize -> authorize
             .requestMatchers("/registro", "/login", "/", "/css/**",
-             "/js/**", "/registrar", "/images/**", "/modoInvitado", "/imagene  s/**", 
+             "/js/**", "/registrar", "/images/**", "/modoInvitado","/prediccionReservas**", "/imagene  s/**", 
              "/reservas/registrar**","/reservas/**").permitAll() // Permitir acceso a estas rutas sin autenticación
             .requestMatchers("/pedidos","/perfil","/restaurante").hasAnyRole("USER","ADMIN") // Solo admin puede acceder a rutas específicas
             .requestMatchers("/opcionAdmin","/cambiarEstado", "/mesas/**").hasRole("ADMIN") // Solo usuario normal

@@ -18,35 +18,38 @@
             margin: 0;
         }
         
+         
         .main-container {
-            display: flex;
+            display: flex; /* Para que el menú esté a la izquierda */
+            flex-grow: 1; /* Permite que esta sección ocupe el resto del espacio */
         }
-        
         .menu-container {
-            width: 250px;
-            background-color: #343a40;
-            height: 100vh;
-            padding-top: 20px;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 0px; /* Bordes redondeados */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+            width: 250px; /* Ancho del contenedor */
+            margin: 0; /* Sin márgenes */
         }
-        
-        .menu-container nav ul {
+        nav ul {
             list-style-type: none;
             padding: 0;
+            margin: 0; /* Eliminar márgenes */
         }
-        
-        .menu-container nav ul li {
-            margin: 20px 0;
-            text-align: center;
+        nav ul li {
+            margin: 10px 0; /* Espaciado entre elementos */
         }
-        
-        .menu-container nav ul li a {
-            color: #fff;
+        nav ul li a {
+            color: white;
             text-decoration: none;
-            font-size: 18px;
+            font-size: 16px;
+            display: block; /* Hacer que el enlace ocupe todo el ancho */
+            padding: 10px; /* Espaciado interno */
+            border-radius: 4px; /* Bordes redondeados en los enlaces */
+            transition: background-color 0.3s; /* Transición suave para el hover */
         }
-        
-        .menu-container nav ul li a:hover {
-            color: #ffc107;
+        nav ul li a:hover {
+            background-color: #444; /* Color de fondo al pasar el ratón */
         }
         
         .content {

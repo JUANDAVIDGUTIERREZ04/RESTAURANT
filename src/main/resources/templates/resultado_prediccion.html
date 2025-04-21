@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado de la Predicción</title>
+</head>
+<body>
+    <h1>Resultado de la Predicción</h1>
+
+    <!-- Mostrar error si lo hay -->
+    <div th:if="${error != null}">
+        <p style="color: red;">Error: <span th:text="${error}"></span></p>
+    </div>
+
+    <!-- Mostrar el resultado de la predicción -->
+    <div th:if="${resultado != null}">
+        <p>La predicción de cancelación de la reserva es: <span th:text="${resultado}"></span></p>
+    </div>
+
+    <a th:href="@{/prediccionReservas/formulario}">Volver al formulario</a>
+</body>
+</html>
