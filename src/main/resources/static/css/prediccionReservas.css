@@ -1,0 +1,51 @@
+
+/* Estilo general del cuerpo de la página */
+body {
+font-family: Arial, sans-serif;
+line-height: 1.6;
+margin: 0;
+padding: 0;
+background-color: #f4f4f4;
+}
+
+h1 {
+text-align: center;
+margin-top: 20px;
+}
+
+/* Estilo para la tabla */
+table {
+width: 50%;
+margin: 20px auto;
+border-collapse: collapse;
+}
+
+td {
+padding: 10px;
+border: 1px solid #ddd;
+text-align: left;
+}
+
+td strong {
+font-weight: bold;
+}
+
+/* Estilo para las filas de la tabla */
+tr:nth-child(odd) {
+background-color: #f9f9f9;
+}
+
+tr:nth-child(even) {
+background-color: #f1f1f1;
+}
+
+/* Estilos para la tabla responsiva */
+@media (max-width: 768px) {
+table {
+width: 100%;
+}
+
+td {
+padding: 8px;
+}
+}

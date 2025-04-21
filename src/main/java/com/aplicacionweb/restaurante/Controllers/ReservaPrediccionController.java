@@ -27,7 +27,8 @@ public class ReservaPrediccionController {
         try {
             // Realiza la predicción utilizando el servicio
             String resultado = prediccionReservaService.predecirCancelacion(reservaDTO);
-            model.addAttribute("resultado", resultado);  // Resultado de la predicción
+            model.addAttribute("resultado", resultado);
+            model.addAttribute("reservaDTO", reservaDTO);  // Resultado de la predicción
         } catch (Exception e) {
             // En caso de error, muestra el mensaje de error
             model.addAttribute("error", "Error al realizar la predicción: " + e.getMessage());
