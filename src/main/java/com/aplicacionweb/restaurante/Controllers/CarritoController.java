@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -179,6 +180,34 @@ public String verDetallesPedidos(Authentication authentication, Model model) {
 
     return "detalles-pedidos";  // Vista donde se muestran los detalles de los pedidos
 }
+
+
+@PostMapping("/eliminar/{itemId}")
+public String eliminarProductoDelCarrito(@PathVariable Long itemId, Authentication authentication, RedirectAttributes redirectAttributes) {
+    // Verificar que el usuario esté autenticado
+    if (authentication == null || !authentication.isAuthenticated()) {
+        return "redirect:/login"; // Redirigir al login si no está autenticado
+    }
+
+    String username = authentication.getName(); // Obtener el nombre de usuario
+    User usuario = userService.buscarByUsername(username); // Buscar al usuario por su nombre
+
+    if (usuario == null) {
+        redirectAttributes.addFlashAttribute("error", "Usuario no encontrado.");
+        return "redirect:/login"; // Redirigir al login si el usuario no existe
+    }
+
+    // Llamar al servicio para eliminar el producto del carrito
+    try {
+        carritoService.eliminarProductoDelCarrito(itemId); // Eliminar el ítem por su ID
+        redirectAttributes.addFlashAttribute("mensaje", "Producto eliminado del carrito.");
+    } catch (RuntimeException e) {
+        redirectAttributes.addFlashAttribute("error", e.getMessage());
+    }
+
+    return "redirect:/carrito/lista"; // Redirigir a la lista del carrito
+}
+
 
 
 

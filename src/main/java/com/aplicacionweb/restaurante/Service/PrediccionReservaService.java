@@ -23,64 +23,48 @@ public class PrediccionReservaService {
     public void init() {
         try {
             // Carga del modelo
-            InputStream modelStream = new ClassPathResource("reservaaModelPrueba.model").getInputStream();
+            InputStream modelStream = new ClassPathResource("reservaModelPrueba.model").getInputStream();
             classifier = (Classifier) weka.core.SerializationHelper.read(modelStream);
 
-            // Carga de la estructura ARFF
+            // Carga de la estructura ARFF (sin 'estadoReserva' en los atributos, solo como clase)
             InputStream arffStream = new ClassPathResource("reservas.arff").getInputStream();
             DataSource source = new DataSource(arffStream);
             estructuraDatos = source.getDataSet();
-            estructuraDatos.setClassIndex(estructuraDatos.numAttributes() - 1); // 'cancelada' es la clase
+            estructuraDatos.setClassIndex(estructuraDatos.numAttributes() - 1); // estado_reserva como clase
         } catch (Exception e) {
             throw new RuntimeException("Error cargando modelo o estructura", e);
         }
     }
 
-    public String predecirCancelacion(ReservaDTO reservaDTO) throws Exception {
+    public String predecirEstadoReserva(ReservaDTO reservaDTO) throws Exception {
         Instance instance = new DenseInstance(estructuraDatos.numAttributes());
         instance.setDataset(estructuraDatos);
 
-        // Asignación de valores a la instancia (asegurándose de que los tipos sean correctos)
+        // Asignación de valores a la instancia (respetando el orden de atributos)
 
-        // Atributo anticipación (numeric)
-        instance.setValue(0, reservaDTO.getAnticipacion());
+        instance.setValue(0, reservaDTO.getAnticipacion()); // anticipacion (numeric)
+        instance.setValue(1, reservaDTO.getNumeroPersonas()); // numero_personas (numeric)
 
-        // Atributo numeroPersonas (numeric)
-        instance.setValue(1, reservaDTO.getNumeroPersonas());
+        String origen = reservaDTO.getOrigenReserva().toUpperCase();
+        if (estructuraDatos.attribute(2).indexOfValue(origen) == -1)
+            throw new IllegalArgumentException("Origen inválido: " + origen);
+        instance.setValue(2, origen);
 
-        // Atributo origenReserva (nominal) -> Convertir a mayúsculas
-        String origenReserva = reservaDTO.getOrigenReserva().toUpperCase();  // Convertir a mayúsculas
-        if (estructuraDatos.attribute(2).indexOfValue(origenReserva) == -1) {
-            throw new IllegalArgumentException("Origen de reserva inválido: " + origenReserva);
-        }
-        instance.setValue(2, origenReserva);  // Nominal
+        String metodo = reservaDTO.getMetodoDePago().toUpperCase();
+        if (estructuraDatos.attribute(3).indexOfValue(metodo) == -1)
+            throw new IllegalArgumentException("Método de pago inválido: " + metodo);
+        instance.setValue(3, metodo);
 
-        // Atributo metodoDePago (nominal) -> Convertir a mayúsculas
-        String metodoDePago = reservaDTO.getMetodoDePago().toUpperCase();  // Convertir a mayúsculas
-        if (estructuraDatos.attribute(3).indexOfValue(metodoDePago) == -1) {
-            throw new IllegalArgumentException("Método de pago inválido: " + metodoDePago);
-        }
-        instance.setValue(3, metodoDePago);  // Nominal
+        instance.setValue(4, reservaDTO.getClienteRecurrente() ? "true" : "false"); // cliente_recurrente
 
-        // Atributo estadoReserva (nominal) -> Convertir a minúsculas
-        String estadoReserva = reservaDTO.getEstadoReserva().toLowerCase();  // Convertir a minúsculas
-        if (estructuraDatos.attribute(4).indexOfValue(estadoReserva) == -1) {
-            throw new IllegalArgumentException("Estado de reserva inválido: " + estadoReserva);
-        }
-        instance.setValue(4, estadoReserva);  // Nominal
+        String dia = reservaDTO.getDiaSemana().toUpperCase();
+        if (estructuraDatos.attribute(5).indexOfValue(dia) == -1)
+            throw new IllegalArgumentException("Día inválido: " + dia);
+        instance.setValue(5, dia);
 
-        // Atributo clienteRecurrente (nominal)
-        instance.setValue(5, reservaDTO.getClienteRecurrente() ? "true" : "false");  // Nominal
+        // No se asigna el valor de 'estado_reserva', pues es lo que queremos predecir
 
-        // Atributo diaSemana (nominal) -> Convertir a mayúsculas
-        String diaSemana = reservaDTO.getDiaSemana().toUpperCase();  // Convertir a mayúsculas
-        if (estructuraDatos.attribute(6).indexOfValue(diaSemana) == -1) {
-            throw new IllegalArgumentException("Día de la semana inválido: " + diaSemana);
-        }
-        instance.setValue(6, diaSemana);  // Nominal
-
-        // Realización de la predicción
         double prediccion = classifier.classifyInstance(instance);
-        return estructuraDatos.classAttribute().value((int) prediccion); // "true" o "false"
+        return estructuraDatos.classAttribute().value((int) prediccion); // "pagada" o "no_pagada"
     }
 }

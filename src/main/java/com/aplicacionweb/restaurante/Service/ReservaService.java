@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,8 +25,15 @@ public class ReservaService {
     }
 
     public void eliminarReserva(Long id) {
-        reservaRepository.deleteById(id); // Elimina la reserva por su ID
+        reservaRepository.deleteById(id); 
     }
+     
+
+    public List<Reserva> buscarReservaPorNombre(String nombre) {
+        return reservaRepository.findByNombre(nombre); // Llama al repositorio para buscar por nombre
+    }
+    
+
 
     // Nuevo método para actualizar el estado de una reserva
     public void actualizarEstadoReserva(Long id, String nuevoEstado) {

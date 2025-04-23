@@ -5,13 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultado de la Predicción</title>
-    <link rel="stylesheet" href="/css/prediccionReservas.css"> <!-- Asegúrate de tener el archivo CSS -->
-
-  
+    <link rel="stylesheet" href="/css/prediccionReservas.css">
 </head>
 
 <body>
-    <h1>Resultado de la Predicción</h1>
+    <h1>Resultado de la Predicción del Estado de Pago</h1>
 
     <!-- Mostrar error si lo hay -->
     <div th:if="${error != null}">
@@ -20,52 +18,43 @@
 
     <!-- Mostrar el resultado de la predicción -->
     <div th:if="${resultado != null}">
-        <p>La predicción de cancelación de la reserva es: <span th:text="${resultado}"></span></p>
+        <p>La predicción del estado de pago es: <strong><span th:text="${resultado}"></span></strong></p>
     </div>
 
     <a th:href="@{/prediccionReservas/formulario}">Volver al formulario</a>
 
-    <!-- Tabla con Atributo y Valor en formato vertical -->
+    <!-- Tabla de atributos usados -->
     <table>
-        <tbody>
+        <thead>
             <tr>
-                <td><strong>Atributo</strong></td>
-                <td><strong>Valor</strong></td>
+                <th>Atributo</th>
+                <th>Valor</th>
             </tr>
-
-            <tr th:each="reservaPrediccion : ${reservaDTO}">
-                <td><strong>Número de Personas</strong></td>
-                <td th:text="${reservaPrediccion.numeroPersonas}"></td>
+        </thead>
+        <tbody>
+            <tr th:each="reserva : ${reservaDTO}">
+                <td>Número de Personas</td>
+                <td th:text="${reserva.numeroPersonas}"></td>
             </tr>
-
-            <tr th:each="reservaPrediccion : ${reservaDTO}">
-                <td><strong>Origen de la Reserva</strong></td>
-                <td th:text="${reservaPrediccion.origenReserva}"></td>
+            <tr th:each="reserva : ${reservaDTO}">
+                <td>Origen de la Reserva</td>
+                <td th:text="${reserva.origenReserva}"></td>
             </tr>
-
-            <tr th:each="reservaPrediccion : ${reservaDTO}">
-                <td><strong>Método de Pago</strong></td>
-                <td th:text="${reservaPrediccion.metodoDePago}"></td>
+            <tr th:each="reserva : ${reservaDTO}">
+                <td>Método de Pago</td>
+                <td th:text="${reserva.metodoDePago}"></td>
             </tr>
-
-            <tr th:each="reservaPrediccion : ${reservaDTO}">
-                <td><strong>Estado de la Reserva</strong></td>
-                <td th:text="${reservaPrediccion.estadoReserva}"></td>
+            <tr th:each="reserva : ${reservaDTO}">
+                <td>¿Cliente Recurrente?</td>
+                <td th:text="${reserva.clienteRecurrente ? 'Sí' : 'No'}"></td>
             </tr>
-
-            <tr th:each="reservaPrediccion : ${reservaDTO}">
-                <td><strong>¿Eres cliente recurrente?</strong></td>
-                <td th:text="${reservaPrediccion.clienteRecurrente ? 'Sí' : 'No'}"></td>
+            <tr th:each="reserva : ${reservaDTO}">
+                <td>Anticipación (días)</td>
+                <td th:text="${reserva.anticipacion}"></td>
             </tr>
-
-            <tr th:each="reservaPrediccion : ${reservaDTO}">
-                <td><strong>Anticipación (en días)</strong></td>
-                <td th:text="${reservaPrediccion.anticipacion}"></td>
-            </tr>
-
-            <tr th:each="reservaPrediccion : ${reservaDTO}">
-                <td><strong>Día de la Semana</strong></td>
-                <td th:text="${reservaPrediccion.diaSemana}"></td>
+            <tr th:each="reserva : ${reservaDTO}">
+                <td>Día de la Semana</td>
+                <td th:text="${reserva.diaSemana}"></td>
             </tr>
         </tbody>
     </table>

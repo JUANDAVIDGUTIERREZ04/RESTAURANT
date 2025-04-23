@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,72 +8,99 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="/css/perfil.css" />
 </head>
+
 <body>
 
-<header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-negro fixed-top shadow">
-        <div class="container">
-            <a class="navbar-brand" href="/">Restaurante</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-    </nav>
-</header>
-
-<section class="opciones-usuario mt-5 pt-5">
-    <div class="container">
-        <div class="d-flex justify-content-center gap-4 flex-wrap">
-            <a class="btn btn-oro" href="/restaurante">Inicio</a>
-            <div sec:authorize="hasRole('ROLE_ADMIN')">
-                <a class="btn btn-azul" href="/opcionAdmin">Solo Administrador</a>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-negro fixed-top shadow">
+            <div class="container">
+                <a class="navbar-brand" href="/">Restaurante</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
             </div>
-            <a class="btn btn-gris" href="/logout">Cerrar sesión</a>
+        </nav>
+    </header>
+
+    <section class="opciones-usuario mt-5 pt-5">
+        <div class="container">
+            <div class="d-flex justify-content-center gap-4 flex-wrap">
+                <a class="btn btn-oro" href="/restaurante">Inicio</a>
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="btn btn-azul" href="/opcionAdmin">Solo Administrador</a>
+                </div>
+                <a class="btn btn-gris" href="/logout">Cerrar sesión</a>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<main class="container mt-4">
-    <div class="text-center text-light">
-        <h1 class="display-4 mb-3">Perfil de Usuario</h1>
-        <h4 class="text-muted">Bienvenido, <span th:text="${usuario.nombre}">Nombre Usuario</span></h4>
-    </div>
+    <main class="container mt-4">
+        <div class="text-center text-light">
+            <h1 class="display-4 mb-3">Perfil de Usuario</h1>
+            <h4 class="bienvenido">Bienvenido, <span th:text="${user.nombre}">Nombre Usuario</span></h4>
+        </div>
 
-    <div th:if="${mensaje}" class="alert alert-success text-center my-3" role="alert">
-        <p th:text="${mensaje}"></p>
-    </div>
+        <div th:if="${mensaje}" class="alert alert-success text-center my-3" role="alert">
+            <p th:text="${mensaje}"></p>
+        </div>
 
-    <div th:if="${error}" class="alert alert-danger text-center my-3" role="alert">
-        <p th:text="${error}"></p>
-    </div>
+        <div th:if="${error}" class="alert alert-danger text-center my-3" role="alert">
+            <p th:text="${error}"></p>
+        </div>
 
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card bg-gris text-white shadow">
-                <div class="card-body">
-                    <h4 class="text-center mb-4">Actualizar Perfil</h4>
-                    <form action="/perfil/actualizar" method="post">
-                        <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" class="form-control" value="${usuario.nombre}" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Correo Electrónico:</label>
-                            <input type="email" id="email" name="email" class="form-control" value="${usuario.correo}" required>
-                        </div>
-                        <button type="submit" class="btn btn-azul w-100">Actualizar Perfil</button>
-                    </form>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card bg-gris text-white shadow">
+                    <div class="card-body">
+                        <h4 class="text-center mb-4">Actualizar Perfil</h4>
+                        <form action="/usuarios/modificar/{id}" method="post">
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre:</label>
+                                <input type="text" id="nombre" name="nombre" class="form-control"
+                                    th:value="${user.nombre}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="correo" class="form-label">Correo Electrónico:</label>
+                                <input type="email" id="correo" name="correo" class="form-control"
+                                    th:value="${user.correo}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="telefono" class="form-label">Teléfono:</label>
+                                <input type="text" id="telefono" name="telefono" class="form-control"
+                                    th:value="${user.telefono}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Nombre de Usuario:</label>
+                                <input type="text" id="username" name="username" class="form-control"
+                                    th:value="${user.username}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Contraseña:</label>
+                                <input type="password" id="password" name="password" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="role" class="form-label">Rol:</label>
+                                <select id="role" name="role" class="form-select">
+                                    <option value="ROLE_USER" th:selected="${user.role == 'ROLE_USER'}">Usuario</option>
+                                    <option value="ROLE_ADMIN" th:selected="${user.role == 'ROLE_ADMIN'}">Administrador
+                                    </option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-azul w-100">Actualizar Usuario</button>
+                        </form>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
 
-<footer class="text-center text-white bg-negro py-3 mt-5">
-    <p>&copy; 2024 Restaurante</p>
-</footer>
+    <footer class="text-center text-white bg-negro py-3 mt-5">
+        <p>&copy; 2024 Restaurante</p>
+    </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

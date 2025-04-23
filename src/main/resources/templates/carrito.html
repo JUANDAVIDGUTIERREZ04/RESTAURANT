@@ -48,6 +48,7 @@
                         <th>Cantidad</th>
                         <th>Precio</th>
                         <th>Total</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,6 +67,12 @@
                         </td>
                         <td>
                             <span th:text="${item.subtotal}"></span>
+                        </td>
+                        <td>
+                            <!-- Formulario de eliminación -->
+                            <form th:action="@{/carrito/eliminar/{itemId}(itemId=${item.id})}" method="post">
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
                         </td>
                     </tr>
                 </tbody>

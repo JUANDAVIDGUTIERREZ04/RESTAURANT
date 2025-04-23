@@ -1,117 +1,153 @@
+/* Estilo General */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
 
-        /* Estilo General */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-        }
-        
-        header {
-            background-color: #343a40;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        header h1 {
-            margin: 0;
-        }
-        
-         
-        .main-container {
-            display: flex; /* Para que el menú esté a la izquierda */
-            flex-grow: 1; /* Permite que esta sección ocupe el resto del espacio */
-        }
-        .menu-container {
-            background-color: #333;
-            padding: 20px;
-            border-radius: 0px; /* Bordes redondeados */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
-            width: 250px; /* Ancho del contenedor */
-            margin: 0; /* Sin márgenes */
-        }
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0; /* Eliminar márgenes */
-        }
-        nav ul li {
-            margin: 10px 0; /* Espaciado entre elementos */
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            display: block; /* Hacer que el enlace ocupe todo el ancho */
-            padding: 10px; /* Espaciado interno */
-            border-radius: 4px; /* Bordes redondeados en los enlaces */
-            transition: background-color 0.3s; /* Transición suave para el hover */
-        }
-        nav ul li a:hover {
-            background-color: #444; /* Color de fondo al pasar el ratón */
-        }
-        
-        .content {
-            flex: 1;
-            padding: 20px;
-        }
-        
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .container h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        table th, table td {
-            padding: 12px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-        
-        table th {
-            background-color: #343a40;
-            color: #fff;
-        }
-        
-        table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        
-        table tr:hover {
-            background-color: #e9ecef;
-        }
-        
-        .btn {
-            padding: 8px 15px;
-            font-size: 14px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        
-        .btn-danger {
-            background-color: #dc3545;
-            color: #fff;
-        }
-        
-        .btn-danger:hover {
-            background-color: #c82333;
-        }
-        
-        .btn-danger:active {
-            background-color: #bd2130;
-        }
-        
-    
+header {
+    background-color: #241f1e;
+    color: white;
+    padding: 20px 100px 20px 80px;
+    text-align: center;
+    width: 140%;
+}
+
+header h1 {
+    margin: 0;
+}
+
+
+.main-container {
+    display: flex;
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.menu-container {
+    width: 200px;
+    /* Cambiá este valor si querés más ancho */
+    background-color: #343a40;
+    height: 100vh;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    /* Impide que el menú se encoja */
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 20px;
+    margin: 0;
+}
+
+nav ul li {
+    margin: 10px 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+nav ul li a:hover {
+    background-color: #444;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.tabla-container {
+    background-color: #f2f1f1;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    width: 100%;
+
+    margin: 0 auto;
+    border-radius: 0px;
+    color: #060606;
+
+}
+
+.container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+table th,
+table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #343a40;
+    color: #fff;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+table tr:hover {
+    background-color: #e9ecef;
+}
+
+.btn {
+    padding: 8px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-danger:active {
+    background-color: #bd2130;
+}
+
+/* Botón para mostrar/ocultar menú */
+#toggle-menu {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    padding: 10px 15px;
+    font-size: 18px;
+    background-color: #343a40;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Estilo para ocultar el menú */
+/* Estilo para ocultar el menú */
+.menu-container.hidden {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease; /* Añadir transición para que el deslizamiento sea suave */
+}

@@ -64,6 +64,15 @@ public class CarritoService {
         carritoRepository.save(item);
     }
     
+    public void eliminarProductoDelCarrito(Long itemId) {
+        // Buscar y eliminar el CarritoItem por su ID
+        if (carritoRepository.existsById(itemId)) {
+            carritoRepository.deleteById(itemId); // Elimina el ítem completamente de la base de datos
+        } else {
+            throw new RuntimeException("Item no encontrado");
+        }
+    }
+    
     
     
     

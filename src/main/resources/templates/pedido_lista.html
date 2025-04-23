@@ -18,6 +18,8 @@
         <h1>Panel de Administración</h1>
     </header>
 
+    <button id="toggle-menu">☰</button>
+
     <div class="main-container">
         <div class="menu-container">
             <nav>
@@ -33,7 +35,7 @@
         </div>
 
         <div class="content">
-            <div class="container">
+            <div class="tabla-container">
                 <h1>Lista de Pedidos</h1>
 
                 <table>
@@ -95,6 +97,16 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const toggleButton = document.getElementById('toggle-menu');
+        const menu = document.getElementsByClassName('menu-container')[0]; // Usa la clase en lugar del id
+    
+        toggleButton.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+    </script>
+    
 
 </body>
 

@@ -17,22 +17,21 @@ public class ReservaPrediccionController {
     // Muestra el formulario de predicción
     @GetMapping("/formulario")
     public String mostrarFormulario(Model model) {
-        model.addAttribute("reservaDTO", new ReservaDTO());  // Modelo vacío para la vista
-        return "form_prediccion_reserva";  // Vista de entrada
+        model.addAttribute("reservaDTO", new ReservaDTO());  // Objeto vacío para el formulario
+        return "form_prediccion_reserva";  // Nombre de la vista Thymeleaf
     }
 
-    // Procesa la predicción de cancelación
+    // Procesa la predicción de si la reserva será pagada o no
     @PostMapping("/predecir")
-    public String predecirCancelacion(@ModelAttribute ReservaDTO reservaDTO, Model model) {
+    public String predecirEstadoReserva(@ModelAttribute ReservaDTO reservaDTO, Model model) {
         try {
-            // Realiza la predicción utilizando el servicio
-            String resultado = prediccionReservaService.predecirCancelacion(reservaDTO);
+            // Llamada al servicio para obtener la predicción
+            String resultado = prediccionReservaService.predecirEstadoReserva(reservaDTO);
             model.addAttribute("resultado", resultado);
-            model.addAttribute("reservaDTO", reservaDTO);  // Resultado de la predicción
+            model.addAttribute("reservaDTO", reservaDTO);  // Se reenvía para mostrar lo ingresado
         } catch (Exception e) {
-            // En caso de error, muestra el mensaje de error
             model.addAttribute("error", "Error al realizar la predicción: " + e.getMessage());
         }
-        return "resultado_prediccion";  // Vista de resultados
+        return "resultado_prediccion";  // Vista que muestra el resultado
     }
 }

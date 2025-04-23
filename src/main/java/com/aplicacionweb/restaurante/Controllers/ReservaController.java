@@ -105,4 +105,21 @@ public class ReservaController {
         }
         return "redirect:/reservas/listaReserva"; // Redirigir a la lista de reservas
     }
+
+    //  buscar reservas por nombre
+    @GetMapping("/buscar")
+    public String buscarReservaPorNombre(@RequestParam("nombre") String nombre, Model model) {
+        List<Reserva> reservas = reservaService.buscarReservaPorNombre(nombre);
+        
+        // Añadir las reservas al modelo para que Thymeleaf las pueda mostrar
+        model.addAttribute("reservas", reservas);
+
+        // Si no se encuentran reservas, podemos agregar un mensaje adicional al modelo
+        if (reservas.isEmpty()) {
+            model.addAttribute("mensaje", "No se encontraron reservas con ese nombre.");
+        }
+
+        // Devuelve la vista que se renderiza
+        return "reserva_lista"; // La plantilla HTML que mostrará los resultados
+    }
 }
