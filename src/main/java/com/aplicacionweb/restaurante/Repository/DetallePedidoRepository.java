@@ -16,7 +16,7 @@ public interface DetallePedidoRepository extends JpaRepository<DetallePedido, Lo
     // Método para buscar los detalles de pedido por CarritoItem
     List<DetallePedido> findByCarritoItem(CarritoItem carritoItem);
     List<DetallePedido> findByCarritoItem_Usuario_Id(Long UsuarioId);
-    List<DetallePedido> findByCarritoItem_ActivoTrue();
+   
     // Consultar por CarritoItem activo
     
 

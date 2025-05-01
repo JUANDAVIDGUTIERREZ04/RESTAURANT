@@ -12,34 +12,55 @@
 
 <body>
 
+
     <header>
         <h1>Panel de Administración</h1>
     </header>
 
-    <div class="main-container">
-        <div class="menu-container">
-            <nav>
-                <ul>
-                    <li><a href="/reservas/listaReserva"><i class="fas fa-calendar-check"></i> Lista de Reservas</a>
-                    </li>
-                    <li><a href="/listaPedidos"><i class="fas fa-utensils"></i> Lista de Pedidos</a></li>
-                    <li><a href="/usuarios"><i class="fas fa-users"></i> Lista de Usuarios</a></li>
-                    <li><a href="/adminMenu/listar"><i class='bx bx-bowl-hot'></i> Registrar Menú</a></li>
-                    <li><a href="/mesas/disponibles"><i class='bx bx-table'></i> Mesas</a></li>
-                    <li><a href="/prediccionReservas/formulario"><i class='fas fa-brain'></i> Predecir</a></li>
-                    
-                    <li><a href="/restaurante"><i class='bx bx-arrow-back'></i> Salir</a></li>
-
-                </ul>
-            </nav>
-        </div>
-
-        <div class="content">
-            <!-- Aquí puedes agregar el contenido principal del panel de administración -->
-            <h2>Bienvenido al Panel de Administración</h2>
-            <p>Aquí podrás gestionar todas las funcionalidades del sistema.</p>
-        </div>
+    <div class="content">
+        <!-- Aquí puedes agregar el contenido principal del panel de administración -->
+        <h2>Bienvenido al Panel de Administración</h2>
+        <p>Aquí podrás gestionar todas las funcionalidades del sistema.</p>
     </div>
+    </div>
+
+    <div class="menu-container">
+        <a href="/usuarios" class="menu-item">
+            <i class="fas fa-home menu-icon"></i>
+            <div class="menu-text">usuarios</div>
+        </a>
+        <a href="/reservas/listaReserva" class="menu-item">
+            <i class="fas fa-calendar-check menu-icon"></i>
+
+            <div class="menu-text">reservas</div>
+        </a>
+        <a href="/listaPedidos" class="menu-item">
+
+            <i class="fas fa-concierge-bell menu-icon"></i>
+            
+
+            <div class="menu-text">pedidos</div>
+        </a>
+        <a href="/adminMenu/listar" class="menu-item">
+            <i class="fas fa-utensils menu-icon"></i>
+
+            <div class="menu-text">Menus</div>
+        </a>
+
+        <a href="/prediccionReservas/formulario" class="menu-item">
+            <i class="fas fa-brain menu-icon"></i>
+
+            <div class="menu-text">MODELO PREDICTIVO</div>
+        </a>
+
+        <a href="/restaurante" class="menu-item">
+            <i class="fas fa-sign-out-alt menu-icon"></i>
+            <div class="menu-text">Salir</div>
+        </a>
+    </div>
+
+
+
 
 </body>
 

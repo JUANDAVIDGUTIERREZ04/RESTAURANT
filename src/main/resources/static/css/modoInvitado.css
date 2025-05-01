@@ -35,6 +35,15 @@ header {
     height: 100%; /* Las imágenes ocupan toda la altura del carrusel */
     width: 100%; /* Mantiene la imagen en su tamaño */
     object-fit: cover; /* Cubre el área del carrusel sin distorsionar */
+    filter: brightness(40%);
+    transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.imagen-carrusel img:hover{
+    transform: scale(1.05);
+    /* Zoom suave */
+    filter: brightness(0.9);
+    /* Oscurece un poco */
 }
 
 nav {
@@ -70,7 +79,7 @@ ul {
 }
 
 .menu-izquierda {
-    background-color: #333;
+    background-color: rgba(51, 51, 51, 0.3);
     width: 100%; /* Ocupará todo el ancho de la pantalla */
     height: 50px; /* Ajusta la altura según necesites */
     position: fixed; /* Fija el menú en la parte superior */
@@ -113,11 +122,57 @@ a:hover {
 }
 
 .titulo {
-    font-family: 'Times New Roman', serif; /* Fuente Times New Roman */
-    font-size: 56px; /* Tamaño del texto del título */
-    margin: 60px 0 20px; /* Margen ajustado */
-    position: relative; /* Permite que se superponga al carrusel */
-    top: 160px; /* Asegura que el título esté encima del carrusel */
+    font-family: 'Georgia', 'Times New Roman', Times, serif;
+    /* Fuente sofisticada */
+    font-size: 40px;
+    /* Tamaño grande y llamativo */
+    color: #D4AF37;
+    /* Color dorado */
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.8);
+    /* Sombra dorada y negra para resaltar */
+    margin: 60px 0 20px;
+    /* Márgenes ajustados */
+    margin-top: 20px;
+    position: relative;
+    /* Permite que el título se superponga */
+    top: 230px;
+
+    display: flex;            /* Habilitamos Flexbox */
+    justify-content: center;
+    text-transform: uppercase;
+    /* Texto en mayúsculas para darle fuerza */
+    letter-spacing: 3px;
+    /* Espaciado entre letras para claridad */
+    display: inline-block;
+    /* Hace que el título ocupe solo el espacio necesario */
+    padding: 10px 20px;
+    /* Padding para darle más cuerpo */
+    background: linear-gradient(45deg, #2f2f2f, #1a1a1a);
+    /* Fondo con degradado gris oscuro */
+    border-radius: 15px;
+    /* Bordes redondeados elegantes */
+    border: 2px solid #D4AF37;
+    /* Borde dorado para mayor distinción */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 215, 0, 0.7);
+    /* Sombra de contorno elegante */
+    /* Le da una ligera inclinación moderna */
+    animation: glowEffect 2s ease-in-out infinite alternate;
+    /* Efecto de brillo animado */
+}
+
+/* Animación de resplandor para el título */
+@keyframes glowEffect {
+    0% {
+        text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.8);
+    }
+
+    50% {
+        text-shadow: 0 0 15px rgba(255, 215, 0, 0.9), 0 0 25px rgba(255, 215, 0, 0.6);
+    }
+
+    100% {
+        text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.8);
+    }
 }
 
 main {
@@ -182,8 +237,13 @@ footer {
     color: rgba(255, 215, 0, 0.7); /* Color al pasar el mouse */
 }
 
-.menu-derecha a {
-    font-family: 'Times New Roman', serif; /* Cambiar la fuente */
+.menu-derecha  {
+
+    position: relative;
+    left: 1200px;
+    position: fixed;
+    top: 2px;
+    
 }
 
 /*imagenes de bienvenida*/
@@ -308,19 +368,21 @@ footer {
 }
 
 .btn-realizar-pedido {
-    padding: 10px 20px;
-    background-color: #f7b42c;
-    color: white;
-    border: none;
+    padding: 2px 6px;
+    background-color: #f2f0ec;
+    color: rgb(8, 8, 8);
+    border: 2px solid#e38a00 ;
     border-radius: 25px;
+    border-color: #e38a00;
+    
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    position: relative;
+    top: -12px;
+    
 }
 
-.btn-realizar-pedido:hover {
-    background-color: #e38a00;
-}
+
 
 /* Mensajes de éxito o error */
 .mensaje-exito, .mensaje-error {
@@ -495,3 +557,40 @@ footer {
     color: gold; /* Color dorado para las estrellas */
     font-size: 20px; /* Tamaño de las estrellas */
 }
+
+
+
+
+
+/* Estilo para el slogan */
+.slogan-container-2 {
+    font-size: 30px;
+    font-weight:bold;
+    color: white; /* Texto blanco para destacarse sobre fondo oscuro */
+    
+    padding: 25px 50px;
+    border-radius: 15px;
+    box-shadow: 0px 6px 30px rgba(0, 0, 0, 0.15); /* Sombra suave */
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+    
+    letter-spacing: 1.5px;
+    max-width: 80%;
+    margin: 20px auto; /* Centrado y un pequeño margen */
+    display: flex;            /* Habilitamos Flexbox */
+    justify-content: center;
+   
+    position: relative;
+    top: 170px;
+}
+
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 600px) {
+    .slogan-container {
+        font-size: 1.5rem;
+        padding: 15px 30px;
+    }
+}
+
+

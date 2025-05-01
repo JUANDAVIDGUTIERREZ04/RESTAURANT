@@ -1,8 +1,13 @@
 package com.aplicacionweb.restaurante.Service;
 
-import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.aplicacionweb.restaurante.Models.Menu;
@@ -29,10 +34,15 @@ public class MenuService {
         menuRepository.deleteById(id);
     }
 
-    // Obtener todos los menús
     public List<Menu> obtenerTodosLosMenus() {
-        return menuRepository.findAll(); // Asegúrate de que el repositorio esté configurado
+        return menuRepository.findAll();
     }
+
+    public Page<Menu> obtenerMenusPaginados(int page, int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+    return menuRepository.findAll(pageable);
+}
+
 
      // Método para eliminar un menú por su ID
      public void eliminarMenu(Long id) {

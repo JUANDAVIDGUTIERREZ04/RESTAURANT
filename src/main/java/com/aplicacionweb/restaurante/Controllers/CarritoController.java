@@ -144,10 +144,7 @@ public String finalizarCompra(String tipoEntrega, Authentication authentication,
     // Guardar los detalles del pedido en la base de datos
     detallePedidoService.guardarDetallesPedido(detallesPedido);
 
-    // Limpiar el carrito después de finalizar la compra (marcar los CarritoItems como inactivos)
-    for (CarritoItem item : itemsCarrito) {
-        carritoService.eliminarCarritoItem(item.getId());  // Llamar al servicio para marcar como inactivo
-    }
+    
 
     // Pasar los detalles del pedido y tipo de entrega a la vista
     model.addAttribute("detallesPedido", detallesPedido);

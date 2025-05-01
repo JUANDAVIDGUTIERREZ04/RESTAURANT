@@ -3,27 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Menus</title>
+    <title>Lista de Menús</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/css/menu_lista.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     
-    <script>
-        function toggleForm() {
-            const formContainer = document.querySelector('.form-container');
-            formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
-        }
+    
 
-        // Función para mostrar el mensaje de éxito
-        function showSuccessMessage() {
-            const successMessage = document.querySelector('.success-message');
-            successMessage.style.display = 'block';
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-            }, 5000); // Desaparece después de 5 segundos
-        }
-    </script>
+    
 </head>
 <body>
 
@@ -88,7 +76,7 @@
             </div>
 
             <!-- Mensaje de éxito -->
-            <div class="success-message">
+            <div class="success-message" style="display: none;">
                 Registro de Menú Exitoso
             </div>
 
@@ -99,7 +87,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Nombre de Plato</th>
-                        <th>Categoria</th>
+                        <th>Categoría</th>
                         <th>Descripción</th>
                         <th>Precio</th>
                         <th>Imagen</th>
@@ -124,9 +112,41 @@
                     </tr>
                 </tbody>
             </table>
+
+            <!-- Paginación -->
+            <div class="pagination">
+                <ul>
+                    <li th:if="${currentPage > 0}">
+                        <a th:href="@{/adminMenu/listar(page=${currentPage - 1})}">&laquo; Anterior</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:classappend="${i == currentPage} ? 'active'">
+                        <a th:href="@{/adminMenu/listar(page=${i})}" th:text="${i + 1}"></a>
+                    </li>
+                    <li th:if="${currentPage < totalPages - 1}">
+                        <a th:href="@{/adminMenu/listar(page=${currentPage + 1})}">Siguiente &raquo;</a>
+                    </li>
+                </ul>
+            </div>
+
         </div>
     </div>
 </div>
+
+<script>
+    function toggleForm() {
+        const formContainer = document.querySelector('.form-container');
+        formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function showSuccessMessage() {
+        const successMessage = document.querySelector('.success-message');
+        successMessage.style.display = 'block';
+        setTimeout(() => {
+            successMessage.style.display = 'none';
+        }, 5000);
+    }
+</script>
 
 </body>
 </html>

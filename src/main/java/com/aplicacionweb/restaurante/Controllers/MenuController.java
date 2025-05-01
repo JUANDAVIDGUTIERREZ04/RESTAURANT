@@ -4,6 +4,7 @@ import com.aplicacionweb.restaurante.Models.Menu;
 import com.aplicacionweb.restaurante.Service.MenuService;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 import java.nio.file.Path;
-import java.util.List;
+
 
 @Controller
 @RequestMapping("/adminMenu")
@@ -36,13 +37,18 @@ public class MenuController {
     }
 
     @GetMapping("/listar")
-    public String listarMenus(Model model) {
-        List<Menu> menus = menuService.obtenerTodosLosMenus();  // Obtener todos los menús
-        System.out.println("Menús obtenidos: " + menus);  // Esto te ayudará a verificar si se están obteniendo los menús
-        model.addAttribute("menus", menus);  // Agregar los menús al modelo
-        return "menu_lista"; // El nombre de la vista Thymeleaf que se debe renderizar
-    
-    }
+public String listarMenus(@RequestParam(defaultValue = "0") int page,
+                          Model model) {
+    int pageSize = 5;
+    Page<Menu> menuPage = menuService.obtenerMenusPaginados(page, pageSize);
+
+    model.addAttribute("menus", menuPage.getContent());
+    model.addAttribute("totalPages", menuPage.getTotalPages());
+    model.addAttribute("currentPage", page);
+
+    return "menu_lista";
+}
+
     // Método para procesar el formulario de registro y guardar la imagen
     @PostMapping
     public String registrarMenu(@ModelAttribute Menu menu, @RequestParam("imagen") MultipartFile archivo, Model model) {

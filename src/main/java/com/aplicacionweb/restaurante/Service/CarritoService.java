@@ -51,18 +51,7 @@ public class CarritoService {
 
     // Método para limpiar el carrito del usuario
     
-    // Método para eliminar un CarritoItem (marcarlo como inactivo)
-    public void eliminarCarritoItem(Long itemId) {
-        // Buscar el CarritoItem por su ID
-        CarritoItem item = carritoRepository.findById(itemId)
-                .orElseThrow(() -> new RuntimeException("Item no encontrado"));
-
-        // Marcarlo como inactivo
-        item.setActivo(false);
-
-        // Guardar el CarritoItem con el campo "activo" actualizado
-        carritoRepository.save(item);
-    }
+    
     
     public void eliminarProductoDelCarrito(Long itemId) {
         // Buscar y eliminar el CarritoItem por su ID

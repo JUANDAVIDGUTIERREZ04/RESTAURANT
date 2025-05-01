@@ -49,3 +49,80 @@ td {
 padding: 8px;
 }
 }
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    /* Asegura que la navegación esté en la parte superior */
+    z-index: 10;
+    /* Asegura que la navegación esté por encima del carrusel */
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.menu-izquierda {
+
+    background-color: #333;
+    width: 100%;
+    /* Ocupará todo el ancho de la pantalla */
+    height: 60px;
+    /* Ajusta la altura según necesites */
+    position: fixed;
+    /* Fija el menú en la parte superior */
+    top: 0px;
+    /* Se pega arriba */
+    left: 0;
+    /* Se alinea al borde izquierdo */
+    position: fixed;
+
+}
+
+.menu-izquierda li {
+    margin-right: 60px;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+
+}
+
+.menu-izquierda li:hover {
+
+    transform: scale(1.1);
+
+
+}
+
+.menu-derecha li {
+    margin-left: 20px;
+
+}
+
+
+
+
+a {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px;
+    /* Espaciado alrededor del texto */
+    border-radius: 5px;
+    /* Bordes redondeados */
+    transition: background-color 0.3s, box-shadow 0.3s;
+    /* Transiciones suaves */
+    font-size: 14px;
+
+}
+
+a:hover {
+    background-color: rgba(255, 215, 0, 0.7);
+    /* Fondo dorado al pasar el mouse */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 1);
+    /* Sombra luminosa */
+
+}

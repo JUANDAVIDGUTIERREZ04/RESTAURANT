@@ -1,53 +1,69 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    height: 100vh;
+    /* Altura completa de la ventana */
+    background-color: #f0f0f0;
+    /* Color de fondo */
+    flex-direction: column;
+    /* Para que el header esté arriba */
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            display: flex;
-            height: 100vh; /* Altura completa de la ventana */
-            background-color: #f0f0f0; /* Color de fondo */
-            flex-direction: column; /* Para que el header esté arriba */
-        }
-        header {
-            background-color: #241f1e; /* Fondo negro */
-            color: white;
-            padding: 20px;
-            text-align: center;
-            width: 100%; /* Asegura que el header ocupe todo el ancho */
-        }
-        .main-container {
-            display: flex; /* Para que el menú esté a la izquierda */
-            flex-grow: 1; /* Permite que esta sección ocupe el resto del espacio */
-        }
-        .menu-container {
-            background-color: #333;
-            padding: 20px;
-            border-radius: 0px; /* Bordes redondeados */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
-            width: 250px; /* Ancho del contenedor */
-            margin: 0; /* Sin márgenes */
-        }
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0; /* Eliminar márgenes */
-        }
-        nav ul li {
-            margin: 10px 0; /* Espaciado entre elementos */
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            display: block; /* Hacer que el enlace ocupe todo el ancho */
-            padding: 10px; /* Espaciado interno */
-            border-radius: 4px; /* Bordes redondeados en los enlaces */
-            transition: background-color 0.3s; /* Transición suave para el hover */
-        }
-        nav ul li a:hover {
-            background-color: #444; /* Color de fondo al pasar el ratón */
-        }
-        .content {
-            flex-grow: 1; /* Permite que el contenido ocupe el resto del espacio */
-            padding: 20px; /* Espaciado interno del contenido */
-        }
-    
+header {
+    background-color: #241f1e;
+    /* Fondo negro */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    /* Asegura que el header ocupe todo el ancho */
+}
+
+.menu-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 40px;
+    position: relative;
+    top: -60px;
+}
+
+.menu-item {
+    display: block;
+    /* necesario para que el <a> se comporte como un bloque */
+    background-color: white;
+    border-radius: 15px;
+    text-align: center;
+    padding: 30px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s;
+    text-decoration: none;
+    /* quita el subrayado del enlace */
+    color: inherit;
+    /* hereda el color del texto */
+}
+
+.menu-item:hover {
+    transform: scale(1.05);
+}
+
+.menu-icon {
+    font-size: 60px;
+    color: #007BFF;
+    margin-bottom: 15px;
+}
+
+.menu-text {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.content {
+    flex-grow: 1;
+    /* Permite que el contenido ocupe el resto del espacio */
+    padding: 20px;
+    /* Espaciado interno del contenido */
+}

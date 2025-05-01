@@ -16,38 +16,93 @@ body {
 
 /* Menú de navegación */
 nav {
-    background-color: #2c3e50;
-    color: white;
-    padding: 15px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    /* Asegura que la navegación esté en la parte superior */
+    z-index: 10;
+    /* Asegura que la navegación esté por encima del carrusel */
 }
 
-nav h1 {
-    font-size: 1.8rem;
+.logo {
+    width: 40px;
+    /* Tamaño adecuado */
+    height: 40vpx;
+    margin-left: 250px;
+    /* Espacio entre la imagen y el texto */
+
+    border-radius: 50%;
+    /* Opcional: si quieres que la imagen sea redonda */
+
 }
 
-nav ul {
-    list-style: none;
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
     display: flex;
-    gap: 20px;
 }
 
-nav ul li {
-    display: inline-block;
+.menu-izquierda {
+
+    background-color: #333;
+    width: 100%;
+    /* Ocupará todo el ancho de la pantalla */
+    height: 60px;
+    /* Ajusta la altura según necesites */
+    position: fixed;
+    /* Fija el menú en la parte superior */
+    top: 0px;
+    /* Se pega arriba */
+    left: 0;
+    /* Se alinea al borde izquierdo */
+    position: fixed;
+
 }
 
-nav ul li a {
+.menu-izquierda li {
+    margin-right: 60px;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+
+}
+
+.menu-izquierda li:hover {
+
+    transform: scale(1.1);
+
+
+}
+
+.menu-derecha li {
+    margin-left: 20px;
+
+}
+
+
+
+
+a {
+    color: #fff;
     text-decoration: none;
-    color: white;
-    font-size: 1.1rem;
-    transition: color 0.3s ease;
+    padding: 5px 10px;
+    /* Espaciado alrededor del texto */
+    border-radius: 5px;
+    /* Bordes redondeados */
+    transition: background-color 0.3s, box-shadow 0.3s;
+    /* Transiciones suaves */
+    font-size: 14px;
+
 }
 
-nav ul li a:hover {
-    color: #3498db;
+a:hover {
+    background-color: rgba(255, 215, 0, 0.7);
+    /* Fondo dorado al pasar el mouse */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 1);
+    /* Sombra luminosa */
+
 }
 
 /* Formulario Principal */
@@ -56,8 +111,8 @@ form {
     padding: 40px 30px;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 800px;
+    width: 40%;
+    height: 10%;
     margin: 40px auto;
 }
 
@@ -84,7 +139,7 @@ label {
 input[type="number"],
 select {
     width: 100%;
-    padding: 12px 15px;
+    padding: 2px 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 1rem;
