@@ -330,6 +330,23 @@ footer {
     margin-bottom: 10px;
 }
 
+/* Precio */
+/* Estilo general para la sección de precios */
+.precio {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Estilo específico para el valor del precio */
+.precio-valor {
+    font-size: 20px;
+    color: #e38a00;  /* Un color cálido para destacar el precio */
+    font-weight: 700;
+}
+
+
 /* Descripción del Plato */
 .menu-card .descripcion {
     font-size: 14px;

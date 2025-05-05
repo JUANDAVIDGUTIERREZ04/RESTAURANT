@@ -29,8 +29,6 @@
     <div class="container mt-5">
         <h1 class="mb-4">Detalles del pedido</h1>
 
-        
-
         <!-- Tabla con los detalles del pedido -->
         <table class="table table-bordered">
             <thead>
@@ -42,8 +40,9 @@
                     <th>Total</th>
                     <th>Fecha y Hora</th>
                     <th>Día de la Semana</th>
-                    <th>Tipo de Entrega</th> <!-- Nueva columna para el tipo de entrega -->
-                    <th>Acción</th> <!-- Columna para el botón de eliminar -->
+                    <th>Tipo de Entrega</th>
+                    <th>Dirección</th>
+                    <th>Metodo de Pago</th> <!-- Nueva columna para el tipo de entrega -->
                 </tr>
             </thead>
             <tbody>
@@ -73,22 +72,22 @@
                         <span th:text="${detalle.tipoEntrega}"></span> <!-- Mostrar el tipo de entrega aquí -->
                     </td>
                     <td>
-                        <!-- Botón para eliminar el artículo del carrito -->
-                        <form th:action="@{/carrito/eliminar/{id}(id=${detalle.carritoItem.id})}" method="post">
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
-                        </form>
+                        <span th:text="${detalle.direccion}"></span> <!-- Mostrar el tipo de entrega aquí -->
+                    </td>
+                    <td>
+                        <span th:text="${detalle.metodoDePago}"></span> <!-- Mostrar el tipo de entrega aquí -->
                     </td>
                 </tr>
             </tbody>
         </table>
-        
 
         <!-- Volver al menú -->
         <a href="/carrito/lista" class="btn btn-secondary">Volver al carrito de compras</a>
-        
+
     </div>
 
     <!-- Agregar Bootstrap JS desde CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

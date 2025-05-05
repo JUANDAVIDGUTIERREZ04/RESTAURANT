@@ -1,0 +1,261 @@
+/* Estilo base para el cuerpo de la página */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+header {
+    position: relative; /* Permite que el texto se superponga */
+    min-height: 100px; /* Altura mínima del encabezado aumentada */
+    color: #fff;
+    text-align: center; /* Centrar el texto */
+    overflow: hidden; /* Oculta el desbordamiento */
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative; /* Asegura que la navegación esté en la parte superior */
+    z-index: 10; /* Asegura que la navegación esté por encima del carrusel */
+}
+
+.logo img {
+    width: 80px; /* Ajusta el tamaño del logo */
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+     /* Se posiciona de forma absoluta dentro del contenedor */
+    top: 10px;
+    left: -60px;
+    
+    
+   /* Ajusta la distancia desde la parte superior */
+    
+    
+}
+
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    width: 900px; 
+}
+
+.menu-izquierda {
+    background-color: rgba(51, 51, 51, 0.3);
+    width: 100%; /* Ocupará todo el ancho de la pantalla */
+    height: 50px; /* Ajusta la altura según necesites */
+    position: fixed; /* Fija el menú en la parte superior */
+    top: 0px; /* Se pega arriba */
+    left: 0; /* Se alinea al borde izquierdo */
+    position: fixed;
+
+    background-color: #333;
+}
+
+
+
+
+
+.menu-izquierda li {
+    margin-right:60px;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+    
+}
+
+.menu-izquierda li:hover {
+
+    transform: scale(1.1);
+    
+    
+}
+
+
+
+a {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px;
+    /* Espaciado alrededor del texto */
+    border-radius: 5px;
+    /* Bordes redondeados */
+    transition: background-color 0.3s, box-shadow 0.3s;
+    /* Transiciones suaves */
+    font-size: 14px;
+
+}
+
+a:hover {
+    background-color: rgba(255, 215, 0, 0.7);
+    /* Fondo dorado al pasar el mouse */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 1);
+    /* Sombra luminosa */
+
+}
+
+/* Detalles del plato */
+.detalle-plato {
+    margin: 50px auto;
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+}
+
+.menu-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 600px;
+}
+
+.menu-card h3 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.menu-card p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.menu-card img {
+    width: 100%;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* Calificación de los platos */
+.calificacion {
+    margin: 20px 0;
+    font-size: 1.3rem;
+}
+
+.calificacion i {
+    color: #f39c12;
+}
+
+/* Botones de acción */
+.btn-realizar-pedido, .btn-carrito {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.btn-realizar-pedido:hover, .btn-carrito:hover {
+    background-color: #218838;
+}
+
+/* Formulario del carrito */
+.form-carrito {
+    margin-top: 10px;
+}
+
+.cantidad-input {
+    width: 60px;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+/* Mensaje de éxito después de la compra */
+#mensaje {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    background-color: #28a745;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+/* Testimonios */
+#testimonios {
+    background-color: #f1f1f1;
+    padding: 50px 0;
+}
+
+#testimonios h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.testimonios-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.testimonio {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 30%;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* Contacto */
+#contacto {
+    background-color: #ffffff;
+    padding: 50px 0;
+}
+
+#contacto form input, #contacto form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#contacto form button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 1.1rem;
+}
+
+/* Redes Sociales */
+#redes-sociales {
+    background-color: #f8f9fa;
+    padding: 50px 0;
+}
+
+.social-icons a {
+    font-size: 1.5rem;
+    margin-right: 15px;
+    color: #333;
+    text-decoration: none;
+}
+
+.social-icons a:hover {
+    color: #28a745;
+}
+
+/* Footer */
+footer {
+    background-color: #343a40;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}

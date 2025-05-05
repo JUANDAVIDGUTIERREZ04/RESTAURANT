@@ -1,17 +1,12 @@
 package com.aplicacionweb.restaurante.Service;
 
-
-
 import com.aplicacionweb.restaurante.Models.DetallePedido;
-import com.aplicacionweb.restaurante.Repository.DetallePedidoRepository;
-
-import jakarta.transaction.Transactional;
-
 import com.aplicacionweb.restaurante.Models.CarritoItem;
-
+import com.aplicacionweb.restaurante.Repository.DetallePedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,22 +15,17 @@ import java.util.List;
 public class DetallePedidoService {
 
     @Autowired
-    DetallePedidoRepository detallePedidoRepository;
-
+    private DetallePedidoRepository detallePedidoRepository;
 
     // Método para obtener los detalles de pedido de un usuario
     public List<DetallePedido> obtenerDetallesPorUsuario(Long userId) {
         return detallePedidoRepository.findByCarritoItem_Usuario_Id(userId);
     }
 
-    
-    
-
-
     // Método para guardar los detalles del pedido
     @Transactional
     public void guardarDetallesPedido(List<DetallePedido> detallesPedido) {
-        detallePedidoRepository.saveAll(detallesPedido);  // Guardar todos los detalles del pedido en la base de datos
+        detallePedidoRepository.saveAll(detallesPedido);  // Guardar todos los detalles del pedido
     }
 
     // Método para crear detalles del pedido a partir de los items del carrito
@@ -50,19 +40,16 @@ public class DetallePedidoService {
 
             detallesPedido.add(detalle);
         }
-
         return detallesPedido;
     }
 
-    // Método para desvincular los detalles de los CarritoItem
-    public void desvincularDetallesDelCarrito(List<CarritoItem> carritoItems) {
-        for (CarritoItem item : carritoItems) {
-            // Buscar los detalles de pedido asociados a cada CarritoItem
-            List<DetallePedido> detalles = detallePedidoRepository.findByCarritoItem(item);
-            for (DetallePedido detalle : detalles) {
-                detalle.setCarritoItem(null);  // Desvinculamos el detalle del carrito
-                detallePedidoRepository.save(detalle);  // Guardamos el detalle desvinculado
-            }
+    // Método para desvincular los detalles de los CarritoItems (sin eliminar los Detalles)
+    public void desvincularDetallesDelCarrito(CarritoItem carritoItem) {
+        // Buscar los detalles de pedido asociados a un CarritoItem
+        List<DetallePedido> detalles = detallePedidoRepository.findByCarritoItem(carritoItem);
+        for (DetallePedido detalle : detalles) {
+            detalle.setCarritoItem(null);  // Desvincula el detalle del CarritoItem
+            detallePedidoRepository.save(detalle);  // Guarda el detalle desvinculado
         }
     }
 }

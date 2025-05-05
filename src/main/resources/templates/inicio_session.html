@@ -11,25 +11,18 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
-
 </head>
 
 <body>
     <header>
         <nav>
-
-
-
             <ul class="menu-izquierda">
                 <li><a href="/perfil"><i class="fas fa-user"></i> Mi Perfil</a></li>
                 <li><a href="/restaurante"><i class="fas fa-home"></i> Inicio</a></li>
                 <li><a href="#seccion-menu"><i class="fas fa-utensils"></i> Menú</a></li>
                 <li><a href="/reservas"><i class="fas fa-calendar-check"></i> Reservas</a></li>
                 <li><a href="/carrito/lista"><i class="fas fa-shopping-cart"></i> Carro de Compras </a></li>
-
                 <li><a href="/carrito/listaDetallePedido"><i class="fas fa-user"></i>Historial de compras</a></li>
-
             </ul>
 
             <ul class="menu-derecha">
@@ -39,14 +32,11 @@
                 <li>
                     <a href="/carrito/detallePedido">
                         <img src="/images/LOGO.jpg" alt="imagen-logo" class="logo">
-
                     </a>
                 </li>
-
             </ul>
-
-
         </nav>
+
         <div class="carrusel">
             <div class="imagen-carrusel active">
                 <img src="/images/encabezado1.jpg" alt="Imagen 1" />
@@ -58,6 +48,7 @@
                 <img src="/images/encabezado3.jpg" alt="Imagen 3" />
             </div>
         </div>
+
         <h1 class="titulo"> Tecno Restaurant</h1>
     </header>
 
@@ -73,6 +64,7 @@
                 <img src="images/plato3.jpg" alt="Plato 3" />
             </div>
         </section>
+
         <div id="mensaje" th:if="${mensaje}" class="alert alert-success">
             <p th:text="${mensaje}"></p>
         </div>
@@ -84,8 +76,7 @@
             <!-- Botones de selección de categorías -->
             <div id="seccion-menu" class="categorias-menu">
                 <a href="#entrada" class="btn-categoria">ENTRADA <i class='bx bx-bowl-hot'></i> </i></a>
-                <a href="#plato-principal" class="btn-categoria"> </i>PLATO PRINCIPAL <i
-                        class='bx bx-bowl-rice'></i></a>
+                <a href="#plato-principal" class="btn-categoria">PLATO PRINCIPAL <i class='bx bx-bowl-rice'></i></a>
                 <a href="#postre" class="btn-categoria">POSTRE <i class='bx bx-cake'></i></a>
                 <a href="#bebidas" class="btn-categoria">BEBIDAS <i class="bi bi-cup-straw"></i></a>
             </div>
@@ -98,9 +89,12 @@
                         <h3 th:text="${menu.nombreDePlato}"></h3>
                         <p>Precio: $<span th:text="${menu.precio}"></span></p>
                         <p th:text="${menu.descripcion}"></p>
-                        <div>
+
+                        <!-- Enlace envolviendo la imagen para redirigir al detalle -->
+                        <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
                             <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                        </div>
+                        </a>
+                        
 
                         <div class="calificacion">
                             <i class="bi bi-star-fill"></i>
@@ -110,28 +104,6 @@
                             <i class="bi bi-star-half"></i>
                         </div>
                         <br>
-
-                        <!-- Formulario para realizar pedido -->
-                        <form th:action="@{/pedidos}" method="post">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <!-- Selección de tipo de entrega -->
-                            <select name="tipoEntrega" required>
-                                <option value="DOMICILIO">Domicilio</option>
-                                <option value="PERSONALMENTE">Personalmente</option>
-                            </select>
-                            <button type="submit" class="btn-realizar-pedido">Realizar Pedido</button>
-                        </form>
-
-                        <!-- Formulario para agregar al carrito -->
-                        <form th:action="@{/carrito/agregar}" method="post" class="form-carrito">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <button type="submit" class="btn-carrito">
-                                <i class="bi bi-cart"></i> Agregar al Carrito
-                            </button>
-                        </form>
-
                     </div>
                 </div>
             </div>
@@ -144,9 +116,11 @@
                         <h3 th:text="${menu.nombreDePlato}"></h3>
                         <p>Precio: $<span th:text="${menu.precio}"></span></p>
                         <p th:text="${menu.descripcion}"></p>
-                        <div>
+
+                        <!-- Enlace envolviendo la imagen para redirigir al detalle -->
+                        <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
                             <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                        </div>
+                        </a>
 
                         <div class="calificacion">
                             <i class="bi bi-star-fill"></i>
@@ -156,28 +130,6 @@
                             <i class="bi bi-star-half"></i>
                         </div>
                         <br>
-
-
-                        <!-- Formulario para realizar pedido -->
-                        <form th:action="@{/pedidos}" method="post">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <!-- Selección de tipo de entrega -->
-                            <select name="tipoEntrega" required>
-                                <option value="DOMICILIO">Domicilio</option>
-                                <option value="PERSONALMENTE">Personalmente</option>
-                            </select>
-                            <button type="submit" class="btn-realizar-pedido">Realizar Pedido</button>
-                        </form>
-
-                        <!-- Formulario para agregar al carrito -->
-                        <form th:action="@{/carrito/agregar}" method="post" class="form-carrito">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <button type="submit" class="btn-carrito">
-                                <i class="bi bi-cart"></i> Agregar al Carrito
-                            </button>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -190,9 +142,11 @@
                         <h3 th:text="${menu.nombreDePlato}"></h3>
                         <p>Precio: $<span th:text="${menu.precio}"></span></p>
                         <p th:text="${menu.descripcion}"></p>
-                        <div>
+
+                        <!-- Enlace envolviendo la imagen para redirigir al detalle -->
+                        <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
                             <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                        </div>
+                        </a>
 
                         <div class="calificacion">
                             <i class="bi bi-star-fill"></i>
@@ -202,28 +156,6 @@
                             <i class="bi bi-star-half"></i>
                         </div>
                         <br>
-
-
-                        <!-- Formulario para realizar pedido -->
-                        <form th:action="@{/pedidos}" method="post">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <!-- Selección de tipo de entrega -->
-                            <select name="tipoEntrega" required>
-                                <option value="DOMICILIO">Domicilio</option>
-                                <option value="PERSONALMENTE">Personalmente</option>
-                            </select>
-                            <button type="submit" class="btn-realizar-pedido">Realizar Pedido</button>
-                        </form>
-
-                        <!-- Formulario para agregar al carrito -->
-                        <form th:action="@{/carrito/agregar}" method="post" class="form-carrito">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <button type="submit" class="btn-carrito">
-                                <i class="bi bi-cart"></i> Agregar al Carrito
-                            </button>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -236,9 +168,11 @@
                         <h3 th:text="${menu.nombreDePlato}"></h3>
                         <p>Precio: $<span th:text="${menu.precio}"></span></p>
                         <p th:text="${menu.descripcion}"></p>
-                        <div>
+
+                        <!-- Enlace envolviendo la imagen para redirigir al detalle -->
+                        <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
                             <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                        </div>
+                        </a>
 
                         <div class="calificacion">
                             <i class="bi bi-star-fill"></i>
@@ -248,123 +182,20 @@
                             <i class="bi bi-star-half"></i>
                         </div>
                         <br>
-
-                        <!-- Formulario para realizar pedido -->
-                        <form th:action="@{/pedidos}" method="post">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <!-- Selección de tipo de entrega -->
-                            <select name="tipoEntrega" required>
-                                <option value="DOMICILIO">Domicilio</option>
-                                <option value="PERSONALMENTE">Personalmente</option>
-                            </select>
-                            <button type="submit" class="btn-realizar-pedido">Realizar Pedido</button>
-                        </form>
-
-                        <!-- Formulario para agregar al carrito -->
-                        <form th:action="@{/carrito/agregar}" method="post" class="form-carrito">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <button type="submit" class="btn-carrito">
-                                <i class="bi bi-cart"></i> Agregar al Carrito
-                            </button>
-                        </form>
                     </div>
                 </div>
             </div>
+        </section>
 
-
-
-
-            <!-- Testimonios -->
-            <section id="testimonios">
-                <h1>Lo que dicen nuestros clientes</h1>
-                <div class="testimonios-container">
-                    <div class="testimonio">
-                        <p>"El mejor restaurante que he visitado. Comida deliciosa y excelente servicio!"</p>
-                        <p>- Juan Pérez</p>
-                    </div>
-                    <div class="testimonio">
-                        <p>"Ambiente acogedor y comida increíblemente fresca. ¡Volveré sin duda!"</p>
-                        <p>- María López</p>
-                    </div>
-                    <div class="testimonio">
-                        <p>"Me encantaron los platos. Muy sabrosos y presentados con mucho cuidado."</p>
-                        <p>- Ana García</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Contacto -->
-            <section id="contacto">
-                <h1>Contáctanos</h1>
-                <p>¿Tienes alguna duda o comentario? ¡Nos encantaría saber de ti!</p>
-                <form action="/contacto" method="POST">
-                    <input type="text" name="nombre" placeholder="Tu nombre" required />
-                    <input type="email" name="email" placeholder="Tu correo" required />
-                    <textarea name="mensaje" placeholder="Tu mensaje" required></textarea>
-                    <button type="submit" class="btn-realizar-pedido">Enviar</button>
-                </form>
-            </section>
-
-            <!-- Redes Sociales -->
-            <section id="redes-sociales">
-                <h1>¡Síguenos en nuestras redes sociales!</h1>
-                <div class="social-icons">
-                    <a href="https://facebook.com" target="_blank">
-                        <i class="bi bi-facebook"></i> FACEBOOK
-                    </a>
-                    <a href="https://instagram.com" target="_blank">
-                        <i class="bi bi-instagram"></i> INSTAGRAM
-                    </a>
-                    <a href="https://twitter.com" target="_blank">
-                        <i class="bi bi-twitter"></i> TWITTER
-                    </a>
-                </div>
-            </section>
-
-            <!-- Footer -->
-            <footer>
-                <p>&copy; 2024 Mi Restaurante | Todos los derechos reservados</p>
-            </footer>
     </main>
 
-    <script>
-        let index = 0;
-        const images = document.querySelectorAll('.imagen-carrusel');
-        const totalImages = images.length;
+    <footer>
+        <p>&copy; 2025 TecnoRestaurant. Todos los derechos reservados.</p>
+    </footer>
 
-        function showNextImage() {
-            images[index].classList.remove('active');
-            index = (index + 1) % totalImages;
-            images[index].classList.add('active');
-        }
-
-        setInterval(showNextImage, 3000);
-
-        //div de mensaje despues de hacer la compra
-        window.onload = function () {
-            var mensajeDiv = document.getElementById('mensaje');
-
-            // Verifica si el div tiene contenido
-            if (mensajeDiv.innerHTML.trim() !== '') {
-                mensajeDiv.style.display = 'block'; // Muestra el mensaje
-
-                // Ocultar el mensaje después de 2 segundos
-                setTimeout(function () {
-                    mensajeDiv.style.display = 'none';
-                }, 3000);
-            }
-        };
-
-
-
-
-
-    </script>
-
-
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/scripts.js"></script>
 </body>
 
 </html>

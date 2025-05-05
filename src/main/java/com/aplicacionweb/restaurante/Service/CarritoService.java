@@ -1,29 +1,34 @@
 package com.aplicacionweb.restaurante.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.aplicacionweb.restaurante.Models.CarritoItem;
+
+import com.aplicacionweb.restaurante.Models.User;
+import com.aplicacionweb.restaurante.Models.Menu;
+import com.aplicacionweb.restaurante.Repository.CarritoRepository;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.aplicacionweb.restaurante.Models.CarritoItem;
-import com.aplicacionweb.restaurante.Models.Menu;
-import com.aplicacionweb.restaurante.Models.User;
-import com.aplicacionweb.restaurante.Repository.CarritoRepository;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CarritoService {
 
-    
-
-
     @Autowired
     private CarritoRepository carritoRepository;
 
-    public void agregarItemAlCarrito(User usuario, Menu menu, int cantidad) {
-        // Ver si ya existe un ítem del mismo menú en el carrito del usuario
-        Optional<CarritoItem> existente = carritoRepository.findByUsuarioAndMenu(usuario, menu);
+    
 
+
+    // Método para agregar un item al carrito
+    public void agregarItemAlCarrito(User usuario, Menu menu, int cantidad) {
+        if (cantidad <= 0) {
+            throw new IllegalArgumentException("La cantidad debe ser mayor que cero.");
+        }
+    
+        Optional<CarritoItem> existente = carritoRepository.findByUsuarioAndMenu(usuario, menu);
+    
         if (existente.isPresent()) {
             CarritoItem item = existente.get();
             item.setCantidad(item.getCantidad() + cantidad);
@@ -38,32 +43,34 @@ public class CarritoService {
             carritoRepository.save(item);
         }
     }
-
+    
 
     // Obtener los elementos del carrito de un usuario
     public List<CarritoItem> obtenerListaCarrito(User usuario) {
-        return carritoRepository.findByUsuario(usuario); // Esto asume que ya tienes un método en el repositorio
+        return carritoRepository.findByUsuarioAndActivoTrue(usuario);  // Solo ítems activos
     }
+    
 
+    // Método para guardar un CarritoItem (por si lo necesitas)
     public void guardar(CarritoItem item) {
         carritoRepository.save(item);
     }
 
-    // Método para limpiar el carrito del usuario
-    
-    
-    
+    // Método para eliminar un CarritoItem del carrito
     public void eliminarProductoDelCarrito(Long itemId) {
-        // Buscar y eliminar el CarritoItem por su ID
-        if (carritoRepository.existsById(itemId)) {
-            carritoRepository.deleteById(itemId); // Elimina el ítem completamente de la base de datos
+        // Buscar el CarritoItem por su ID
+        Optional<CarritoItem> carritoItem = carritoRepository.findById(itemId);
+
+        if (carritoItem.isPresent()) {
+            // Marcar el CarritoItem como inactivo (en lugar de eliminarlo)
+            CarritoItem item = carritoItem.get();
+            item.setActivo(false);  // Marcar como inactivo, no lo eliminamos de la base de datos
+            carritoRepository.save(item);  // Guardar el estado actualizado
+
+            // Los DetallePedido siguen existiendo con la referencia al CarritoItem inactivo
+            // No es necesario hacer nada más con DetallePedido, ya que solo estás "desactivando" el ítem en el carrito
         } else {
-            throw new RuntimeException("Item no encontrado");
+            throw new RuntimeException("Item no encontrado en el carrito.");
         }
     }
-    
-    
-    
-    
 }
-

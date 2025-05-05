@@ -31,7 +31,7 @@
             <ul class="menu-derecha">
                 <li class="logo">
                     
-                        <img src="images/LOGO-2.jpg" alt="Logo" style="width: 50px; height: auto;" />
+                        <img src="images/LOGO TECNO RESTAURANT.jpg" alt="Logo" style="width: 50px; height: auto;" />
                     
                 </li>
             </ul>
@@ -86,11 +86,12 @@
                 <div class="menu-container">
                     <div th:each="menu : ${menus}" th:if="${menu.categoria == 'Entradas'}" class="menu-card">
                         <h3 th:text="${menu.nombreDePlato}"></h3>
-                        <p>Precio: $<span th:text="${menu.precio}"></span></p>
+                        <p class="precio">Precio: $<span th:text="${menu.precio}"></span></p>
                         <p th:text="${menu.descripcion}"></p>
-                        <div>
+
+                        <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
                             <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                        </div>
+                        </a>
 
                         <div class="calificacion">
                             <i class="bi bi-star-fill"></i>
@@ -134,9 +135,9 @@
                         <h3 th:text="${menu.nombreDePlato}"></h3>
                         <p>Precio: $<span th:text="${menu.precio}"></span></p>
                         <p th:text="${menu.descripcion}"></p>
-                        <div>
+                        <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
                             <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                        </div>
+                        </a>
 
                         <div class="calificacion">
                             <i class="bi bi-star-fill"></i>
@@ -157,7 +158,7 @@
                                 <option value="DOMICILIO">Domicilio</option>
                                 <option value="PERSONALMENTE">Personalmente</option>
                             </select>
-                            <button type="submit" class="btn-realizar-pedido">Realizar Pedido</button>
+                            <button type="submit" class="btn-realizar-pedido">Comprar ahora</button>
                         </form>
 
                         <!-- Formulario para agregar al carrito -->
@@ -185,9 +186,9 @@
                             <p>Precio: $<span th:text="${menu.precio}"></span></p>
                             <p class="descripcion" th:text="${menu.descripcion}"></p>
             
-                            <div>
+                            <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
                                 <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                            </div>
+                            </a>
             
                             <div class="calificacion">
                                 <i class="bi bi-star-fill"></i>
@@ -207,7 +208,7 @@
                                     <option value="DOMICILIO">Domicilio</option>
                                     <option value="PERSONALMENTE">Personalmente</option>
                                 </select>
-                                <button type="submit" class="btn-realizar-pedido">Realizar Pedido</button>
+                                <button type="submit" class="btn-realizar-pedido">Comprar ahora</button>
                             </form>
             
                             <!-- Carrito -->
@@ -233,9 +234,9 @@
                         <h3 th:text="${menu.nombreDePlato}"></h3>
                         <p>Precio: $<span th:text="${menu.precio}"></span></p>
                         <p th:text="${menu.descripcion}"></p>
-                        <div>
+                        <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
                             <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                        </div>
+                        </a>
 
                         <div class="calificacion">
                             <i class="bi bi-star-fill"></i>
@@ -255,7 +256,7 @@
                                 <option value="DOMICILIO">Domicilio</option>
                                 <option value="PERSONALMENTE">Personalmente</option>
                             </select>
-                            <button type="submit" class="btn-realizar-pedido">Realizar Pedido</button>
+                            <button type="submit" class="btn-realizar-pedido">Comprar ahora</button>
                         </form>
 
                         <!-- Formulario para agregar al carrito -->
@@ -334,7 +335,7 @@
         <span class="close">&times;</span> <!-- Botón de cerrar -->
         <div class="modal-content">
             <div class="logo">
-                <img src="images/LOGO-2.jpg" alt="Logo" />
+                <img src="images/LOGO TECNO RESTAURANT.jpg" alt="Logo" />
             </div>
             <br>
 

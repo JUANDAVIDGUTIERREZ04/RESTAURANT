@@ -14,6 +14,9 @@ public interface CarritoRepository extends JpaRepository<CarritoItem, Long> {
     List<CarritoItem> findByUsuario(User usuario);
 
     Optional<CarritoItem> findByUsuarioAndMenu(User usuario, Menu menu);
+    // Método para obtener los CarritoItems activos de un usuario
+    List<CarritoItem> findByUsuarioAndActivoTrue(User usuario);  // Solo activos
+
    
 
     

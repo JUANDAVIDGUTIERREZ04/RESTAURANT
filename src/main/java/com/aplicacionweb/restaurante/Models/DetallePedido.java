@@ -9,6 +9,8 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.aplicacionweb.restaurante.Models.Reservas.MetodoDePago;
+
 @Entity
 @Getter
 @Setter
@@ -20,12 +22,17 @@ public class DetallePedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)  // Agrega CascadeType.PERSIST para que se guarde el CarritoItem automáticamente
+    @ManyToOne(cascade = CascadeType.MERGE)  // Cambié CascadeType.PERSIST por CascadeType.MERGE
     private CarritoItem carritoItem;
 
     private LocalDateTime fechaHora;
     private String diaSemana;
     private String tipoEntrega;
+
+    private String direccion;
+
+    @Enumerated(EnumType.STRING)
+    private MetodoDePago metodoDePago;
 
     public DetallePedido(CarritoItem carritoItem, String tipoEntrega) {
         this.carritoItem = carritoItem;
@@ -70,4 +77,3 @@ public class DetallePedido {
                 '}';
     }
 }
-

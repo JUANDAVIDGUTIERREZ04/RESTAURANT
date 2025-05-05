@@ -1,11 +1,10 @@
 package com.aplicacionweb.restaurante.Controllers;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +18,7 @@ import com.aplicacionweb.restaurante.Models.CarritoItem;
 import com.aplicacionweb.restaurante.Models.DetallePedido;
 import com.aplicacionweb.restaurante.Models.Menu;
 import com.aplicacionweb.restaurante.Models.User;
+import com.aplicacionweb.restaurante.Models.Reservas.MetodoDePago;
 import com.aplicacionweb.restaurante.Service.CarritoService;
 import com.aplicacionweb.restaurante.Service.DetallePedidoService;
 import com.aplicacionweb.restaurante.Service.MenuService;
@@ -37,6 +37,7 @@ public class CarritoController {
     @Autowired
     private DetallePedidoService detallePedidoService;
 
+    // Agregar producto al carrito
     @PostMapping("/agregar")
     public String agregarAlCarrito(
             @RequestParam("menuId") Long menuId,
@@ -44,24 +45,18 @@ public class CarritoController {
             Authentication authentication,
             RedirectAttributes redirectAttributes
     ) {
-        // Verificar que el usuario esté autenticado
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login"; // Redirigir al login si no está autenticado
         }
 
-        // Obtenemos el username del usuario autenticado
         String username = authentication.getName();
-
-        // Usamos UserService para obtener el usuario
         User usuario = userService.buscarByUsername(username);
 
-        // Validamos que el usuario exista
         if (usuario == null) {
             redirectAttributes.addFlashAttribute("error", "Usuario no encontrado.");
-            return "redirect:/login"; // Redirigir a login si no se encuentra el usuario
+            return "redirect:/login";
         }
 
-        // Buscamos el menú por su ID
         Menu menu = menuService.getMenuById(menuId)
                 .orElseThrow(() -> new RuntimeException("Menú no encontrado"));
 
@@ -69,42 +64,34 @@ public class CarritoController {
         carritoService.agregarItemAlCarrito(usuario, menu, cantidad);
 
         redirectAttributes.addFlashAttribute("mensaje", "Producto agregado al carrito.");
-        return "redirect:/restaurante";
+        return "redirect:/carrito/lista";
     }
 
-    // Obtener el carrito del usuario
+    // Ver el carrito de un usuario
     @GetMapping("/lista")
     public String verCarrito(Authentication authentication, Model model) {
-        // Verificar que el usuario esté autenticado
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login"; // Redirigir al login si no está autenticado
         }
 
-        // Obtener el username del usuario autenticado
         String username = authentication.getName();
-
-        // Buscar el usuario por su username
         User usuario = userService.buscarByUsername(username);
 
         if (usuario == null) {
             model.addAttribute("error", "Usuario no encontrado.");
-            return "redirect:/login"; // Redirigir a login si no se encuentra el usuario
+            return "redirect:/login";
         }
 
-        // Obtener la lista de productos en el carrito del usuario
         List<CarritoItem> itemsCarrito = carritoService.obtenerListaCarrito(usuario);
 
-        // Calcular el subtotal del carrito
         double subtotal = itemsCarrito.stream()
                 .mapToDouble(CarritoItem::getSubtotal)
                 .sum();
 
-        // Calcular la cantidad total de productos en el carrito
         int cantidadTotalIcono = itemsCarrito.stream()
                 .mapToInt(CarritoItem::getCantidad)
                 .sum();
 
-        // Añadir la lista de productos y el subtotal al modelo
         model.addAttribute("itemsCarrito", itemsCarrito);
         model.addAttribute("subtotal", subtotal);
         model.addAttribute("cantidadTotalIcono", cantidadTotalIcono);
@@ -112,22 +99,26 @@ public class CarritoController {
         return "carrito"; // Devolver la vista carrito.html
     }
 
+    // Finalizar compra
     @PostMapping("/finalizar-compra")
-public String finalizarCompra(String tipoEntrega, Authentication authentication, Model model) {
-    // Verificar que el usuario esté autenticado
+public String finalizarCompra(@RequestParam("tipoEntrega") String tipoEntrega, 
+                              @RequestParam("direccion") String direccion, 
+                              @RequestParam("metodoDePago") String metodoDePago, 
+                              Authentication authentication, 
+                              Model model) {
+
     if (authentication == null || !authentication.isAuthenticated()) {
         return "redirect:/login"; // Redirigir al login si no está autenticado
     }
 
-    String username = authentication.getName(); // Obtén el nombre de usuario
-    User usuario = userService.buscarByUsername(username); // Buscar al usuario por nombre
+    String username = authentication.getName();
+    User usuario = userService.buscarByUsername(username);
 
     if (usuario == null) {
         model.addAttribute("error", "Usuario no encontrado.");
-        return "redirect:/login"; // Redirigir al login si el usuario no se encuentra
+        return "redirect:/login"; // Redirigir al login si no se encuentra el usuario
     }
 
-    // Obtener los items del carrito
     List<CarritoItem> itemsCarrito = carritoService.obtenerListaCarrito(usuario);
 
     if (itemsCarrito.isEmpty()) {
@@ -135,16 +126,23 @@ public String finalizarCompra(String tipoEntrega, Authentication authentication,
         return "redirect:/carrito/lista"; // Redirigir si el carrito está vacío
     }
 
-    // Desvincular los detalles del carrito antes de proceder con la compra
-    detallePedidoService.desvincularDetallesDelCarrito(itemsCarrito);
-
     // Crear los detalles del pedido
-    List<DetallePedido> detallesPedido = detallePedidoService.crearDetallePedido(itemsCarrito, tipoEntrega);
+    List<DetallePedido> detallesPedido = new ArrayList<>();
+
+    // Crear el detalle del pedido para cada ítem en el carrito
+    for (CarritoItem item : itemsCarrito) {
+        DetallePedido detallePedido = new DetallePedido();
+        detallePedido.setCarritoItem(item);
+        detallePedido.setTipoEntrega(tipoEntrega);
+        detallePedido.setDireccion(direccion); // Asignar la dirección
+        detallePedido.setMetodoDePago(MetodoDePago.valueOf(metodoDePago)); // Asignar el metodo de pago (enum)
+
+        // Agregar el detalle al listado
+        detallesPedido.add(detallePedido);
+    }
 
     // Guardar los detalles del pedido en la base de datos
     detallePedidoService.guardarDetallesPedido(detallesPedido);
-
-    
 
     // Pasar los detalles del pedido y tipo de entrega a la vista
     model.addAttribute("detallesPedido", detallesPedido);
@@ -154,63 +152,47 @@ public String finalizarCompra(String tipoEntrega, Authentication authentication,
 }
 
 
+    // Ver los detalles del pedido de un usuario
+    @GetMapping("/listaDetallePedido")
+    public String verDetallesPedidos(Authentication authentication, Model model) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login"; // Redirigir al login si no está autenticado
+        }
 
-// Método para ver los detalles de los pedidos de un usuario
-@GetMapping("/listaDetallePedido")
-public String verDetallesPedidos(Authentication authentication, Model model) {
-    if (authentication == null || !authentication.isAuthenticated()) {
-        return "redirect:/login"; // Redirigir al login si no está autenticado
+        String username = authentication.getName();
+        Long usuarioId = userService.buscarByUsername(username).getId();
+
+        // Obtener los detalles de los pedidos del usuario
+        List<DetallePedido> detallesPedidos = detallePedidoService.obtenerDetallesPorUsuario(usuarioId);
+
+        model.addAttribute("detallesPedidos", detallesPedidos); // Pasamos los detalles a la vista
+
+        return "detalles-pedidos";  // Vista donde se muestran los detalles de los pedidos
     }
 
-    String username = authentication.getName();
-    Long usuarioId = userService.buscarByUsername(username).getId();
+    // Eliminar producto del carrito (solo elimina el ítem del carrito, no los detalles de pedido)
+    @PostMapping("/eliminar/{itemId}")
+    public String eliminarProductoDelCarrito(@PathVariable Long itemId, Authentication authentication, RedirectAttributes redirectAttributes) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login"; // Redirigir al login si no está autenticado
+        }
 
-    // Obtener los detalles de los pedidos del usuario
-    List<DetallePedido> detallesPedidos = detallePedidoService.obtenerDetallesPorUsuario(usuarioId);
+        String username = authentication.getName();
+        User usuario = userService.buscarByUsername(username);
 
-    model.addAttribute("detallesPedidos", detallesPedidos); // Pasamos los detalles a la vista
-    System.out.println("Detalles encontrados: " + detallesPedidos.size());
+        if (usuario == null) {
+            redirectAttributes.addFlashAttribute("error", "Usuario no encontrado.");
+            return "redirect:/login";
+        }
 
-    System.out.println("Detalles encontrados: " + detallesPedidos.size());
-    detallesPedidos.forEach(System.out::println);
+        // Llamar al servicio para eliminar el producto del carrito (no afecta los detalles del pedido)
+        try {
+            carritoService.eliminarProductoDelCarrito(itemId); // Eliminar el ítem por su ID
+            redirectAttributes.addFlashAttribute("mensaje", "Producto eliminado del carrito.");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
 
-
-    return "detalles-pedidos";  // Vista donde se muestran los detalles de los pedidos
-}
-
-
-@PostMapping("/eliminar/{itemId}")
-public String eliminarProductoDelCarrito(@PathVariable Long itemId, Authentication authentication, RedirectAttributes redirectAttributes) {
-    // Verificar que el usuario esté autenticado
-    if (authentication == null || !authentication.isAuthenticated()) {
-        return "redirect:/login"; // Redirigir al login si no está autenticado
+        return "redirect:/carrito/lista"; // Redirigir a la lista del carrito
     }
-
-    String username = authentication.getName(); // Obtener el nombre de usuario
-    User usuario = userService.buscarByUsername(username); // Buscar al usuario por su nombre
-
-    if (usuario == null) {
-        redirectAttributes.addFlashAttribute("error", "Usuario no encontrado.");
-        return "redirect:/login"; // Redirigir al login si el usuario no existe
-    }
-
-    // Llamar al servicio para eliminar el producto del carrito
-    try {
-        carritoService.eliminarProductoDelCarrito(itemId); // Eliminar el ítem por su ID
-        redirectAttributes.addFlashAttribute("mensaje", "Producto eliminado del carrito.");
-    } catch (RuntimeException e) {
-        redirectAttributes.addFlashAttribute("error", e.getMessage());
-    }
-
-    return "redirect:/carrito/lista"; // Redirigir a la lista del carrito
-}
-
-
-
-
-    
-    
-    
-
-
 }

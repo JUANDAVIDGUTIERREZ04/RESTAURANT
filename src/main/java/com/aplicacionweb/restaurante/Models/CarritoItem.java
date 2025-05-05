@@ -1,6 +1,7 @@
 package com.aplicacionweb.restaurante.Models;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,8 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-
 
 
 @Entity
@@ -35,10 +34,10 @@ public class CarritoItem {
 
     private Integer cantidad;
 
-    
-
     private Double subtotal;
 
+    @Column(nullable = false)
+    private boolean activo = true; 
 
     @PrePersist
     @PreUpdate
@@ -47,5 +46,13 @@ public class CarritoItem {
             this.subtotal = menu.getPrecio() * cantidad;
         }
     }
-}
 
+     // Getters y setters
+     public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+}
