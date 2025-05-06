@@ -52,6 +52,7 @@
                     <tr>
                         <th>Producto</th>
                         <th>Descripción</th>
+                        <th>img</th>
                         <th>Cantidad</th>
                         <th>Precio</th>
                         <th>Total</th>
@@ -64,7 +65,10 @@
                             <span th:text="${item.menu.nombreDePlato}"></span>
                         </td>
                         <td>
-                            <img th:src="@{${item.menu.imagenUrl}}" alt="Imagen de Plato" class="product-img" />
+                            <span th:text="${item.menu.descripcion}"></span>
+                        </td>
+                        <td>
+                            <img th:src="${item.menu.imagenUrl}" alt="Imagen de Plato" class="product-img" />
                         </td>
                         <td>
                             <span th:text="${item.cantidad}"></span>

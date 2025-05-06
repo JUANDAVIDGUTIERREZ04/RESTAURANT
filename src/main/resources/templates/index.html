@@ -103,25 +103,11 @@
                         <br>
 
                         <!-- Formulario para realizar pedido -->
-                        <form th:action="@{/pedidos}" method="post">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <!-- Selección de tipo de entrega -->
-                            <select name="tipoEntrega" required>
-                                <option value="DOMICILIO">Domicilio</option>
-                                <option value="PERSONALMENTE">Personalmente</option>
-                            </select>
-                            <button type="submit" class="btn-realizar-pedido">Comprar ahora</button>
+                        <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
+                            <button type="submit" class="btn-realizar-pedido">VER</button>
                         </form>
 
-                        <!-- Formulario para agregar al carrito -->
-                        <form th:action="@{/carrito/agregar}" method="post" class="form-carrito">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <button type="submit" class="btn-carrito">
-                                <i class="bi bi-cart"></i> Agregar al Carrito
-                            </button>
-                        </form>
+                        
 
                     </div>
                 </div>
@@ -150,25 +136,12 @@
 
 
                         <!-- Formulario para realizar pedido -->
-                        <form th:action="@{/pedidos}" method="post">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <!-- Selección de tipo de entrega -->
-                            <select name="tipoEntrega" required>
-                                <option value="DOMICILIO">Domicilio</option>
-                                <option value="PERSONALMENTE">Personalmente</option>
-                            </select>
-                            <button type="submit" class="btn-realizar-pedido">Comprar ahora</button>
+                         <!-- Formulario para realizar pedido -->
+                         <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
+                            <button type="submit" class="btn-realizar-pedido">Ver</button>
                         </form>
 
                         <!-- Formulario para agregar al carrito -->
-                        <form th:action="@{/carrito/agregar}" method="post" class="form-carrito">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <button type="submit" class="btn-carrito">
-                                <i class="bi bi-cart"></i> Agregar al Carrito
-                            </button>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -201,24 +174,12 @@
                             <br>
             
                             <!-- Pedido -->
-                            <form th:action="@{/pedidos}" method="post">
-                                <input type="hidden" name="menuId" th:value="${menu.id}" />
-                                <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                                <select name="tipoEntrega" required>
-                                    <option value="DOMICILIO">Domicilio</option>
-                                    <option value="PERSONALMENTE">Personalmente</option>
-                                </select>
-                                <button type="submit" class="btn-realizar-pedido">Comprar ahora</button>
+                            <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
+                                <button type="submit" class="btn-realizar-pedido">Ver</button>
                             </form>
             
-                            <!-- Carrito -->
-                            <form th:action="@{/carrito/agregar}" method="post" class="form-carrito">
-                                <input type="hidden" name="menuId" th:value="${menu.id}" />
-                                <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                                <button type="submit" class="btn-carrito">
-                                    <i class="bi bi-cart"></i> Agregar al Carrito
-                                </button>
-                            </form>
+                            
+                        
                         </div>
                     </div>
             </div>
@@ -248,25 +209,11 @@
                         <br>
 
                         <!-- Formulario para realizar pedido -->
-                        <form th:action="@{/pedidos}" method="post">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <!-- Selección de tipo de entrega -->
-                            <select name="tipoEntrega" required>
-                                <option value="DOMICILIO">Domicilio</option>
-                                <option value="PERSONALMENTE">Personalmente</option>
-                            </select>
-                            <button type="submit" class="btn-realizar-pedido">Comprar ahora</button>
+                        <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
+                            <button type="submit" class="btn-realizar-pedido">Ver</button>
                         </form>
 
-                        <!-- Formulario para agregar al carrito -->
-                        <form th:action="@{/carrito/agregar}" method="post" class="form-carrito">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                            <button type="submit" class="btn-carrito">
-                                <i class="bi bi-cart"></i> Agregar al Carrito
-                            </button>
-                        </form>
+                        
                     </div>
                     
                 </div>

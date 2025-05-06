@@ -1,8 +1,10 @@
 package com.aplicacionweb.restaurante.Service;
 
+import com.aplicacionweb.restaurante.Models.Prediccion;
 import com.aplicacionweb.restaurante.Models.Reservas.ReservaDTO;
-
+import com.aplicacionweb.restaurante.Repository.PrediccionRepository;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import weka.classifiers.Classifier;
@@ -12,12 +14,16 @@ import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
 import java.io.InputStream;
+import java.time.LocalDateTime;
 
 @Service
 public class PrediccionReservaService {
 
     private Classifier classifier;
     private Instances estructuraDatos;
+
+    @Autowired
+    private PrediccionRepository prediccionRepository;  // Repositorio para guardar la predicción
 
     @PostConstruct
     public void init() {
@@ -41,7 +47,6 @@ public class PrediccionReservaService {
         instance.setDataset(estructuraDatos);
 
         // Asignación de valores a la instancia (respetando el orden de atributos)
-
         instance.setValue(0, reservaDTO.getAnticipacion()); // anticipacion (numeric)
         instance.setValue(1, reservaDTO.getNumeroPersonas()); // numero_personas (numeric)
 
@@ -62,9 +67,24 @@ public class PrediccionReservaService {
             throw new IllegalArgumentException("Día inválido: " + dia);
         instance.setValue(5, dia);
 
-        // No se asigna el valor de 'estado_reserva', pues es lo que queremos predecir
-
+        // Predicción del estado de la reserva
         double prediccion = classifier.classifyInstance(instance);
-        return estructuraDatos.classAttribute().value((int) prediccion); // "pagada" o "no_pagada"
+        String estadoPrediccion = estructuraDatos.classAttribute().value((int) prediccion); // "pagada" o "no_pagada"
+
+        // Guardar la predicción en la base de datos
+        Prediccion prediccionReserva = new Prediccion();
+        prediccionReserva.setNumeroPersonas(reservaDTO.getNumeroPersonas());
+        prediccionReserva.setOrigenReserva(reservaDTO.getOrigenReserva());
+        prediccionReserva.setMetodoPago(reservaDTO.getMetodoDePago());
+        prediccionReserva.setClienteRecurrente(reservaDTO.getClienteRecurrente());
+        prediccionReserva.setAnticipacion(reservaDTO.getAnticipacion());
+        prediccionReserva.setDiaSemana(reservaDTO.getDiaSemana());
+        prediccionReserva.setEstadoReserva(estadoPrediccion);
+        prediccionReserva.setFecha(LocalDateTime.now()); // Fecha y hora de la predicción
+
+        // Guardar la predicción en la base de datos
+        prediccionRepository.save(prediccionReserva);
+
+        return estadoPrediccion; // Devuelve el estado de la predicción (pagada o no_pagada)
     }
 }

@@ -37,35 +37,48 @@ public class CarritoController {
     @Autowired
     private DetallePedidoService detallePedidoService;
 
-    // Agregar producto al carrito
     @PostMapping("/agregar")
     public String agregarAlCarrito(
             @RequestParam("menuId") Long menuId,
             @RequestParam("cantidad") Integer cantidad,
+            
             Authentication authentication,
             RedirectAttributes redirectAttributes
     ) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login"; // Redirigir al login si no está autenticado
         }
-
+    
         String username = authentication.getName();
         User usuario = userService.buscarByUsername(username);
-
+    
         if (usuario == null) {
             redirectAttributes.addFlashAttribute("error", "Usuario no encontrado.");
             return "redirect:/login";
         }
-
+    
         Menu menu = menuService.getMenuById(menuId)
                 .orElseThrow(() -> new RuntimeException("Menú no encontrado"));
-
+    
+        // Validación de la cantidad
+        if (cantidad == null || cantidad <= 0) {
+            redirectAttributes.addFlashAttribute("error", "Cantidad no válida.");
+            return "redirect:/carrito/lista";
+        }
+    
         // Lógica para agregar el ítem al carrito
-        carritoService.agregarItemAlCarrito(usuario, menu, cantidad);
-
+        try {
+            carritoService.agregarItemAlCarrito(usuario, menu, cantidad);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al agregar el producto al carrito.");
+            return "redirect:/carrito/lista";
+        }
+    
         redirectAttributes.addFlashAttribute("mensaje", "Producto agregado al carrito.");
         return "redirect:/carrito/lista";
     }
+    
+
 
     // Ver el carrito de un usuario
     @GetMapping("/lista")
