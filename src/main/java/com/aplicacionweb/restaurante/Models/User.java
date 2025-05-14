@@ -38,7 +38,7 @@ public class User {
     @Column(nullable = false, length = 3)
     private int edad;
 
-    @Column(nullable = false, unique = true, length = 30)
+    @Column(nullable = false, length = 30)
     private String sexo;
 
     @Column(name= "tipo_rol", nullable = false)

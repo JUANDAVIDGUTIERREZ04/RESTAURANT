@@ -1,16 +1,21 @@
 package com.aplicacionweb.restaurante.Controllers;
 
-import com.aplicacionweb.restaurante.Models.Prediccion;
+import com.aplicacionweb.restaurante.Models.Reservas.Reserva;
 import com.aplicacionweb.restaurante.Models.Reservas.ReservaDTO;
 import com.aplicacionweb.restaurante.Service.PrediccionReservaService;
-import com.aplicacionweb.restaurante.Repository.PrediccionRepository;
+import com.aplicacionweb.restaurante.Service.ReservaService;
+
+
+import java.util.Locale;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.time.format.DateTimeFormatter;
 
-import java.time.LocalDateTime;
-import java.util.List;
+
 
 @Controller
 @RequestMapping("/prediccionReservas")
@@ -20,53 +25,136 @@ public class ReservaPrediccionController {
     private PrediccionReservaService prediccionReservaService;
 
     @Autowired
-    private PrediccionRepository prediccionRepository;
+    private ReservaService reservaService;
 
-    // Muestra el formulario de predicción
+    // Muestra el formulario
     @GetMapping("/formulario")
     public String mostrarFormulario(Model model) {
-        model.addAttribute("reservaDTO", new ReservaDTO()); // Objeto vacío para el formulario
-        return "form_prediccion_reserva"; // Nombre de la vista Thymeleaf
+        model.addAttribute("reservaDTO", new ReservaDTO());
+        return "form_prediccion_reserva";
     }
 
-    // Procesa la predicción de si la reserva será cancelada o no
+    // Procesa la predicción
     @PostMapping("/predecir")
     public String predecirEstadoReserva(@ModelAttribute ReservaDTO reservaDTO, Model model) {
         try {
-            // Llamada al servicio para obtener la predicción
             String resultado = prediccionReservaService.predecirEstadoReserva(reservaDTO);
 
-            // Guardar la predicción en la base de datos
-            Prediccion prediccion = new Prediccion();
-            prediccion.setNumeroPersonas(reservaDTO.getNumeroPersonas());
-            prediccion.setOrigenReserva(reservaDTO.getOrigenReserva());
-            prediccion.setMetodoPago(reservaDTO.getMetodoDePago());
-            prediccion.setClienteRecurrente(reservaDTO.getClienteRecurrente());
-            prediccion.setAnticipacion(reservaDTO.getAnticipacion());
-            prediccion.setDiaSemana(reservaDTO.getDiaSemana());
-            prediccion.setEstadoReserva(resultado); // Cambio aquí a estadoReserva
-            prediccion.setFecha(LocalDateTime.now()); // Fecha actual
+            // Ejemplo resultado: "Estado predicho: cancelada | Probabilidad de cancelación: 65.00%"
+            String[] partes = resultado.split("\\|");
+            String estado = partes[0].split(":")[1].trim();
+            String probabilidadTexto = partes[1].split(":")[1].trim().replace("%", "").replace(",", "."); // manejo robusto
 
-            // Guardar la predicción en el repositorio
-            prediccionRepository.save(prediccion);
+            double probabilidad = Double.parseDouble(probabilidadTexto);
 
-            // Pasar el resultado y los datos al modelo
-            String resultadoTraducido = resultado.equalsIgnoreCase("pagada") ? "cancelada" : "no cancelada";
-model.addAttribute("resultado", resultadoTraducido);
-
-            model.addAttribute("reservaDTO", reservaDTO); // Se reenvía para mostrar lo ingresado
+            model.addAttribute("resultado", estado);
+            model.addAttribute("probabilidad", probabilidad);
+            model.addAttribute("reservaDTO", reservaDTO);
 
         } catch (Exception e) {
             model.addAttribute("error", "Error al realizar la predicción: " + e.getMessage());
         }
-        return "resultado_prediccion"; // Vista que muestra el resultado
+
+        return "resultado_prediccion";
     }
 
-    // Método para mostrar la tabla de predicciones
-    @GetMapping("/tablaPredicciones")
-    public String mostrarTablaPredicciones(Model model) {
-        List<Prediccion> predicciones = prediccionRepository.findAll(); // Obtener todas las predicciones
-        model.addAttribute("predicciones", predicciones); // Añadir las predicciones al modelo
-        return "lista_predicciones"; // Nombre de la vista Thymeleaf
+    @GetMapping("/ver/{id}")
+public String predecirDesdeReserva(@PathVariable Long id, Model model) {
+    ReservaDTO dto = new ReservaDTO();
+
+    try {
+        Optional<Reserva> optionalReserva = reservaService.findById(id);
+
+        if (optionalReserva.isEmpty()) {
+            model.addAttribute("error", "No se encontró la reserva con ID: " + id);
+            model.addAttribute("reservaDTO", dto);
+            return "resultado_prediccion";
+        }
+
+        Reserva reserva = optionalReserva.get();
+
+        // Construcción del DTO
+        dto.setNumeroPersonas(reserva.getNumeroPersonas());
+        dto.setMetodoDePago(reserva.getMetodoDePago().toString());
+        dto.setClienteRecurrente(reserva.getClienteRecurrente());
+        dto.setAnticipacion(reserva.getAnticipacion().intValue());
+
+        // Día en inglés (asegurarse de usar el Locale.ENGLISH)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", Locale.ENGLISH); // Forzar inglés
+        String diaEnIngles = reserva.getFecha().format(formatter); // Ej: "Monday"
+
+        // Imprimir el valor de diaEnIngles para depurar
+        System.out.println("Día en inglés obtenido: " + diaEnIngles);
+        
+        // Traducir el día al español
+        String diaEnEspanol = traducirDiaSemana(diaEnIngles); // Ej: "LUNES"
+        
+        // Verificar si la traducción fue exitosa
+        if (diaEnEspanol == null || diaEnEspanol.isEmpty()) {
+            model.addAttribute("error", "No se pudo traducir el día de la semana. Día en inglés: " + diaEnIngles);
+            model.addAttribute("reservaDTO", dto);
+            return "resultado_prediccion";
+        }
+
+        dto.setDiaSemana(diaEnEspanol);
+
+        // Validación de campos
+        if (dto.getNumeroPersonas() == 0 || dto.getMetodoDePago() == null || dto.getDiaSemana() == null) {
+            model.addAttribute("error", "Datos incompletos en la reserva para la predicción.");
+            model.addAttribute("reservaDTO", dto);
+            return "resultado_prediccion";
+        }
+
+        // Predicción
+        String resultadoCompleto = prediccionReservaService.predecirEstadoReserva(dto);
+
+        if (resultadoCompleto.contains("Estado predicho:") && resultadoCompleto.contains("Probabilidad de cancelación:")) {
+            String[] partes = resultadoCompleto.split("\\|");
+
+            if (partes.length < 2) {
+                throw new IllegalArgumentException("Formato de resultado inválido. No se encontraron las partes esperadas.");
+            }
+
+            String probabilidadTexto = partes[1].split(":")[1].trim().replace("%", "").replace(",", ".");
+            double probabilidad = Double.parseDouble(probabilidadTexto);
+
+            model.addAttribute("reservaDTO", dto);
+            model.addAttribute("resultado", resultadoCompleto);
+            model.addAttribute("probabilidad", probabilidad);
+        } else {
+            model.addAttribute("error", "El formato de la predicción es incorrecto.");
+            model.addAttribute("reservaDTO", dto);
+        }
+
+    } catch (Exception e) {
+        model.addAttribute("error", "Error al realizar la predicción: " + e.getMessage());
+        model.addAttribute("reservaDTO", dto);
+    }
+
+    return "resultado_prediccion";
+}
+
+// Método para traducir los días de la semana de inglés a español
+private String traducirDiaSemana(String diaEnIngles) {
+    switch (diaEnIngles.toUpperCase()) {
+        case "MONDAY": return "LUNES";
+        case "TUESDAY": return "MARTES";
+        case "WEDNESDAY": return "MIERCOLES";
+        case "THURSDAY": return "JUEVES";
+        case "FRIDAY": return "VIERNES";
+        case "SATURDAY": return "SABADO";
+        case "SUNDAY": return "DOMINGO";
+        default: return null; // Si no es un día válido, retornar null
     }
 }
+
+    
+
+}
+
+
+
+
+
+    
+

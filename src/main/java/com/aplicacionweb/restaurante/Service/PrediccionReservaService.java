@@ -15,6 +15,7 @@ import weka.core.converters.ConverterUtils.DataSource;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 @Service
 public class PrediccionReservaService {
@@ -23,68 +24,77 @@ public class PrediccionReservaService {
     private Instances estructuraDatos;
 
     @Autowired
-    private PrediccionRepository prediccionRepository;  // Repositorio para guardar la predicción
+    private PrediccionRepository prediccionRepository;
 
     @PostConstruct
     public void init() {
         try {
-            // Carga del modelo
-            InputStream modelStream = new ClassPathResource("reservaModelPrueba.model").getInputStream();
+            InputStream modelStream = new ClassPathResource("nuevoModel.model").getInputStream();
             classifier = (Classifier) weka.core.SerializationHelper.read(modelStream);
 
-            // Carga de la estructura ARFF (sin 'estadoReserva' en los atributos, solo como clase)
-            InputStream arffStream = new ClassPathResource("reservas.arff").getInputStream();
+            InputStream arffStream = new ClassPathResource("reservaNuevoModelo.arff").getInputStream();
             DataSource source = new DataSource(arffStream);
             estructuraDatos = source.getDataSet();
-            estructuraDatos.setClassIndex(estructuraDatos.numAttributes() - 1); // estado_reserva como clase
+            estructuraDatos.setClassIndex(estructuraDatos.numAttributes() - 1); // Atributo "cancelada"
         } catch (Exception e) {
-            throw new RuntimeException("Error cargando modelo o estructura", e);
+            throw new RuntimeException("Error al cargar modelo o estructura ARFF", e);
         }
     }
 
-    public String predecirEstadoReserva(ReservaDTO reservaDTO) throws Exception {
-        Instance instance = new DenseInstance(estructuraDatos.numAttributes());
-        instance.setDataset(estructuraDatos);
+    public String predecirEstadoReserva(ReservaDTO dto) throws Exception {
+        Instance instancia = new DenseInstance(estructuraDatos.numAttributes());
+        instancia.setDataset(estructuraDatos);
 
-        // Asignación de valores a la instancia (respetando el orden de atributos)
-        instance.setValue(0, reservaDTO.getAnticipacion()); // anticipacion (numeric)
-        instance.setValue(1, reservaDTO.getNumeroPersonas()); // numero_personas (numeric)
+        // Conversión robusta para números
+        instancia.setValue(0, convertirADouble(dto.getAnticipacion()));
+        instancia.setValue(1, convertirADouble(dto.getNumeroPersonas()));
 
-        String origen = reservaDTO.getOrigenReserva().toUpperCase();
-        if (estructuraDatos.attribute(2).indexOfValue(origen) == -1)
-            throw new IllegalArgumentException("Origen inválido: " + origen);
-        instance.setValue(2, origen);
-
-        String metodo = reservaDTO.getMetodoDePago().toUpperCase();
-        if (estructuraDatos.attribute(3).indexOfValue(metodo) == -1)
+        // Validación y asignación de atributos categóricos
+        String metodo = dto.getMetodoDePago().toUpperCase(Locale.ROOT);
+        if (estructuraDatos.attribute(2).indexOfValue(metodo) == -1)
             throw new IllegalArgumentException("Método de pago inválido: " + metodo);
-        instance.setValue(3, metodo);
+        instancia.setValue(2, metodo);
 
-        instance.setValue(4, reservaDTO.getClienteRecurrente() ? "true" : "false"); // cliente_recurrente
+        instancia.setValue(3, dto.getClienteRecurrente() ? "TRUE" : "FALSE");
 
-        String dia = reservaDTO.getDiaSemana().toUpperCase();
-        if (estructuraDatos.attribute(5).indexOfValue(dia) == -1)
+        String dia = dto.getDiaSemana().toUpperCase(Locale.ROOT);
+        if (estructuraDatos.attribute(4).indexOfValue(dia) == -1)
             throw new IllegalArgumentException("Día inválido: " + dia);
-        instance.setValue(5, dia);
+        instancia.setValue(4, dia);
 
-        // Predicción del estado de la reserva
-        double prediccion = classifier.classifyInstance(instance);
-        String estadoPrediccion = estructuraDatos.classAttribute().value((int) prediccion); // "pagada" o "no_pagada"
+        // Clasificación
+        double predIndex = classifier.classifyInstance(instancia);
+        String estado = estructuraDatos.classAttribute().value((int) predIndex);
 
-        // Guardar la predicción en la base de datos
-        Prediccion prediccionReserva = new Prediccion();
-        prediccionReserva.setNumeroPersonas(reservaDTO.getNumeroPersonas());
-        prediccionReserva.setOrigenReserva(reservaDTO.getOrigenReserva());
-        prediccionReserva.setMetodoPago(reservaDTO.getMetodoDePago());
-        prediccionReserva.setClienteRecurrente(reservaDTO.getClienteRecurrente());
-        prediccionReserva.setAnticipacion(reservaDTO.getAnticipacion());
-        prediccionReserva.setDiaSemana(reservaDTO.getDiaSemana());
-        prediccionReserva.setEstadoReserva(estadoPrediccion);
-        prediccionReserva.setFecha(LocalDateTime.now()); // Fecha y hora de la predicción
+        // Probabilidad de cada clase
+        double[] distribucion = classifier.distributionForInstance(instancia);
+        double probCancelada = distribucion[estructuraDatos.classAttribute().indexOfValue("cancelada")];
 
-        // Guardar la predicción en la base de datos
-        prediccionRepository.save(prediccionReserva);
+        // Guardar en base de datos
+        Prediccion pred = new Prediccion();
+        pred.setNumeroPersonas(dto.getNumeroPersonas());
+        pred.setMetodoPago(dto.getMetodoDePago());
+        pred.setClienteRecurrente(dto.getClienteRecurrente());
+        pred.setAnticipacion(dto.getAnticipacion());
+        pred.setDiaSemana(dto.getDiaSemana());
+        pred.setEstadoReserva(estado);
+        pred.setProbabilidadCancelacion(probCancelada);
+        pred.setFecha(LocalDateTime.now());
 
-        return estadoPrediccion; // Devuelve el estado de la predicción (pagada o no_pagada)
+        prediccionRepository.save(pred);
+
+        return String.format("Estado predicho: %s | Probabilidad de cancelación: %.2f%%",
+                estado, probCancelada * 100);
+    }
+
+    private double convertirADouble(Number valor) {
+        if (valor == null) return 0.0;
+
+        try {
+            String valorStr = valor.toString().replace(",", ".").trim();
+            return Double.parseDouble(valorStr);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Valor inválido para número: " + valor, e);
+        }
     }
 }

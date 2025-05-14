@@ -28,7 +28,7 @@ public class UserDetailsImpl implements UserDetailsService {
         // Convertir el rol a un GrantedAuthority, asegurándonos de que el rol tiene el prefijo ROLE_
         return new org.springframework.security.core.userdetails.User(
             user.getUsername(),
-            "{noop}" + user.getPassword(), // Contraseña sin encriptar, con {noop} como prefijo
+            user.getPassword(), // Contraseña sin encriptar, con {noop} como prefijo
             Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole())) // Asegurarse de que el rol tiene el prefijo ROLE_
         );
     }

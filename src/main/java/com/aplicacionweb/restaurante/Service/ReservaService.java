@@ -17,8 +17,14 @@ public class ReservaService {
     private ReservaRepository reservaRepository;
 
     public void guardarReserva(Reserva reserva) {
+        reserva.calcularAnticipacion();
         reservaRepository.save(reserva);
     }
+
+    public Optional<Reserva> findById(Long id) {
+        return reservaRepository.findById(id);
+    }
+
 
     public List<Reserva> obtenerTodasLasReservas() {
         return reservaRepository.findAll();

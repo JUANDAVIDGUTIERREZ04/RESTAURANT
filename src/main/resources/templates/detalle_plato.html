@@ -7,11 +7,11 @@
     <title>Detalle del Plato</title>
 
     <link rel="stylesheet" href="/css/detalle_plato.css">
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -22,28 +22,23 @@
     <header>
         <nav>
 
+
+
             <ul class="menu-izquierda">
                 <li><a href="/perfil"><i class="fas fa-user"></i> Mi Perfil</a></li>
-                <li><a href="/"><i class="fas fa-home"></i> Inicio</a></li>
-                <li><a href="/restaurante"><i class="fas fa-utensils"></i> Menú</a></li>
+                <li><a href="/restaurante"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="#seccion-menu"><i class="fas fa-utensils"></i> Menú</a></li>
                 <li><a href="/reservas"><i class="fas fa-calendar-check"></i> Reservas</a></li>
-                <li><a href="/carrito/agregar"><i class="fas fa-shopping-cart"></i> Carro de Compras</a></li>
-                
+                <li><a href="/carrito/lista"><i class="fas fa-shopping-cart"></i> Carro de Compras </a></li>
+
+                <li><a href="/carrito/listaDetallePedido"><i class="fas fa-user"></i>Historial de compras</a></li>
+
             </ul>
 
-            <ul class="menu-derecha">
-                <li class="logo">
-                    
-                        <img src="images/LOGO TECNO RESTAURANT.jpg" alt="Logo">
-                    
-                    
-                </li>
-            </ul>
+
+
+
         </nav>
-
-        
-
-        
     </header>
 
 
@@ -60,36 +55,94 @@
                     </div>
 
                     <div class="calificacion">
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-half"></i>
+                        <form action="/calificar" method="post">
+                            <input type="hidden" name="menuId" th:value="${menu.id}" />
+
+                            <!-- Estrellas interactivas -->
+                            <div class="estrellas">
+                                <input type="radio" id="estrella5" name="estrellas" value="5" />
+                                <input type="radio" id="estrella4" name="estrellas" value="4" />
+                                <input type="radio" id="estrella3" name="estrellas" value="3" />
+                                <input type="radio" id="estrella2" name="estrellas" value="2" />
+                                <input type="radio" id="estrella1" name="estrellas" value="1" />
+
+                                <!-- Estrellas visibles -->
+                                <label for="estrella5" class="estrella">☆</label>
+                                <label for="estrella4" class="estrella">☆</label>
+                                <label for="estrella3" class="estrella">☆</label>
+                                <label for="estrella2" class="estrella">☆</label>
+                                <label for="estrella1" class="estrella">☆</label>
+                            </div>
+
+                            <button type="submit" class="btn-calificar">Calificar</button>
+                        </form>
                     </div>
 
-                    <!-- Formulario para realizar pedido -->
-                    <form th:action="@{/pedidos}" method="post">
-                        <input type="hidden" name="menuId" th:value="${menu.id}" />
-                        <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-                        <!-- Selección de tipo de entrega -->
-                        <select name="tipoEntrega" required>
-                            <option value="DOMICILIO">Domicilio</option>
-                            <option value="PERSONALMENTE">Personalmente</option>
-                        </select>
-                        <button type="submit" class="btn-realizar-pedido">Comprar ahora</button>
-                    </form>
+
+
+
+                    <!-- Botón de Comprar ahora -->
+<form th:action="@{/pedidos}" method="post">
+    <input type="hidden" name="menuId" th:value="${menu.id}" />
+    <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
+    <!-- Selección de tipo de entrega -->
+    <select name="tipoEntrega" required>
+        <option value="DOMICILIO">Domicilio</option>
+        <option value="PERSONALMENTE">Personalmente</option>
+    </select>
+
+    <!-- MÉTODO DE PAGO (nuevo campo obligatorio) -->
+    <select name="metodoDePago" required>
+        <option value="" disabled selected>Selecciona método de pago</option>
+        <option value="EFECTIVO">Efectivo</option>
+        <option value="TARJETA_CREDITO">Tarjeta de Crédito</option>
+        <option value="TARJETA_DEBITO">Tarjeta de Débito</option>
+        <option value="NEQUI">Nequi</option>
+        <option value="DAVIPLATA">Daviplata</option>
+    </select>
+    <button type="button" class="btn-realizar-pedido" id="openModalBtn">Comprar ahora</button>
+</form>
+
+<!-- Modal para el formulario de pedido -->
+<div id="pedidoModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeModalBtn">&times;</span>
+        <h2>Formulario de Pedido</h2>
+        <form action="/pedidos" method="post">
+            <input type="hidden" name="menuId" th:value="${menu.id}" />
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" name="cantidad" value="1" min="1" required />
+            <label for="tipoEntrega">Tipo de entrega:</label>
+            <select name="tipoEntrega" required>
+                <option value="DOMICILIO">Domicilio</option>
+                <option value="PERSONALMENTE">Personalmente</option>
+            </select>
+            <label for="metodoDePago">Método de pago:</label>
+            <select name="metodoDePago" required>
+                <option value="" disabled selected>Selecciona método de pago</option>
+                <option value="EFECTIVO">Efectivo</option>
+                <option value="TARJETA_CREDITO">Tarjeta de Crédito</option>
+                <option value="TARJETA_DEBITO">Tarjeta de Débito</option>
+                <option value="NEQUI">Nequi</option>
+                <option value="DAVIPLATA">Daviplata</option>
+            </select>
+            <button type="submit" class="btn-realizar-pedido">Realizar Pedido</button>
+        </form>
+    </div>
+</div>
+
 
                     <!-- Formulario para agregar al carrito -->
                     <!-- Formulario para agregar al carrito -->
                     <form th:action="@{/carrito/agregar}" method="post" class="form-carrito">
                         <input type="hidden" name="menuId" th:value="${menu.id}" />
-                        
+
                         <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
                         <button type="submit" class="btn-carrito">
                             <i class="bi bi-cart"></i> Agregar al Carrito
                         </button>
                     </form>
-                    
+
                 </div>
             </div>
         </section>
@@ -166,6 +219,44 @@
                 }, 3000);
             }
         };
+
+
+        document.querySelectorAll('.estrellas input').forEach(input => {
+            input.addEventListener('change', function () {
+                // Resetear color de todas las estrellas
+                const labels = document.querySelectorAll('.estrellas label');
+                labels.forEach(label => label.style.color = "#ccc");
+
+                // Resaltar las estrellas hasta la seleccionada
+                for (let i = 0; i <= this.value - 1; i++) {
+                    labels[i].style.color = "#ffbf00";  // Amarillo para las estrellas seleccionadas
+                }
+            });
+        });
+
+        // Obtener el modal y los botones
+var modal = document.getElementById("pedidoModal");
+var openModalBtn = document.getElementById("openModalBtn");
+var closeModalBtn = document.getElementById("closeModalBtn");
+
+// Cuando el usuario haga clic en el botón, se abre el modal
+openModalBtn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// Cuando el usuario haga clic en el botón de cerrar, se cierra el modal
+closeModalBtn.onclick = function() {
+    modal.style.display = "none";
+}
+
+// Si el usuario hace clic fuera del modal, también se cierra
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+
     </script>
 
 </body>

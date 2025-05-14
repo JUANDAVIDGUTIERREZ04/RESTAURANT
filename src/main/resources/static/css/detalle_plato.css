@@ -7,33 +7,36 @@ body {
 
 header {
     position: relative; /* Permite que el texto se superponga */
-    min-height: 100px; /* Altura mínima del encabezado aumentada */
+    min-height: 50px; /* Altura mínima del encabezado aumentada */
     color: #fff;
     text-align: center; /* Centrar el texto */
     overflow: hidden; /* Oculta el desbordamiento */
+
+        background: linear-gradient(to right, rgba(51, 83, 211, 0.5), rgba(255, 165, 0, 0.5), rgba(12, 108, 79, 0.5));
+    
 }
 
+/* Menú de navegación */
 nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative; /* Asegura que la navegación esté en la parte superior */
-    z-index: 10; /* Asegura que la navegación esté por encima del carrusel */
+    position: relative;
+    /* Asegura que la navegación esté en la parte superior */
+    z-index: 10;
+    /* Asegura que la navegación esté por encima del carrusel */
 }
 
-.logo img {
-    width: 80px; /* Ajusta el tamaño del logo */
-    height: 80px;
+.logo {
+    width: 40px;
+    /* Tamaño adecuado */
+    height: 40vpx;
+    margin-left: 250px;
+    /* Espacio entre la imagen y el texto */
+
     border-radius: 50%;
-    object-fit: cover;
-     /* Se posiciona de forma absoluta dentro del contenedor */
-    top: 10px;
-    left: -60px;
-    
-    
-   /* Ajusta la distancia desde la parte superior */
-    
-    
+    /* Opcional: si quieres que la imagen sea redonda */
+
 }
 
 
@@ -42,38 +45,44 @@ ul {
     margin: 0;
     padding: 0;
     display: flex;
-    width: 900px; 
 }
 
 .menu-izquierda {
-    background-color: rgba(51, 51, 51, 0.3);
-    width: 100%; /* Ocupará todo el ancho de la pantalla */
-    height: 50px; /* Ajusta la altura según necesites */
-    position: fixed; /* Fija el menú en la parte superior */
-    top: 0px; /* Se pega arriba */
-    left: 0; /* Se alinea al borde izquierdo */
-    position: fixed;
 
     background-color: #333;
+    width: 100%;
+    /* Ocupará todo el ancho de la pantalla */
+    height: 60px;
+    /* Ajusta la altura según necesites */
+    position: fixed;
+    /* Fija el menú en la parte superior */
+    top: 0px;
+    /* Se pega arriba */
+    left: 0;
+    /* Se alinea al borde izquierdo */
+    position: fixed;
+
 }
 
-
-
-
-
 .menu-izquierda li {
-    margin-right:60px;
+    margin-right: 60px;
     margin-top: 20px;
     transition: all 0.3s ease;
-    
+
 }
 
 .menu-izquierda li:hover {
 
     transform: scale(1.1);
-    
-    
+
+
 }
+
+.menu-derecha li {
+    margin-left: 20px;
+
+}
+
 
 
 
@@ -258,4 +267,80 @@ footer {
     color: white;
     padding: 15px;
     text-align: center;
+}
+
+/* Estilos para las estrellas */
+/* Estilos para las estrellas */
+.estrellas {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    direction: rtl;  /* Esto hace que las estrellas se alineen de derecha a izquierda */
+}
+
+.estrellas input[type="radio"] {
+    display: none; /* Ocultamos los inputs, ya que solo mostramos las etiquetas */
+}
+
+.estrellas label {
+    font-size: 2rem;
+    color: #ccc;  /* Color de la estrella desactivada */
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+/* Efecto cuando el usuario pasa el mouse por encima */
+.estrellas label:hover,
+.estrellas input[type="radio"]:checked ~ label {
+    color: #ffbf00;  /* Color de la estrella cuando el usuario pasa el mouse o la selecciona */
+}
+
+/* Estilo cuando el usuario pasa el ratón por encima */
+.estrellas label:hover,
+.estrellas input[type="radio"]:checked ~ label {
+    color: #ffbf00;  /* Resalta de color amarillo */
+}
+
+/* Estilo para mostrar las estrellas según la calificación seleccionada */
+.estrellas input[type="radio"]:checked ~ label {
+    color: #ffbf00;  /* Cambiar color a amarillo cuando se hace check */
+}
+
+/* Modal de pedido */
+/* Estilo del Modal */
+.modal {
+    display: none;  /* Ocultar el modal por defecto */
+    position: fixed;
+    z-index: 1; /* Asegúrate de que esté encima de otros elementos */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);  /* Fondo oscuro */
+    padding-top: 60px;
+}
+
+/* Contenido del Modal */
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* O el tamaño que prefieras */
+    max-width: 500px;
+}
+
+/* El botón de cerrar */
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }

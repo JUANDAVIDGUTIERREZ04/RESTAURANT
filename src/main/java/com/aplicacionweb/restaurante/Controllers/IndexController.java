@@ -15,6 +15,7 @@ import com.aplicacionweb.restaurante.Models.Menu;
 import com.aplicacionweb.restaurante.Models.Pedido;
 import com.aplicacionweb.restaurante.Models.TipoEntregaPedido;
 import com.aplicacionweb.restaurante.Models.User;
+import com.aplicacionweb.restaurante.Models.Reservas.MetodoDePago;
 import com.aplicacionweb.restaurante.Service.MenuService;
 import com.aplicacionweb.restaurante.Service.PedidoService;
 import com.aplicacionweb.restaurante.Service.UserService;
@@ -67,7 +68,7 @@ public class IndexController {
     // Método que maneja la realización de un pedido
     @PostMapping("/pedidos")
     public String realizarPedido(@RequestParam Long menuId, @RequestParam Integer cantidad,
-            @RequestParam TipoEntregaPedido tipoEntrega, Model model, RedirectAttributes redirectAttributes) {
+            @RequestParam TipoEntregaPedido tipoEntrega, @RequestParam MetodoDePago metodoDePago, Model model, RedirectAttributes redirectAttributes) {
         // Obtener el usuario autenticado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName(); // Nombre del usuario autenticado
@@ -95,6 +96,7 @@ public class IndexController {
             pedido.setTotal(menu.getPrecio() * cantidad);
             pedido.setMenu(menu);
             pedido.setUsuario(usuario); // Asociar el pedido al usuario autenticado
+            pedido.setMetodoDePago(metodoDePago);
 
             // Guardar el pedido
             pedidoService.guardarPedido(pedido);

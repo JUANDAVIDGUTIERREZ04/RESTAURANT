@@ -53,7 +53,10 @@
                 <div class="card bg-gris text-white shadow">
                     <div class="card-body">
                         <h4 class="text-center mb-4">Actualizar Perfil</h4>
-                        <form action="/usuarios/modificar/{id}" method="post">
+                        <form th:action="@{/usuarios/actualizar/{id}(id=${user.id})}" method="post">
+                            <input type="hidden" name="id" th:value="${user.id}" />
+
+
                             <div class="mb-3">
                                 <label for="nombre" class="form-label">Nombre:</label>
                                 <input type="text" id="nombre" name="nombre" class="form-control"
@@ -69,6 +72,18 @@
                                 <input type="text" id="telefono" name="telefono" class="form-control"
                                     th:value="${user.telefono}" required>
                             </div>
+
+                            <div class="mb-3">
+                                <label for="sexo" class="form-label">Sexo:</label>
+                                <select id="sexo" name="sexo" class="form-select" required>
+                                    <option th:selected="${user.sexo == 'Masculino'}" value="Masculino">Masculino
+                                    </option>
+                                    <option th:selected="${user.sexo == 'Femenino'}" value="Femenino">Femenino</option>
+                                    
+                                </select>
+                            </div>
+
+
                             <div class="mb-3">
                                 <label for="username" class="form-label">Nombre de Usuario:</label>
                                 <input type="text" id="username" name="username" class="form-control"
@@ -81,8 +96,8 @@
                             <div class="mb-3">
                                 <label for="role" class="form-label">Rol:</label>
                                 <select id="role" name="role" class="form-select">
-                                    <option value="ROLE_USER" th:selected="${user.role == 'ROLE_USER'}">Usuario</option>
-                                    <option value="ROLE_ADMIN" th:selected="${user.role == 'ROLE_ADMIN'}">Administrador
+                                    <option value="ROLE_USER" th:selected="${user.role == 'USER'}">Usuario</option>
+                                    <option value="ROLE_ADMIN" th:selected="${user.role == 'ADMIN'}">Administrador
                                     </option>
                                 </select>
                             </div>

@@ -14,13 +14,13 @@ header {
     color: white;
     padding: 20px 100px 20px 80px;
     text-align: center;
-    width: 140%;
+    width: 100%;
 }
 
 .main-container {
     display: flex;
     flex-grow: 1;
-    width: 100%;
+    width: 90%;
     height: 100%;
     overflow: visible;
 }
@@ -85,14 +85,14 @@ h2 {
 }
 
 table {
-    width: 50%;
+    width: 10%;
     border-collapse: collapse;
-    font-size: 12px;
+    font-size: 7px;
     position: relative;
 }
 
 table th, table td {
-    padding: 12px;
+    padding: 6px;
     text-align: center;
     border: 1px solid #ddd;
 }
@@ -113,7 +113,7 @@ table tr:hover {
 .button {
     background-color: #FFFFFF;
     color: #000;
-    padding: 10px 15px;
+    padding: 5px 4px;
     border: none;
     cursor: pointer;
     border-radius: 5px;
@@ -130,7 +130,7 @@ button {
     background-color: red;
     color: white;
     border: none;
-    padding: 5px 10px;
+    padding: 2px 4px;
     cursor: pointer;
     border-radius: 4px;
 }

@@ -1,19 +1,15 @@
 package com.aplicacionweb.restaurante.Service;
 
-
-
-
 import com.aplicacionweb.restaurante.Models.DTO.UserDto;
 import com.aplicacionweb.restaurante.Repository.UserRepository;
+import com.aplicacionweb.restaurante.Models.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import com.aplicacionweb.restaurante.Models.User;
 
 @Service
 public class UserService {
@@ -24,14 +20,19 @@ public class UserService {
     
 
     
+
+    // Guardar usuario
     public User saveUser(User user) {
-        return userRepository.save(user); // Guardar el usuario
+       
+        return userRepository.save(user);
     }
 
+    // Buscar usuario por nombre de usuario
     public User buscarByUsername(String username) {
-        return userRepository.findByUsername(username); // Implementa este método en tu UserRepository
+        return userRepository.findByUsername(username);
     }
 
+    // Obtener todos los usuarios como DTO
     public List<UserDto> obtenerTodosLosUsuarios() {
         return userRepository.findAll().stream()
                 .map(user -> {
@@ -41,7 +42,6 @@ public class UserService {
                     dto.setCorreo(user.getCorreo());
                     dto.setEdad(user.getEdad());
                     dto.setSexo(user.getSexo());
-
                     dto.setTelefono(user.getTelefono());
                     dto.setUsername(user.getUsername());
                     dto.setRole(user.getRole());
@@ -55,23 +55,27 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    // Obtener usuario por ID
     public Optional<User> getById(Long id) {
-        return userRepository.findById((long) id);
+        return userRepository.findById(id);
     }
 
+    // Verificar si el usuario existe por ID
     public boolean exitById(Long id) {
         return userRepository.existsById(id);
     }
 
+    // Verificar si el usuario existe por nombre
     public boolean existsByNombre(String username) {
         return userRepository.existsByUsername(username);
     }
 
-    // Método para actualizar un usuario
+    // Actualizar usuario
     public void updateUser(Long id, User updatedUser) {
         if (userRepository.existsById(id)) {
-            updatedUser.setId(id); // Asegúrate de que el ID sea correcto
-            userRepository.save(updatedUser); // Guarda el usuario modificado
+            updatedUser.setId(id);
+            
+            userRepository.save(updatedUser);
         }
     }
 
@@ -90,21 +94,5 @@ public class UserService {
             return userDto;
         }
         return null;
-
     }
-
-    // Obtener todos los usuarios y mapearlos a DTOs
-
-    // Método para obtener el usuario actualmente autenticado por ID
-    /*
-     * public User getUsuarioActual() {
-     * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-     * if (auth != null && auth.isAuthenticated()) {
-     * Long userId = (Long) auth.getPrincipal(); // Suponiendo que el principal es
-     * el ID del usuario
-     * return userRepository.findById(userId).orElse(null);
-     * }
-     * return null;
-     * }
-     */
 }

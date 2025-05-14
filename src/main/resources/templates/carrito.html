@@ -8,51 +8,79 @@
     <!-- Agregar Bootstrap desde CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/carrito.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- jsPDF -->
+    <style>
+        .payment-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 0.5rem;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .modal-content {
+            border-radius: 0.5rem;
+        }
+
+        .product-img {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">Restaurante</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/restaurante">Menú</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/carrito">Carrito</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <header>
+        <nav>
 
-    <div th:if="${mensaje}" class="alert alert-success">
-        <p th:text="${mensaje}"></p>
-    </div>
 
+
+            <ul class="menu-izquierda">
+                <li><a href="/perfil"><i class="fas fa-user"></i> Mi Perfil</a></li>
+                <li><a href="/restaurante"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="#seccion-menu"><i class="fas fa-utensils"></i> Menú</a></li>
+                <li><a href="/reservas"><i class="fas fa-calendar-check"></i> Reservas</a></li>
+                <li><a href="/carrito/lista"><i class="fas fa-shopping-cart"></i> Carro de Compras </a></li>
+
+                <li><a href="/carrito/listaDetallePedido"><i class="fas fa-user"></i>Historial de compras</a></li>
+
+            </ul>
+
+
+
+
+        </nav>
+    </header>
+
+    <!-- Carrito de compras -->
     <div class="container mt-5">
         <h1 class="mb-4">Carrito de Compras</h1>
 
-        <!-- Mostrar mensaje de error si existe -->
-        <div th:if="${error}" class="alert alert-danger">
-            <p th:text="${error}"></p>
+        <div th:if="${mensaje}" class="alert alert-success">
+            <p th:text="${mensaje}"></p>
         </div>
 
-        <!-- Mostrar los productos en el carrito -->
         <div th:if="${itemsCarrito != null}">
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Producto</th>
                         <th>Descripción</th>
-                        <th>img</th>
+                        <th>Imagen</th>
                         <th>Cantidad</th>
                         <th>Precio</th>
                         <th>Total</th>
@@ -61,26 +89,13 @@
                 </thead>
                 <tbody>
                     <tr th:each="item : ${itemsCarrito}">
+                        <td th:text="${item.menu.nombreDePlato}"></td>
+                        <td th:text="${item.menu.descripcion}"></td>
+                        <td><img th:src="${item.menu.imagenUrl}" alt="Imagen de Plato" class="product-img"></td>
+                        <td th:text="${item.cantidad}"></td>
+                        <td th:text="${item.menu.precio}"></td>
+                        <td th:text="${item.subtotal}"></td>
                         <td>
-                            <span th:text="${item.menu.nombreDePlato}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${item.menu.descripcion}"></span>
-                        </td>
-                        <td>
-                            <img th:src="${item.menu.imagenUrl}" alt="Imagen de Plato" class="product-img" />
-                        </td>
-                        <td>
-                            <span th:text="${item.cantidad}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${item.menu.precio}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${item.subtotal}"></span>
-                        </td>
-                        <td>
-                            <!-- Formulario de eliminación -->
                             <form th:action="@{/carrito/eliminar/{itemId}(itemId=${item.id})}" method="post">
                                 <button type="submit" class="btn btn-danger">Eliminar</button>
                             </form>
@@ -89,12 +104,10 @@
                 </tbody>
             </table>
 
-            <!-- Subtotal -->
             <div class="subtotal">
-                <p>Subtotal: $<span th:text="${subtotal}"></span></p>
+                <p>Subtotal: $<span id="subtotal" th:text="${subtotal}"></span></p>
             </div>
 
-            <!-- Botón para proceder al pago o finalizar compra -->
             <button type="button" class="btn btn-primary" onclick="abrirModal()">Finalizar Compra</button>
         </div>
 
@@ -103,12 +116,12 @@
         </div>
     </div>
 
-    <!-- Modal único para entrega, dirección y pago -->
+    <!-- Modal de finalización de compra -->
     <div id="modalFinalizarCompra" class="modal" style="display:none;">
-        <div class="modal-contenido">
+        <div class="modal-content">
             <span class="cerrar" onclick="cerrarModal()">&times;</span>
             <h2>Finalizar Compra</h2>
-            <form id="formFinalizarCompra" method="post" action="/carrito/finalizar-compra">
+            <form id="formFinalizarCompra" method="post" action="/carrito/finalizar-compra" class="form-container">
                 <!-- Tipo de entrega -->
                 <div class="mb-3">
                     <label for="tipoEntrega" class="form-label">Tipo de Entrega</label>
@@ -127,34 +140,100 @@
                 <!-- Método de pago -->
                 <div class="mb-3">
                     <label for="metodoPago" class="form-label">Método de Pago</label>
-                    <select class="form-select" id="metodoPago" name="metodoDePago" required>
-                        <option value="EFECTIVO">Efectivo</option>
-                        <option value="TARJETA_CREDITO">Tarjeta de Crédito</option>
-                        <option value="TARJETA_DEBITO">Tarjeta de Débito</option>
-                        <option value="TRANSFERENCIA">Transferencia</option>
-                        <option value="PAYPAL">Paypal</option>
+                    <select class="form-select" id="metodoPago" name="metodoDePago" required
+                        onchange="mostrarFormularioPago()">
+                        <option value="EFECTIVO" data-icon="cash-icon">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/cash-in-hand.png" alt="Efectivo"
+                                class="payment-icon">Efectivo
+                        </option>
+                        <option value="TARJETA_CREDITO" data-icon="credit-card-icon">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/credit-card.png" alt="Tarjeta"
+                                class="payment-icon">Tarjeta de Crédito
+                        </option>
+                        <option value="TARJETA_DEBITO" data-icon="debit-card-icon">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/debit-card.png" alt="Débito"
+                                class="payment-icon">Tarjeta de Débito
+                        </option>
+                        <option value="TRANSFERENCIA" data-icon="bank-icon">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/bank-card.png" alt="Transferencia"
+                                class="payment-icon">Transferencia
+                        </option>
+                        <option value="PAYPAL" data-icon="paypal-icon">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/paypal.png" alt="Paypal"
+                                class="payment-icon">Paypal
+                        </option>
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Confirmar Compra</button>
+                <!-- Formularios específicos por método de pago -->
+                <div id="formPagoEfectivo" style="display:none;">
+                    <div class="payment-method">
+                        <img src="https://img.icons8.com/ios-filled/50/000000/cash-in-hand.png" alt="Efectivo"
+                            class="payment-icon">
+                        <p>Por favor, confirme que pagará en efectivo en el momento de la entrega.</p>
+                    </div>
+                </div>
+
+                <div id="formPagoTarjeta" style="display:none;">
+                    <div class="payment-method">
+                        <img src="https://img.icons8.com/ios-filled/50/000000/credit-card.png" alt="Tarjeta"
+                            class="payment-icon">
+                        <p>Ingrese los detalles de su tarjeta de crédito/débito.</p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="numeroTarjeta" class="form-label">Número de Tarjeta</label>
+                        <input type="text" class="form-control" id="numeroTarjeta" name="numeroTarjeta" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="fechaExpiracion" class="form-label">Fecha de Expiración</label>
+                        <input type="month" class="form-control" id="fechaExpiracion" name="fechaExpiracion" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="codigoSeguridad" class="form-label">Código de Seguridad</label>
+                        <input type="text" class="form-control" id="codigoSeguridad" name="codigoSeguridad" required />
+                    </div>
+                </div>
+
+                <div id="formPagoTransferencia" style="display:none;">
+                    <div class="payment-method">
+                        <img src="https://img.icons8.com/ios-filled/50/000000/bank-card.png" alt="Transferencia"
+                            class="payment-icon">
+                        <p>Realice una transferencia a nuestra cuenta bancaria:</p>
+                        <p><strong>Cuenta Bancaria:</strong> 123-456-789 (Banco X)</p>
+                        <p><strong>Nombre del Banco:</strong> Banco X</p>
+                    </div>
+                </div>
+
+                <div id="formPagoPaypal" style="display:none;">
+                    <div class="payment-method">
+                        <img src="https://img.icons8.com/ios-filled/50/000000/paypal.png" alt="Paypal"
+                            class="payment-icon">
+                        <p>Inicie sesión en su cuenta de PayPal para proceder con el pago.</p>
+                    </div>
+                    <div id="paypal-button-container"></div>
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="procesarPago()">Confirmar Compra</button>
             </form>
         </div>
     </div>
 
-    <!-- Agregar Bootstrap JS desde CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=your-client-id"></script>
 
     <script>
+        // Función para abrir el modal
         function abrirModal() {
             document.getElementById("modalFinalizarCompra").style.display = "block";
         }
 
+        // Función para cerrar el modal
         function cerrarModal() {
             document.getElementById("modalFinalizarCompra").style.display = "none";
         }
 
-        // Mostrar u ocultar campo de dirección basado en el tipo de entrega seleccionado
-        document.getElementById("tipoEntrega").addEventListener("change", function() {
+        // Mostrar u ocultar dirección dependiendo del tipo de entrega
+        document.getElementById("tipoEntrega").addEventListener("change", function () {
             const tipoEntrega = this.value;
             const direccionDiv = document.getElementById("direccionDiv");
 
@@ -164,6 +243,108 @@
                 direccionDiv.style.display = "none";  // Ocultar el campo de dirección
             }
         });
+
+        // Mostrar el formulario de pago correspondiente
+        function mostrarFormularioPago() {
+            const metodoPago = document.getElementById("metodoPago").value;
+
+            // Ocultar todos los formularios
+            document.getElementById("formPagoEfectivo").style.display = "none";
+            document.getElementById("formPagoTarjeta").style.display = "none";
+            document.getElementById("formPagoTransferencia").style.display = "none";
+            document.getElementById("formPagoPaypal").style.display = "none";
+
+            // Mostrar el formulario correspondiente
+            if (metodoPago === "EFECTIVO") {
+                document.getElementById("formPagoEfectivo").style.display = "block";
+            } else if (metodoPago === "TARJETA_CREDITO" || metodoPago === "TARJETA_DEBITO") {
+                document.getElementById("formPagoTarjeta").style.display = "block";
+            } else if (metodoPago === "TRANSFERENCIA") {
+                document.getElementById("formPagoTransferencia").style.display = "block";
+            } else if (metodoPago === "PAYPAL") {
+                document.getElementById("formPagoPaypal").style.display = "block";
+                renderizarBotonPaypal();
+            }
+        }
+
+        // Función para procesar el pago
+        function procesarPago() {
+            const metodoPago = document.getElementById("metodoPago").value;
+            const subtotal = document.getElementById("subtotal").innerText;
+
+            if (metodoPago === "PAYPAL") {
+                // Aquí se puede mostrar el botón de PayPal
+                renderizarBotonPaypal();
+            } else {
+                alert(`Pago simulado con ${metodoPago}`);
+                generarPDF(metodoPago, subtotal);
+                document.getElementById("formFinalizarCompra").submit(); // Enviar el formulario para procesar el pedido
+            }
+        }
+
+        // Función para renderizar el botón de PayPal
+        function renderizarBotonPaypal() {
+            const totalCompra = document.getElementById("subtotal").innerText;  // Total calculado desde el servidor
+            paypal.Buttons({
+                createOrder: function (data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: totalCompra  // El valor dinámico de la compra
+                            }
+                        }]
+                    });
+                },
+                onApprove: function (data, actions) {
+                    return actions.order.capture().then(function (details) {
+                        alert('Pago completado con éxito: ' + details.payer.name.given_name);
+
+                        // Generar PDF después del pago exitoso
+                        setTimeout(function () {
+                            generarPDF('PayPal', details.purchase_units[0].amount.value);
+                        }, 1000);  // Espera 1 segundo antes de generar el PDF
+
+                        document.getElementById("formFinalizarCompra").submit(); // Enviar el formulario para procesar el pedido
+                    });
+                },
+                onCancel: function (data) {
+                    alert("Pago cancelado");
+                }
+            }).render('#paypal-button-container');  // El contenedor donde se renderiza el botón de PayPal
+        }
+
+        // Función para generar el PDF de la factura
+        function generarPDF(metodoPago, total) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Título
+            doc.setFontSize(18);
+            doc.text('Factura de Compra', 105, 10, null, null, 'center');
+            doc.setFontSize(12);
+
+            // Datos de pago
+            doc.text(`Método de Pago: ${metodoPago}`, 10, 30);
+            doc.text(`Total: $${total}`, 10, 40);
+
+            // Detalles de los productos
+            doc.text('Detalle de Productos:', 10, 50);
+
+            // Aquí se añaden los detalles del producto (debe ser dinámico)
+            let yOffset = 60;
+            const items = document.querySelectorAll("tbody tr");
+            items.forEach(item => {
+                const producto = item.querySelector("td:nth-child(1)").innerText;
+                const precio = item.querySelector("td:nth-child(5)").innerText;
+                const cantidad = item.querySelector("td:nth-child(4)").innerText;
+                const totalProducto = item.querySelector("td:nth-child(6)").innerText;
+                doc.text(`Producto: ${producto} | Precio: ${precio} | Cantidad: ${cantidad} | Total: ${totalProducto}`, 10, yOffset);
+                yOffset += 10;
+            });
+
+            // Guardar PDF
+            doc.save(`factura-${new Date().toISOString()}.pdf`);
+        }
     </script>
 
 </body>

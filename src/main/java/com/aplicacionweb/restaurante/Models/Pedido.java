@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+import com.aplicacionweb.restaurante.Models.Reservas.MetodoDePago;
+
 
 
 
@@ -37,14 +39,16 @@ public class Pedido {
     @Column(nullable = false)
     private String estado = "Pendiente"; // Valor predeterminado
 
-    @Column(nullable = false)
-    private Double total;
+   
 
     @Column(nullable = false)
     private Integer cantidad;
 
     @Column(nullable = false)
     private TipoEntregaPedido tipoEntregaPedido;
+    
+     @Enumerated(EnumType.STRING)
+    private MetodoDePago metodoDePago;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user", nullable = false)
@@ -53,6 +57,9 @@ public class Pedido {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_menu", nullable = false)
     private Menu menu;
+
+    @Column(nullable = false)
+    private Double total;
 
     @PrePersist
     protected void onCreate() {

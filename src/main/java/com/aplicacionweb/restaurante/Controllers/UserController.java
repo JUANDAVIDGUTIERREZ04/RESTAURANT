@@ -9,7 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -26,46 +26,56 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
+    
+
+    
+
     @GetMapping("/registro")
     public String showRegistrationForm(Model model) {
         return "registro_usuario"; // Nombre del archivo HTML del formulario
     }
 
-    @PostMapping("/registrar")
+     @PostMapping("/registrar")
     public String createUser(@RequestParam String nombre,
-            @RequestParam String correo,
-            @RequestParam String telefono,
-            @RequestParam String username,
-            @RequestParam String password,
-            @RequestParam String role,
-            @RequestParam int edad,
-            @RequestParam String sexo,
-            Model model) {
-
+                             @RequestParam String correo,
+                             @RequestParam String telefono,
+                             @RequestParam String username,
+                             @RequestParam String password,
+                             @RequestParam String role,
+                             @RequestParam int edad,
+                             @RequestParam String sexo,
+                             Model model) {
         try {
-            // Verificar si el username ya existe
+            // Verificar si el nombre de usuario ya está en uso
             if (userService.existsByNombre(username)) {
                 model.addAttribute("error", "El nombre de usuario ya está en uso. Por favor, elige otro.");
-                return "registro_usuario"; // Volver al formulario de registro con el mensaje de error
+                return "registro_usuario";
             }
 
-            // Si no existe, proceder con el registro del nuevo usuario
+            
+
+            // Crear un nuevo usuario
             User user = new User();
             user.setNombre(nombre);
             user.setCorreo(correo);
             user.setTelefono(telefono);
             user.setUsername(username);
-            user.setPassword("{noop}" + password);
+            user.setPassword(passwordEncoder.encode(password));
+
             user.setSexo(sexo);
-            user.setEdad(edad);// Añadir {noop} a la contraseña
-            user.setRole(role);
+            user.setEdad(edad);
+            user.setRole(role); // Rol de usuario
 
-            userService.saveUser(user); // Guardar el usuario
+            userService.saveUser(user); // Guardar el usuario en la base de datos
 
-            return "index"; // Redirigir a la página de inicio después de registrar
+            return "index"; // Redirigir a la página de inicio después del registro
         } catch (Exception e) {
-            return "Error al registrar el usuario" + e.getMessage();
-
+            model.addAttribute("error", "Error al registrar el usuario: " + e.getMessage());
+            return "registro_usuario"; // Retornar a la página de registro con error
         }
     }
 
@@ -100,21 +110,24 @@ public class UserController {
         return "modificar_usuario"; // Nombre del archivo HTML del formulario
     }
 
-    @PostMapping("/usuarios/modificar/{id}")
+    @PostMapping("/usuarios/actualizar/{id}")
     public String modificarUsuario(@PathVariable Long id, @RequestParam String nombre,
             @RequestParam String correo,
             @RequestParam String telefono,
             @RequestParam String username,
             @RequestParam String password,
             @RequestParam String role,
+            @RequestParam String sexo,
             RedirectAttributes redirectAttributes) {
         // Crear el objeto con los valores recibidos
         User updatedUser = new User();
         updatedUser.setNombre(nombre);
         updatedUser.setCorreo(correo);
         updatedUser.setTelefono(telefono);
+        updatedUser.setSexo(sexo);
         updatedUser.setUsername(username);
-        updatedUser.setPassword(password); // Aquí estamos manteniendo la contraseña tal como la recibimos
+        updatedUser.setPassword(passwordEncoder.encode(password));
+ // Aquí estamos manteniendo la contraseña tal como la recibimos
         updatedUser.setRole(role);
 
         // Actualizar el usuario en el servicio
@@ -127,7 +140,7 @@ public class UserController {
         return "redirect:/usuarios";
     }
 
-    @GetMapping("/perfil")
+     @GetMapping("/perfil")
     public String mostrarPerfil(Model model) {
         // Obtener el usuario autenticado desde el contexto de seguridad
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -13,80 +13,80 @@
 <body>
 
     <!-- Menú -->
-    <nav>
-        <ul class="menu-izquierda">
-            
-                <li><a href="/listaPedidos"><i class="fas fa-utensils"></i> Lista de Pedidos</a></li>
-                <li><a href="/usuarios"><i class="fas fa-users"></i> Lista de Usuarios</a></li>
-                <li><a href="/adminMenu/listar"><i class='bx bx-bowl-hot'></i> Registrar Menú</a></li>
-                <li><a href="/opcionAdmin"><i class='bx bx-arrow-back'></i> Salir</a></li>
-            
-        </ul>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="/listaPedidos"><i class="fas fa-utensils"></i> Lista de Pedidos</a></li>
+                <li class="nav-item"><a class="nav-link" href="/usuarios"><i class="fas fa-users"></i> Lista de Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link" href="/adminMenu/listar"><i class="bx bx-bowl-hot"></i> Registrar Menú</a></li>
+                <li class="nav-item"><a class="nav-link" href="/opcionAdmin"><i class="bx bx-arrow-back"></i> Salir</a></li>
+            </ul>
+        </div>
     </nav>
-
-    <br><br><br>
 
     <!-- Formulario -->
     <div class="container mt-5">
-        <h1 class="text-center">Formulario de Predicción de la  Cancelación de una Reserva</h1>
-        <form th:action="@{/prediccionReservas/predecir}" method="post" th:object="${reservaDTO}">
-            <!-- Fila 1 -->
+        <h1 class="text-center mb-4">Formulario de Predicción de la Cancelación de una Reserva</h1>
+        <form action="/prediccionReservas/predecir" method="post">
+            
+            <!-- Número de personas -->
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="numeroPersonas" class="form-label">Número de Personas:</label>
-                    <input type="number" id="numeroPersonas" class="form-control" th:field="*{numeroPersonas}" required>
-                </div>
-                <div class="col-md-6">
-                    <label for="origenReserva" class="form-label">Origen de la Reserva:</label>
-                    <select id="origenReserva" class="form-select" th:field="*{origenReserva}" required>
-                        <option value="WEB">WEB</option>
-                        <option value="TELEFONO">TELÉFONO</option>
-                        <option value="AGENCIA">AGENCIA</option>
-                    </select>
+                    <input type="number" id="numeroPersonas" class="form-control" name="numeroPersonas" value="${reservaDTO.numeroPersonas}" required>
                 </div>
             </div>
 
-            <!-- Fila 2 -->
+            <!-- Método de Pago -->
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="metodoDePago" class="form-label">Método de Pago:</label>
-                    <select id="metodoDePago" class="form-select" th:field="*{metodoDePago}" required>
-                        <option value="EFECTIVO">EFECTIVO</option>
-                        <option value="TARJETA_CREDITO">TARJETA DE CRÉDITO</option>
-                        <option value="TARJETA_DEBITO">TARJETA DE DÉBITO</option>
-                        <option value="TRANSFERENCIA">TRANSFERENCIA</option>
-                        <option value="PAYPAL">PAYPAL</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label for="clienteRecurrente" class="form-label">¿Eres cliente recurrente?</label>
-                    <select id="clienteRecurrente" class="form-select" th:field="*{clienteRecurrente}" required>
-                        <option value="true">Sí</option>
-                        <option value="false">No</option>
+                    <select id="metodoDePago" class="form-select" name="metodoDePago" required>
+                        <option value="EFECTIVO" ${reservaDTO.metodoDePago == 'EFECTIVO' ? 'selected' : ''}>EFECTIVO</option>
+                        <option value="TARJETA_CREDITO" ${reservaDTO.metodoDePago == 'TARJETA_CREDITO' ? 'selected' : ''}>TARJETA DE CRÉDITO</option>
+                        <option value="TARJETA_DEBITO" ${reservaDTO.metodoDePago == 'TARJETA_DEBITO' ? 'selected' : ''}>TARJETA DE DÉBITO</option>
+                        <option value="TRANSFERENCIA" ${reservaDTO.metodoDePago == 'TRANSFERENCIA' ? 'selected' : ''}>TRANSFERENCIA</option>
+                        <option value="PAYPAL" ${reservaDTO.metodoDePago == 'PAYPAL' ? 'selected' : ''}>PAYPAL</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Fila 3 -->
+            <!-- Cliente recurrente -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="clienteRecurrente" class="form-label">¿Eres cliente recurrente?</label>
+                    <select id="clienteRecurrente" class="form-select" name="clienteRecurrente" required>
+                        <option value="true" ${reservaDTO.clienteRecurrente == 'true' ? 'selected' : ''}>Sí</option>
+                        <option value="false" ${reservaDTO.clienteRecurrente == 'false' ? 'selected' : ''}>No</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Anticipación (en días) -->
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="anticipacion" class="form-label">Anticipación (en días):</label>
-                    <input type="number" id="anticipacion" class="form-control" th:field="*{anticipacion}" required>
+                    <input type="number" id="anticipacion" class="form-control" name="anticipacion" value="${reservaDTO.anticipacion}" required>
                 </div>
+            </div>
+
+            <!-- Día de la Semana -->
+            <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="diaSemana" class="form-label">Día de la Semana:</label>
-                    <select id="diaSemana" class="form-select" th:field="*{diaSemana}" required>
-                        <option value="LUNES">Lunes</option>
-                        <option value="MARTES">Martes</option>
-                        <option value="MIERCOLES">Miércoles</option>
-                        <option value="JUEVES">Jueves</option>
-                        <option value="VIERNES">Viernes</option>
-                        <option value="SABADO">Sábado</option>
-                        <option value="DOMINGO">Domingo</option>
+                    <select id="diaSemana" class="form-select" name="diaSemana" required>
+                        <option value="LUNES" ${reservaDTO.diaSemana == 'LUNES' ? 'selected' : ''}>Lunes</option>
+                        <option value="MARTES" ${reservaDTO.diaSemana == 'MARTES' ? 'selected' : ''}>Martes</option>
+                        <option value="MIERCOLES" ${reservaDTO.diaSemana == 'MIERCOLES' ? 'selected' : ''}>Miércoles</option>
+                        <option value="JUEVES" ${reservaDTO.diaSemana == 'JUEVES' ? 'selected' : ''}>Jueves</option>
+                        <option value="VIERNES" ${reservaDTO.diaSemana == 'VIERNES' ? 'selected' : ''}>Viernes</option>
+                        <option value="SABADO" ${reservaDTO.diaSemana == 'SABADO' ? 'selected' : ''}>Sábado</option>
+                        <option value="DOMINGO" ${reservaDTO.diaSemana == 'DOMINGO' ? 'selected' : ''}>Domingo</option>
                     </select>
                 </div>
             </div>
 
+            <!-- Botón de predicción -->
             <button type="submit" class="btn btn-primary w-100">Predecir Estado de Cancelación</button>
         </form>
     </div>

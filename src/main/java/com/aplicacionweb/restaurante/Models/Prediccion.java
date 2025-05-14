@@ -1,8 +1,6 @@
 package com.aplicacionweb.restaurante.Models;
 
-
 import java.time.LocalDateTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,24 +13,18 @@ public class Prediccion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private int numeroPersonas;
-    private String origenReserva;
     private String metodoPago;
     private boolean clienteRecurrente;
-    private double anticipacion;
+    private int anticipacion;
     private String diaSemana;
-    private String estadoReserva; 
-
-    public String getEstadoReserva() {
-        return estadoReserva;
-    }
-
-    public void setEstadoReserva(String estadoReserva) {
-        this.estadoReserva = estadoReserva;
-    }
+    private String estadoReserva;  // Estado predicho (cancelada/no_cancelada)
 
     @Column(updatable = false)
-    private LocalDateTime fecha;
+    private LocalDateTime fecha;  // Fecha de la predicción
+
+    private double probabilidadCancelacion;  // Precisión de la predicción para la clase 'cancelada'
 
     // Getters y Setters
 
@@ -52,14 +44,6 @@ public class Prediccion {
         this.numeroPersonas = numeroPersonas;
     }
 
-    public String getOrigenReserva() {
-        return origenReserva;
-    }
-
-    public void setOrigenReserva(String origenReserva) {
-        this.origenReserva = origenReserva;
-    }
-
     public String getMetodoPago() {
         return metodoPago;
     }
@@ -76,11 +60,11 @@ public class Prediccion {
         this.clienteRecurrente = clienteRecurrente;
     }
 
-    public double getAnticipacion() {
+    public int getAnticipacion() {
         return anticipacion;
     }
 
-    public void setAnticipacion(double anticipacion) {
+    public void setAnticipacion(int anticipacion) {
         this.anticipacion = anticipacion;
     }
 
@@ -92,6 +76,13 @@ public class Prediccion {
         this.diaSemana = diaSemana;
     }
 
+    public String getEstadoReserva() {
+        return estadoReserva;
+    }
+
+    public void setEstadoReserva(String estadoReserva) {
+        this.estadoReserva = estadoReserva;
+    }
 
     public LocalDateTime getFecha() {
         return fecha;
@@ -101,6 +92,11 @@ public class Prediccion {
         this.fecha = fecha;
     }
 
-    
-}
+    public double getProbabilidadCancelacion() {
+        return probabilidadCancelacion;
+    }
 
+    public void setProbabilidadCancelacion(double probabilidadCancelacion) {
+        this.probabilidadCancelacion = probabilidadCancelacion;
+    }
+}

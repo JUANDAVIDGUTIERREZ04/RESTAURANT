@@ -1,39 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultado de la Predicción</title>
     <link rel="stylesheet" href="/css/prediccionReservas.css">
 </head>
-
 <body>
     <header>
         <nav>
-
-
-
             <ul class="menu-izquierda">
                 <li><a href="/perfil"><i class="fas fa-user"></i> Mi Perfil</a></li>
                 <li><a href="/restaurante"><i class="fas fa-home"></i> Inicio</a></li>
                 <li><a href="#seccion-menu"><i class="fas fa-utensils"></i> Menú</a></li>
                 <li><a href="/reservas"><i class="fas fa-calendar-check"></i> Reservas</a></li>
-                <li><a href="/carrito/lista"><i class="fas fa-shopping-cart"></i> Carro de Compras </a></li>
-
-                <li><a href="/carrito/listaDetallePedido"><i class="fas fa-user"></i>Historial de compras</a></li>
-                <li><a href="/prediccionReservas/formulario"><i class="fas fa-user"></i>Volver al formulario</a></li>
-
+                <li><a href="/carrito/lista"><i class="fas fa-shopping-cart"></i> Carro de Compras</a></li>
+                <li><a href="/carrito/listaDetallePedido"><i class="fas fa-user"></i> Historial de Compras</a></li>
+                <li><a href="/prediccionReservas/formulario"><i class="fas fa-user"></i> Volver al formulario</a></li>
             </ul>
-
-
         </nav>
     </header>
 
-    <br>
-    <br>
-    <br>
-    <h1>Resultado de la Predicción del Estado de Pago</h1>
+    <br><br><br>
+    <h1>Resultado de la Predicción del Estado de Reserva</h1>
 
     <!-- Mostrar error si lo hay -->
     <div th:if="${error != null}">
@@ -42,12 +31,18 @@
 
     <!-- Mostrar el resultado de la predicción -->
     <div th:if="${resultado != null}">
-        <p>La predicción del estado de pago es: <strong><span th:text="${resultado}"></span></strong></p>
+        <p>La predicción del estado de la reserva es: 
+           <strong><span th:text="${resultado}"></span></strong></p>
     </div>
 
-    <a th:href="@{/prediccionReservas/formulario}">Volver al formulario</a>
+    <!-- Mostrar probabilidad -->
+    <div th:if="${probabilidad != null}">
+        <p>Probabilidad de que se cancele: 
+           <strong><span th:text="${probabilidad + '%'}"></span></strong></p>
+    </div>
 
     <!-- Tabla de atributos usados -->
+    <h2>Atributos utilizados para la predicción</h2>
     <table>
         <thead>
             <tr>
@@ -56,33 +51,31 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="reserva : ${reservaDTO}">
+            <tr>
                 <td>Número de Personas</td>
-                <td th:text="${reserva.numeroPersonas}"></td>
+                <td th:text="${reservaDTO.numeroPersonas}">N/A</td>
             </tr>
-            <tr th:each="reserva : ${reservaDTO}">
-                <td>Origen de la Reserva</td>
-                <td th:text="${reserva.origenReserva}"></td>
-            </tr>
-            <tr th:each="reserva : ${reservaDTO}">
+            <tr>
                 <td>Método de Pago</td>
-                <td th:text="${reserva.metodoDePago}"></td>
+                <td th:text="${reservaDTO.metodoDePago}">N/A</td>
             </tr>
-            <tr th:each="reserva : ${reservaDTO}">
+            <tr>
                 <td>¿Cliente Recurrente?</td>
-                <td th:text="${reserva.clienteRecurrente ? 'Sí' : 'No'}"></td>
+                <td th:text="${reservaDTO.clienteRecurrente != null && reservaDTO.clienteRecurrente ? 'Sí' : 'No'}">N/A</td>
             </tr>
-            <tr th:each="reserva : ${reservaDTO}">
+            <tr>
                 <td>Anticipación (días)</td>
-                <td th:text="${reserva.anticipacion}"></td>
+                <td th:text="${reservaDTO.anticipacion}">N/A</td>
             </tr>
-            <tr th:each="reserva : ${reservaDTO}">
+            <tr>
                 <td>Día de la Semana</td>
-                <td th:text="${reserva.diaSemana}"></td>
+                <td th:text="${reservaDTO.diaSemana}">N/A</td>
             </tr>
         </tbody>
+        
+        
     </table>
 
+    <a th:href="@{/prediccionReservas/formulario}">Volver al formulario</a>
 </body>
-
 </html>

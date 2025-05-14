@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 public class CarritoService {
 
@@ -23,23 +24,35 @@ public class CarritoService {
             throw new IllegalArgumentException("La cantidad debe ser mayor que cero.");
         }
 
-        // Buscar si el item ya existe en el carrito
-        Optional<CarritoItem> existente = carritoRepository.findByUsuarioAndMenu(usuario, menu);
+        // Buscar si el item ya existe en el carrito y está activo
+        Optional<CarritoItem> existente = carritoRepository.findByUsuarioAndMenuAndActivoTrue(usuario, menu);
 
         if (existente.isPresent()) {
-            // Si el item ya existe, actualizar la cantidad y subtotal
+            // Si el item ya existe y está activo, reemplazar la cantidad y recalcular el subtotal
             CarritoItem item = existente.get();
-            item.setCantidad(item.getCantidad() + cantidad);
-            item.setSubtotal(calcularSubtotal(item));
+            item.setCantidad(cantidad); // Reemplazar la cantidad con la nueva cantidad
+            item.setSubtotal(calcularSubtotal(item)); // Recalcular el subtotal
             carritoRepository.save(item);
         } else {
-            // Si el item no existe, agregarlo como un nuevo item
-            CarritoItem item = new CarritoItem();
-            item.setUsuario(usuario);
-            item.setMenu(menu);
-            item.setCantidad(cantidad);
-            item.setSubtotal(calcularSubtotal(item));
-            carritoRepository.save(item);
+            // Si el item no existe o está inactivo, buscar si existe inactivo
+            Optional<CarritoItem> inactivo = carritoRepository.findByUsuarioAndMenuAndActivoFalse(usuario, menu);
+
+            if (inactivo.isPresent()) {
+                // Si el item existe pero está inactivo, lo activamos y asignamos la nueva cantidad
+                CarritoItem item = inactivo.get();
+                item.setActivo(true); // Re-activar el producto
+                item.setCantidad(cantidad); // Establecer la cantidad seleccionada
+                item.setSubtotal(calcularSubtotal(item)); // Recalcular el subtotal
+                carritoRepository.save(item);
+            } else {
+                // Si el item no existe, agregarlo como un nuevo item
+                CarritoItem item = new CarritoItem();
+                item.setUsuario(usuario);
+                item.setMenu(menu);
+                item.setCantidad(cantidad); // Establecer la cantidad seleccionada
+                item.setSubtotal(calcularSubtotal(item)); // Recalcular el subtotal
+                carritoRepository.save(item);
+            }
         }
     }
 
