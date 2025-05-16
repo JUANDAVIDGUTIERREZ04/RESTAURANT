@@ -1,18 +1,18 @@
-# Imagen base con Java 21
-FROM openjdk:21-slim
-
-# Crear directorio de trabajo
+# Etapa 1: Construcción del JAR
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Copiar el JAR al contenedor
-COPY target/*.jar app.jar
+# Etapa 2: Imagen final ligera con solo el JAR
+FROM openjdk:21-slim
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 
-
-# Copiar archivos estáticos si los necesitas en tiempo de ejecución
+# Copiar archivos estáticos (opcional)
 COPY src/main/resources/static /app/static
 
-# Exponer el puerto de la aplicación
 EXPOSE 9292
 
-# Ejecutar el JAR
 ENTRYPOINT ["java", "-jar", "app.jar"]
