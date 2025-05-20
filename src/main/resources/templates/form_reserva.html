@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Reserva</title>
     <link rel="stylesheet" href="/css/form_reservas.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <style>
         .error {
             color: red;
@@ -28,14 +29,14 @@
                 <li><a href="#seccion-menu"><i class="fas fa-utensils"></i> Menú</a></li>
                 <li><a href="/reservas"><i class="fas fa-calendar-check"></i> Reservas</a></li>
                 <li><a href="/carrito/lista"><i class="fas fa-shopping-cart"></i> Carro de Compras </a></li>
-    
+
                 <li><a href="/carrito/listaDetallePedido"><i class="fas fa-user"></i>Historial de compras</a></li>
-    
+
             </ul>
-    
-            
-    
-    
+
+
+
+
         </nav>
     </header>
 
@@ -65,10 +66,21 @@
                 </div>
 
                 <div class="field">
-                    <label for="fecha">Fecha y Hora:</label>
-                    <input type="datetime-local" id="fecha" name="fecha" class="input-field" required>
+                    <label for="fecha">Fecha:</label>
+                    <input type="date" id="fecha" name="fecha" class="input-field" required>
                     <div id="fechaError" class="error"></div>
                 </div>
+
+                <div class="field">
+                    <label for="horaInicio">Comienza:</label>
+                    <input type="time" id="horaInicio" name="horaInicio" class="input-field" required>
+                </div>
+
+                <div class="field">
+                    <label for="horaFin">Termina:</label>
+                    <input type="time" id="horaFin" name="horaFin" class="input-field" required>
+                </div>
+
 
                 <div class="field">
                     <label for="numeroPersonas">Número de Personas:</label>
@@ -112,11 +124,6 @@
                     </select>
                     <input type="text" id="restriccionesTexto" name="restriccionesTexto" class="input-field"
                         placeholder="Especificar restricciones" style="display: none;">
-                </div>
-
-                <div class="field">
-                    <label for="comentarios">Observaciones y/o Comentarios:</label>
-                    <textarea id="comentarios" name="comentarios" class="input-field"></textarea>
                 </div>
 
                 <div class="field">
@@ -227,7 +234,8 @@
         window.onload = function () {
             // Asignar fecha actual a fechaReserva
             const ahora = new Date();
-            fechaReservaInput.value = ahora.toISOString().slice(0, 16);
+            fechaReservaInput.value = ahora.toISOString().slice(0, 10); // ✅ Solo la fecha en formato yyyy-MM-dd
+L
 
             const mensajeExitoDiv = document.getElementById('mensajeExito');
             const mensajeErrorDiv = document.getElementById('mensajeError');

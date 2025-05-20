@@ -8,9 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    <!-- Incluye Font Awesome para usar iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
     <link rel="stylesheet" href="/css/lista_reservas.css">
 </head>
 
@@ -27,32 +25,28 @@
             <nav>
                 <ul>
                     <li><a href="/listaPedidos"><i class="fas fa-utensils"></i>PEDIDOS</a></li>
-                    <li><a href="/usuarios"><i class="fas fa-users"></i>USUARIOS</a></li>
+                    <li><a href="/usuarios/activos"><i class="fas fa-users"></i>USUARIOS</a></li>
                     <li><a href="/adminMenu/listar"><i class='bx bx-bowl-hot'></i> MENUS</a></li>
                     <li><a href="/reservas/listaReserva"><i class='fas fa-calendar-check'></i> RESERVAS</a></li>
                     <li><a href="/opcionAdmin"><i class='bx bx-arrow-back'></i> SALIR</a></li>
-                    
-
                 </ul>
             </nav>
         </div>
 
-        
-
         <div class="content">
             <div class="tabla-container">
-                <h2 >LISTA DE RESERVAS</h2>
+                <h2>LISTA DE RESERVAS</h2>
 
                 <!-- Contenedor del formulario de búsqueda -->
-        <div class="search-container">
-            <form action="/reservas/buscar" method="get">
-                <!-- Input con icono de lupa -->
-                
-                <input type="text" id="nombre" name="nombre" required
-                    placeholder="Escribe el nombre completo del usuario"> <i class="fas fa-search"></i>
-                <button type="submit">Buscar</button>
-            </form>
-        </div>
+                <div class="search-container">
+                    <form action="/reservas/buscar" method="get">
+                        <input type="text" id="nombre" name="nombre" required
+                            placeholder="Escribe el nombre completo del usuario">
+                        <i class="fas fa-search"></i>
+                        <button type="submit">Buscar</button>
+                    </form>
+                </div>
+
                 <table>
                     <thead>
                         <tr>
@@ -61,38 +55,37 @@
                             <th>TELÉFONO</th>
                             <th>EMAIL</th>
                             <th>FECHA DE CHECK-IN</th>
+                            <th>HORA INICIO</th>
+                            <th>HORA FIN</th>
                             <th>FECHA DE RESERVA</th>
                             <th>NÚMERO DE PERSONAS</th>
                             <th>MOTIVO</th>
                             <th>RESTRICCIONES</th>
-                            <th>COMENTARIOS</th>
                             <th>ID MESA</th>
                             <th>SECCIÓN</th>
-                            <th>MÉTODO DE PAGO</th>
                             <th>PRECIO</th>
                             <th>ESTADO</th>
                             <th>ACCIONES</th>
-                            <th>PREDICCIÓN</th>
-                            <th>PREDICCIÓN</th>
-
+                            <th>PREDECIR</th>
+                            <th>ACCIONES</th>
                         </tr>
                     </thead>
+
                     <tbody>
-                        <!-- Thymeleaf para iterar sobre las reservas -->
                         <tr th:each="reserva : ${reservas}">
                             <td th:text="${reserva.id}"></td>
                             <td th:text="${reserva.nombre}"></td>
                             <td th:text="${reserva.telefono}"></td>
                             <td th:text="${reserva.email}"></td>
-                            <td th:text="${reserva.fecha}"></td>
-                            <td th:text="${reserva.fechaReserva}"></td>
+                            <td th:text="${#temporals.format(reserva.fecha, 'yyyy-MM-dd')}"></td>
+                            <td th:text="${reserva.horaInicio}"></td>
+                            <td th:text="${reserva.horaFin}"></td>
+                            <td th:text="${#temporals.format(reserva.fechaReserva, 'yyyy-MM-dd HH:mm')}"></td>
                             <td th:text="${reserva.numeroPersonas}"></td>
                             <td th:text="${reserva.motivo}"></td>
                             <td th:text="${reserva.restricciones}"></td>
-                            <td th:text="${reserva.comentarios}"></td>
                             <td th:text="${reserva.mesa.idMesa}"></td>
                             <td th:text="${reserva.mesa.seccion}"></td>
-                            <td th:text="${reserva.metodoDePago}"></td>
                             <td th:text="${reserva.precio}"></td>
                             <td th:text="${reserva.estadoReserva}"></td>
                             <td>
@@ -106,19 +99,33 @@
                                 </form>
                             </td>
                             <td>
-                                <!-- Formulario para eliminar la reserva -->
-                                <form th:action="@{/reservas/eliminar/{id}(id=${reserva.id})}" method="post">
-                                    <button type="submit" class="button"
-                                        style="background-color: red; color: white;">Eliminar</button>
-                                </form>
-                            </td>
-
-                            <td>
                                 <a th:href="@{/prediccionReservas/ver/{id}(id=${reserva.id})}" class="button">
-                                    Ver Predicción
+                                    <i class="fas fa-chart-line"></i>
                                 </a>
                             </td>
-                            
+                            <td>
+                                <button type="button" class="btn-editar" th:attr="data-id=${reserva.id}, 
+data-nombre=${reserva.nombre}, 
+data-telefono=${reserva.telefono}, 
+data-email=${reserva.email}, 
+data-horaInicio=${reserva.horaInicio}, 
+data-horaFin=${reserva.horaFin}, 
+data-fechaReserva=${reserva.fechaReserva}, 
+data-numeroPersonas=${reserva.numeroPersonas}, 
+data-motivo=${reserva.motivo}, 
+data-restricciones=${reserva.restricciones}, 
+data-mesaId=${reserva.mesa.idMesa}, 
+data-seccion=${reserva.mesa.seccion}, 
+data-precio=${reserva.precio}, 
+data-estadoReserva=${reserva.estadoReserva}" onclick="openModal(this)">
+                                    <i class="fas fa-edit" style="color: #007bff;"></i>
+                                </button>
+                                <form th:action="@{/reservas/eliminar/{id}(id=${reserva.id})}" method="post">
+                                    <button type="submit" class="button">
+                                        <i class="fas fa-user-slash" style="color: rgb(171, 32, 7); padding: 2px;"></i>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -126,20 +133,118 @@
         </div>
     </div>
 
-   
+    <!-- Modal de Edición -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Editar Reserva</h2>
+            <form id="editarReserva" method="post">
+                <!-- Campos del formulario -->
+                <input type="hidden" id="reservaId" name="id">
 
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
 
+                <div class="form-group">
+                    <label for="telefono">Teléfono:</label>
+                    <input type="text" id="telefono" name="telefono" required>
+                </div>
 
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="horaInicio">Hora de Inicio:</label>
+                    <input type="time" id="horaInicio" name="horaInicio" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="horaFin">Hora de Fin:</label>
+                    <input type="time" id="horaFin" name="horaFin" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="numeroPersonas">Número de Personas:</label>
+                    <input type="number" id="numeroPersonas" name="numeroPersonas" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="motivo">Motivo:</label>
+                    <textarea id="motivo" name="motivo"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="restricciones">Restricciones:</label>
+                    <textarea id="restricciones" name="restricciones"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="mesaId">Mesa:</label>
+                    <input type="number" id="mesaId" name="mesaId" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="precio">Precio:</label>
+                    <input type="number" id="precio" name="precio" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="estadoReserva">Estado:</label>
+                    <select id="estadoReserva" name="estadoReserva" required>
+                        <option value="no pagada">No pagada</option>
+                        <option value="pagada">Pagada</option>
+                        <option value="cancelada">Cancelada</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="button">Actualizar Reserva</button>
+            </form>
+        </div>
+    </div>
 
     <script>
-        const toggleButton = document.getElementById('toggle-menu');
-        const menu = document.querySelector('.menu-container'); // Usamos querySelector para seleccionar la clase
-    
-        toggleButton.addEventListener('click', () => {
-            menu.classList.toggle('hidden');
-        });
+        function openModal(button) {
+            var modal = document.getElementById("editModal");
+            modal.style.display = "block";
+            var reserva = button.dataset;
+
+            // Rellenar el formulario con los datos de la reserva
+            document.getElementById("reservaId").value = reserva.id;
+            document.getElementById("nombre").value = reserva.nombre;
+            document.getElementById("telefono").value = reserva.telefono;
+            document.getElementById("email").value = reserva.email;
+            document.getElementById("horaInicio").value = reserva.horaInicio;
+            document.getElementById("horaFin").value = reserva.horaFin;
+            document.getElementById("numeroPersonas").value = reserva.numeroPersonas;
+            document.getElementById("motivo").value = reserva.motivo;
+            document.getElementById("restricciones").value = reserva.restricciones;
+            document.getElementById("mesaId").value = reserva.mesaId;
+            document.getElementById("precio").value = reserva.precio;
+            document.getElementById("estadoReserva").value = reserva.estadoReserva;
+
+            // Cambiar la acción del formulario
+            const actionUrl = '/reservas/actualizar/' + reserva.id;
+            document.getElementById('editarReserva').action = actionUrl;
+        }
+
+
+        var modal = document.getElementById("editModal");
+        var span = document.getElementsByClassName("close")[0];
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
     </script>
-    
 
 </body>
 

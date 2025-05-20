@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,100 +9,206 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/lista_usuario.css">
-
 </head>
+
 <body>
 
-<header>
-    <h1>Panel de Administración</h1>
-</header>
+    <header>
+        <h1>Lista de Usuarios</h1>
+    </header>
 
-<div class="main-container">
-    <div class="menu-container">
-        <nav>
-            <ul>
-                <li><a href="/listaPedidos"><i class="fas fa-utensils"></i>PEDIDOS</a></li>
-                    <li><a href="/usuarios"><i class="fas fa-users"></i>USUARIOS</a></li>
+    <div class="main-container">
+        <div class="menu-container">
+            <nav>
+                <ul>
+                    <li><a href="/listaPedidos"><i class="fas fa-utensils"></i>PEDIDOS</a></li>
+                    <li><a href="/usuarios/activos"><i class="fas fa-users"></i>USUARIOS</a></li>
                     <li><a href="/adminMenu/listar"><i class='bx bx-bowl-hot'></i> MENUS</a></li>
                     <li><a href="/reservas/listaReserva"><i class='fas fa-calendar-check'></i> RESERVAS</a></li>
+                    <li><a href="/mesas/disponibles"><i class="fas fa-table menu-icon"></i> MESAS</a></li>
                     <li><a href="/opcionAdmin"><i class='bx bx-arrow-back'></i> SALIR</a></li>
-            </ul>
-        </nav>
-    </div>
+                </ul>
+            </nav>
+        </div>
 
-    <div class="content">
-        <div class="tabla-container">
-            <h2>Lista de Usuarios Registrados</h2>
-            
-            <form action="/usuarios/buscar/resultados" method="GET">
-                <label for="userId">ID del Usuario:</label>
-                <input type="number" id="userId" name="userId" required>
-                <button type="submit">Buscar</button>
-            </form>
-             
+        <div class="content">
+            <div class="tabla-container">
 
-            <!-- Mostrar el resultado de la búsqueda (si existe un usuario encontrado) -->
-<div th:if="${usuario != null}">
-    <h3>Resultado de la Búsqueda:</h3>
-    <p><strong>ID:</strong> <span th:text="${usuario.id}"></span></p>
-    <p><strong>Nombre:</strong> <span th:text="${usuario.nombre}"></span></p>
-    <p><strong>Email:</strong> <span th:text="${usuario.correo}"></span></p>
-    <p><strong>Teléfono:</strong> <span th:text="${usuario.telefono}"></span></p>
-    <p><strong>Username:</strong> <span th:text="${usuario.username}"></span></p>
-    <p><strong>Rol:</strong> <span th:text="${usuario.role}"></span></p>
-</div>
-
-<!-- Mensaje de error si no se encontró el usuario -->
-<div th:if="${mensaje != null}">
-    <p th:text="${mensaje}" style="color: red;"></p>
-</div>
+                <div id="segundo-menu">
+                    <form action="/usuarios/buscar" method="GET" style="display: flex; align-items: center; gap: 10px;">
+                        <label for="userId">ID del Usuario:</label>
+                        <input type="number" id="userId" name="userId" required>
+                        <button id="buscar-btn" type="submit"><i class="fas fa-search"></i></button>
+                    </form>
 
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Email</th>
-                        <th>Teléfono</th>
-                        <th>Edad</th>
-                        <th>Sexo</th>
-                        <th>Username</th>
-                        <th>Rol</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="usuario : ${usuarios}">
-                        <td th:text="${usuario.id}"></td>
-                        <td th:text="${usuario.nombre}"></td>
-                        <td th:text="${usuario.correo}"></td>
-                        <td th:text="${usuario.telefono}"></td>
-                        <td th:text="${usuario.edad}"></td>
-                        <td th:text="${usuario.sexo}"></td>
-                        <td th:text="${usuario.username}"></td>
-                        <td th:text="${usuario.role}"></td>
-                        <td>
-                            <!-- Formulario para eliminar el usuario -->
-                            <form th:action="@{/usuarios/eliminar}" method="POST">
-                                <input type="hidden" name="userId" th:value="${usuario.id}" />
-                                <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+
+                    <div id="buscar-usuario-btn">
+                        <a href="/usuarios/activos">Ver Todos los Usuarios Activos</a>
+                    </div>
+                </div>
+
+                <!-- Mensaje de error -->
+                <div th:if="${mensaje != null}">
+                    <p th:text="${mensaje}" style="color: red;"></p>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Edad</th>
+                            <th>Sexo</th>
+                            <th>Username</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="usuario : ${usuariosActivos}">
+                            <td th:text="${usuario.id}"></td>
+                            <td th:text="${usuario.nombre}"></td>
+                            <td th:text="${usuario.correo}"></td>
+                            <td th:text="${usuario.telefono}"></td>
+                            <td th:text="${usuario.edad}"></td>
+                            <td th:text="${usuario.sexo}"></td>
+                            <td th:text="${usuario.username}"></td>
+                            <td th:text="${usuario.role}"></td>
+                            <td >
+                                <button type="button" class="btn-editar" th:attr="data-id=${usuario.id},
+                                         data-nombre=${usuario.nombre},
+                                         data-correo=${usuario.correo},
+                                         data-telefono=${usuario.telefono},
+                                         data-edad=${usuario.edad},
+                                         data-sexo=${usuario.sexo},
+                                         data-username=${usuario.username},
+                                         data-role=${usuario.role}" onclick="abrirModalEdicion(this)">
+                                    <i class="fas fa-edit" style="color: #007bff;"></i>
+                                </button>
+
+                                <form th:action="@{/usuarios/inactivar}" method="POST" style="display:inline;">
+                                    <input type="hidden" name="userId" th:value="${usuario.id}" />
+                                    <button type="submit"
+                                        onclick="return confirm('¿Estás seguro de que deseas marcar este usuario como inactivo?')"
+                                        class="btn-eliminar" title="Marcar como Inactivo">
+                                        <i class="fas fa-user-slash" style="color: rgb(171, 32, 7); padding: 2px;"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- PAGINACIÓN -->
+                <div class="pagination" style="margin-top: 20px;">
+                    <ul style="display: flex; list-style: none; gap: 10px; padding: 0;">
+                        <li th:if="${currentPage > 0}">
+                            <a th:href="@{/usuarios/activos(page=${currentPage - 1})}">&laquo; Anterior</a>
+                        </li>
+
+                        <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                            <a th:href="@{/usuarios/activos(page=${i})}" th:text="${i + 1}"
+                                th:classappend="${i == currentPage} ? 'active' : ''"></a>
+                        </li>
+
+                        <li th:if="${currentPage < totalPages - 1}">
+                            <a th:href="@{/usuarios/activos(page=${currentPage + 1})}">Siguiente &raquo;</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    // Función para mostrar/ocultar el formulario de búsqueda
-    function toggleFormularioBuscar() {
-        var formulario = document.getElementById('formBuscarUsuario');
-        formulario.style.display = formulario.style.display === 'block' ? 'none' : 'block';
-    }
-</script>
+    <!-- Modal de Edición -->
+    <div id="modalEdicion" class="modal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5);">
+        <div class="modal-content"
+            style="background:#fff; margin:10% auto; padding:20px; width:400px; border-radius:8px;">
+            <span onclick="cerrarModal()" style="float:right; cursor:pointer;">&times;</span>
+            <h2>Editar Usuario</h2>
+
+            <form id="formEditarUsuario" method="POST">
+                <input type="hidden" id="editarId" name="id">
+
+                <label>Nombre:</label>
+                <input type="text" id="editarNombre" name="nombre" required><br>
+
+                <label>Correo:</label>
+                <input type="email" id="editarCorreo" name="correo" required><br>
+
+                <label>Teléfono:</label>
+                <input type="text" id="editarTelefono" name="telefono" required><br>
+
+                <label>Edad:</label>
+                <input type="number" id="editarEdad" name="edad" required><br>
+
+                <label>Sexo:</label>
+                <input type="text" id="editarSexo" name="sexo" required><br>
+
+                <label>Username:</label>
+                <input type="text" id="editarUsername" name="username" required><br>
+
+                <label>Contraseña (opcional):</label>
+                <input type="password" id="editarPassword" name="password"><br>
+
+                <label>Rol:</label>
+                <select id="editarRole" name="role" required>
+                    <option value="USER">USER</option>
+                    <option value="ADMIN">ADMIN</option>
+                </select><br><br>
+
+                <button type="submit">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function abrirModalEdicion(button) {
+            const datos = button.dataset;
+            document.getElementById('modalEdicion').style.display = 'block';
+
+            document.getElementById('editarId').value = datos.id;
+            document.getElementById('editarNombre').value = datos.nombre;
+            document.getElementById('editarCorreo').value = datos.correo;
+            document.getElementById('editarTelefono').value = datos.telefono;
+            document.getElementById('editarEdad').value = datos.edad;
+            document.getElementById('editarSexo').value = datos.sexo;
+            document.getElementById('editarUsername').value = datos.username;
+            document.getElementById('editarRole').value = datos.role;
+
+            document.getElementById('formEditarUsuario').action = '/usuarios/actualizar-modal/' + datos.id;
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalEdicion').style.display = 'none';
+        }
+    </script>
+
+    <style>
+        .pagination a {
+            padding: 5px 10px;
+            background: #eee;
+            border: 1px solid #ccc;
+            text-decoration: none;
+            color: #333;
+            text-align: center;
+            width: 50%;
+            /* O el tamaño que necesites */
+
+        }
+
+        .pagination a.active {
+            font-weight: bold;
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
 
 </body>
+
 </html>

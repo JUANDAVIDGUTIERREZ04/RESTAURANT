@@ -5,6 +5,8 @@ import com.aplicacionweb.restaurante.Repository.UserRepository;
 import com.aplicacionweb.restaurante.Models.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -95,4 +97,72 @@ public class UserService {
         }
         return null;
     }
+
+    // Obtener todos los usuarios activos como DTO
+public List<UserDto> obtenerUsuariosActivos() {
+    return userRepository.findByActivoTrue().stream()
+            .map(user -> {
+                UserDto dto = new UserDto();
+                dto.setId(user.getId());
+                dto.setNombre(user.getNombre());
+                dto.setCorreo(user.getCorreo());
+                dto.setEdad(user.getEdad());
+                dto.setSexo(user.getSexo());
+                dto.setTelefono(user.getTelefono());
+                dto.setUsername(user.getUsername());
+                dto.setRole(user.getRole());
+                return dto;
+            })
+            .collect(Collectors.toList());
+}
+
+
+
+
+
+// Marcar usuario como inactivo
+    public void marcarUsuarioInactivo(Long id) {
+        Optional<User> userOpt = userRepository.findById(id);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            user.setActivo(false);  // Cambiamos el estado de 'activo' a false
+            userRepository.save(user);  // Guardamos la entidad actualizada
+        }
+    }
+
+
+    public Page<UserDto> obtenerUsuariosActivosPaginados(Pageable pageable) {
+    return userRepository.findByActivoTrue(pageable)
+        .map(user -> {
+            UserDto dto = new UserDto();
+            dto.setId(user.getId());
+            dto.setNombre(user.getNombre());
+            dto.setCorreo(user.getCorreo());
+            dto.setEdad(user.getEdad());
+            dto.setSexo(user.getSexo());
+            dto.setTelefono(user.getTelefono());
+            dto.setUsername(user.getUsername());
+            dto.setRole(user.getRole());
+            return dto;
+        });
+}
+
+
+public Page<UserDto> buscarUsuariosPorIdConPaginacion(Long userId, Pageable pageable) {
+    return userRepository.findById(userId, pageable) // Aquí estamos buscando por ID, ajusta según el caso de uso.
+        .map(user -> {
+            UserDto dto = new UserDto();
+            dto.setId(user.getId());
+            dto.setNombre(user.getNombre());
+            dto.setCorreo(user.getCorreo());
+            dto.setEdad(user.getEdad());
+            dto.setSexo(user.getSexo());
+            dto.setTelefono(user.getTelefono());
+            dto.setUsername(user.getUsername());
+            dto.setRole(user.getRole());
+            return dto;
+        });
+}
+
+
 }

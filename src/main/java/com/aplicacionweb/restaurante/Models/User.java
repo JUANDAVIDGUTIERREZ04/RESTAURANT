@@ -41,6 +41,8 @@ public class User {
     @Column(nullable = false, length = 30)
     private String sexo;
 
+    private boolean activo = true;  // true = activo, false = inactivo
+
     @Column(name= "tipo_rol", nullable = false)
     private String role;
 

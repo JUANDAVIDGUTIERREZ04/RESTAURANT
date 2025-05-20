@@ -11,7 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
 import java.util.List;
+
 
 @Controller
 @RequestMapping("/reservas")
@@ -106,11 +108,11 @@ public class ReservaController {
         return "redirect:/reservas/listaReserva"; // Redirigir a la lista de reservas
     }
 
-    //  buscar reservas por nombre
+    // buscar reservas por nombre
     @GetMapping("/buscar")
     public String buscarReservaPorNombre(@RequestParam("nombre") String nombre, Model model) {
         List<Reserva> reservas = reservaService.buscarReservaPorNombre(nombre);
-        
+
         // Añadir las reservas al modelo para que Thymeleaf las pueda mostrar
         model.addAttribute("reservas", reservas);
 
@@ -122,4 +124,39 @@ public class ReservaController {
         // Devuelve la vista que se renderiza
         return "reserva_lista"; // La plantilla HTML que mostrará los resultados
     }
+
+   
+
+    // Acción para manejar la actualización de una reserva
+    @PostMapping("/actualizar/{id}")
+    public String actualizarReserva(@PathVariable Long id, 
+                                    @ModelAttribute Reserva reserva,
+                                    @RequestParam Long mesaId) {
+        // Buscar la reserva por ID
+        Reserva reservaExistente = reservaService.findById(id).orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+
+        // Actualizar los detalles de la reserva
+        reservaExistente.setNombre(reserva.getNombre());
+        reservaExistente.setTelefono(reserva.getTelefono());
+        reservaExistente.setEmail(reserva.getEmail());
+        reservaExistente.setHoraInicio(reserva.getHoraInicio());
+        reservaExistente.setHoraFin(reserva.getHoraFin());
+        reservaExistente.setNumeroPersonas(reserva.getNumeroPersonas());
+        reservaExistente.setMotivo(reserva.getMotivo());
+        reservaExistente.setRestricciones(reserva.getRestricciones());
+        reservaExistente.setPrecio(reserva.getPrecio());
+        reservaExistente.setEstadoReserva(reserva.getEstadoReserva());
+
+        // Actualizar la mesa asociada
+        Mesa mesa = mesaRepository.findById(mesaId).orElseThrow(() -> new RuntimeException("Mesa no encontrada"));
+        reservaExistente.setMesa(mesa);
+
+        // Guardar la reserva actualizada en la base de datos
+        reservaService.guardarReserva(reservaExistente);
+
+        return "redirect:/reservas/listaReserva"; // Redirige de vuelta a la lista de reservas
+    }
 }
+
+
+

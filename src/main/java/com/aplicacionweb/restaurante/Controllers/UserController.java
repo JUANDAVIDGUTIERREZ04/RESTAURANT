@@ -7,6 +7,9 @@ import com.aplicacionweb.restaurante.Service.UserService;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,34 +32,27 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
-    
-
-    
-
     @GetMapping("/registro")
     public String showRegistrationForm(Model model) {
         return "registro_usuario"; // Nombre del archivo HTML del formulario
     }
 
-     @PostMapping("/registrar")
+    @PostMapping("/registrar")
     public String createUser(@RequestParam String nombre,
-                             @RequestParam String correo,
-                             @RequestParam String telefono,
-                             @RequestParam String username,
-                             @RequestParam String password,
-                             @RequestParam String role,
-                             @RequestParam int edad,
-                             @RequestParam String sexo,
-                             Model model) {
+            @RequestParam String correo,
+            @RequestParam String telefono,
+            @RequestParam String username,
+            @RequestParam String password,
+            @RequestParam String role,
+            @RequestParam int edad,
+            @RequestParam String sexo,
+            Model model) {
         try {
             // Verificar si el nombre de usuario ya está en uso
             if (userService.existsByNombre(username)) {
                 model.addAttribute("error", "El nombre de usuario ya está en uso. Por favor, elige otro.");
                 return "registro_usuario";
             }
-
-            
 
             // Crear un nuevo usuario
             User user = new User();
@@ -127,7 +123,7 @@ public class UserController {
         updatedUser.setSexo(sexo);
         updatedUser.setUsername(username);
         updatedUser.setPassword(passwordEncoder.encode(password));
- // Aquí estamos manteniendo la contraseña tal como la recibimos
+        // Aquí estamos manteniendo la contraseña tal como la recibimos
         updatedUser.setRole(role);
 
         // Actualizar el usuario en el servicio
@@ -140,7 +136,7 @@ public class UserController {
         return "redirect:/usuarios";
     }
 
-     @GetMapping("/perfil")
+    @GetMapping("/perfil")
     public String mostrarPerfil(Model model) {
         // Obtener el usuario autenticado desde el contexto de seguridad
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -160,17 +156,83 @@ public class UserController {
     }
 
     // Método para buscar usuarios por ID
-    @GetMapping("/usuarios/buscar/resultados")
-    public String buscarUsuarios(@RequestParam Long userId, Model model) {
-        UserDto usuarioDto = userService.buscarUsuarioPorId(userId);
-        if (usuarioDto == null) {
-            model.addAttribute("mensaje", "Usuario no encontrado.");
+    @GetMapping("/usuarios/buscar")
+public String buscarUsuariosConPaginacion(@RequestParam Long userId, Pageable pageable, Model model) {
+    Page<UserDto> usuariosPage = userService.buscarUsuariosPorIdConPaginacion(userId, pageable);
+
+    model.addAttribute("usuariosBuscados", usuariosPage.getContent());
+    model.addAttribute("totalPages", usuariosPage.getTotalPages());
+    model.addAttribute("currentPage", usuariosPage.getNumber());
+    return "usuario_lista";
+}
+
+
+
+
+    // obterner todos los usuarios activos
+    @GetMapping("/usuarios/activos")
+public String mostrarUsuariosActivos(@RequestParam(defaultValue = "0") int page, Model model) {
+    int pageSize = 6;
+    PageRequest pageable = PageRequest.of(page, pageSize);
+    Page<UserDto> usuariosActivosPage = userService.obtenerUsuariosActivosPaginados(pageable);
+
+    model.addAttribute("usuariosActivos", usuariosActivosPage.getContent());
+    model.addAttribute("currentPage", page);
+    model.addAttribute("totalPages", usuariosActivosPage.getTotalPages());
+
+    return "usuario_lista";
+}
+
+
+    // Método para marcar como inactivo (en lugar de eliminar)
+    @PostMapping("/usuarios/inactivar")
+    public String inactivarUsuario(@RequestParam Long userId, RedirectAttributes redirectAttributes) {
+        if (userService.exitById(userId)) {
+            userService.marcarUsuarioInactivo(userId); // Marcamos al usuario como inactivo
+            redirectAttributes.addFlashAttribute("mensaje", "Usuario marcado como inactivo exitosamente.");
         } else {
-            model.addAttribute("usuario", usuarioDto); // Agregar el usuario encontrado al modelo
+            redirectAttributes.addFlashAttribute("error", "Usuario no encontrado.");
         }
-        List<UserDto> usuarios = userService.obtenerTodosLosUsuarios(); // Obtener todos los usuarios
-        model.addAttribute("usuarios", usuarios); // Agregar la lista de usuarios al modelo
-        return "usuario_lista"; // Devolver la misma vista con el resultado de la búsqueda
+        return "redirect:/usuarios/activos";
     }
+
+    @PostMapping("/usuarios/actualizar-modal/{id}")
+public String actualizarDesdeModal(
+        @PathVariable Long id,
+        @RequestParam String nombre,
+        @RequestParam String correo,
+        @RequestParam String telefono,
+        @RequestParam int edad,
+        @RequestParam String sexo,
+        @RequestParam String username,
+        @RequestParam(required = false) String password,
+        @RequestParam String role,
+        RedirectAttributes redirectAttributes) {
+
+    User userExistente = userService.getById(id).orElse(null);
+    if (userExistente == null) {
+        redirectAttributes.addFlashAttribute("error", "Usuario no encontrado.");
+        return "redirect:/usuarios";
+    }
+
+    // Actualizar campos
+    userExistente.setNombre(nombre);
+    userExistente.setCorreo(correo);
+    userExistente.setTelefono(telefono);
+    userExistente.setEdad(edad);
+    userExistente.setSexo(sexo);
+    userExistente.setUsername(username);
+    userExistente.setRole(role);
+
+    if (password != null && !password.isEmpty()) {
+        userExistente.setPassword(passwordEncoder.encode(password));
+    }
+
+    userService.saveUser(userExistente);
+
+    redirectAttributes.addFlashAttribute("mensaje", "Usuario actualizado exitosamente.");
+    return "redirect:/usuarios/activos";
+}
+
 
 }

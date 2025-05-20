@@ -206,3 +206,58 @@ button:hover {
 .search-container button:hover {
     background-color: #0056b3;
 }
+
+/* Estilos del modal */
+/* Estilos generales para el modal */
+.modal {
+    display: none; /* El modal está oculto por defecto */
+    position: fixed; /* Fija el modal en la pantalla */
+    z-index: 1; /* Asegura que el modal esté por encima de otros elementos */
+    left: 0;
+    top: 0;
+    width: 100%; /* Toma todo el ancho de la ventana */
+    height: 100%; /* Toma todo el alto de la ventana */
+    overflow: auto; /* Si el contenido es grande, muestra una barra de desplazamiento */
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo semi-transparente */
+    transition: opacity 0.3s ease; /* Suaviza la transición del fondo */
+}
+
+/* El contenido dentro del modal */
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto; /* Centra el modal en la ventana */
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%; /* Ancho relativo, ajusta para tu diseño */
+    max-width: 600px; /* Un tamaño máximo para evitar que se haga muy grande */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.5s; /* Animación para cuando aparece el modal */
+}
+
+/* Animación de aparición del modal */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Botón de cerrar (x) */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Cuando el ratón pasa sobre el botón de cerrar */
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+

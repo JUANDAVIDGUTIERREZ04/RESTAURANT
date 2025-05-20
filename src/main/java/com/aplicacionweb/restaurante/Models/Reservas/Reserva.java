@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-
+import java.time.LocalTime;
 
 import com.aplicacionweb.restaurante.Models.Mesas.Mesa;
 
@@ -21,12 +21,36 @@ import com.aplicacionweb.restaurante.Models.Mesas.Mesa;
 @Setter
 public class Reserva {
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+     @Column(nullable = false)
     private String nombre;
+
+    @Column(nullable = false)
+    private LocalDate fechaReserva; // Fecha en que se hizo la reserva
+
+    @Column(nullable = false , name = "check-in")
+    private LocalDate fecha; // Fecha del check-in
+
+    @Column(nullable = false)
+    private LocalTime horaInicio; // Hora en que comienza la reserva
+
+    @Column(nullable = false)
+    private LocalTime horaFin; // Hora en que termina la reserva
+
+    @Column(nullable = false)
+    private int numeroPersonas;
+
+    @ManyToOne
+    @JoinColumn(name = "mesa_id")
+    private Mesa mesa;
+
+    @Column(nullable = false)
+    private Double precio;
 
     @Column(nullable = false)
     private String telefono;
@@ -35,37 +59,22 @@ public class Reserva {
     private String email;
 
     @Column(nullable = false)
-    private LocalDateTime fecha; // Fecha del check-in
+    private String estadoReserva = "no pagada"; // pagada / no pagada
 
-    @Column(nullable = false)
-    private LocalDateTime fechaReserva; // Fecha en que se hizo la reserva
-
-    @Column(nullable = false)
-    private int numeroPersonas;
-
-    private String motivo;
+    private String motivo
+    ;
     private String restricciones;
-    private String comentarios;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MetodoDePago metodoDePago;
 
-    @Column(nullable = false)
-    private String estadoReserva = "no pagada"; // pagada / no pagada
-
-    @Column(nullable = false)
-    private Boolean clienteRecurrente = false;
-
-    @Column(nullable = false)
+     @Column(nullable = false)
     private Boolean cancelada = false;
 
-    @Column(nullable = false)
-    private Double precio;
+     @Column(nullable = false)
+    private Boolean clienteRecurrente = false;
 
-    @ManyToOne
-    @JoinColumn(name = "mesa_id")
-    private Mesa mesa;
 
     @Column(nullable = false)
     private Long anticipacion; // Columna para almacenar la anticipación en días
@@ -74,15 +83,18 @@ public class Reserva {
     private String probabilidadCancelacion; // Enlace a la página con la probabilidad de cancelación
 
     /**
-     * Calcula la anticipación en días entre la fecha de reserva y la fecha de check-in
+     * Calcula la anticipación en días entre la fecha de reserva y la fecha de
+     * check-in
      */
     public void calcularAnticipacion() {
-        if (fechaReserva != null && fecha != null) {
-            this.anticipacion = Duration.between(fechaReserva, fecha).toDays();
-        } else {
-            this.anticipacion = 0L; // Si no hay fechas, anticipación es 0
-        }
+    if (fechaReserva != null && fecha != null) {
+        this.anticipacion = Duration.between(fechaReserva.atStartOfDay(), fecha.atStartOfDay()).toDays();
+    } else {
+        this.anticipacion = 0L;
     }
+}
+
+
 
     // Método para actualizar el enlace de probabilidad de cancelación
     public void actualizarProbabilidadCancelacion(String enlaceProbabilidad) {

@@ -20,8 +20,18 @@ public class MenuService {
     private MenuRepository menuRepository;
     
     // Registrar menú
-    public Menu RegistrarMenu(Menu menu) {
+    public Menu registrarMenu(Menu menu) {
         return menuRepository.save(menu);
+    }
+
+    // Método para actualizar un menú
+    public Menu actualizarMenu(Menu menu) {
+        return menuRepository.save(menu);
+    }
+
+    // Método para buscar un menú por su ID
+    public Menu buscarPorId(Long id) {
+        return menuRepository.findById(id).orElse(null); // Si no se encuentra el menú, se retorna null
     }
 
     // Obtener menú por ID
@@ -30,7 +40,7 @@ public class MenuService {
     }
 
     // Eliminar menú
-    public void deleteMenu(Long id) {
+    public void eliminarMenu(Long id) {
         menuRepository.deleteById(id);
     }
 
@@ -39,18 +49,7 @@ public class MenuService {
     }
 
     public Page<Menu> obtenerMenusPaginados(int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-    return menuRepository.findAll(pageable);
-}
-
-
-     // Método para eliminar un menú por su ID
-     public void eliminarMenu(Long id) {
-        // Verifica si el menú existe antes de eliminarlo
-        if (menuRepository.existsById(id)) {
-            menuRepository.deleteById(id);  // Elimina el menú de la base de datos
-        } else {
-            throw new RuntimeException("El menú con ID " + id + " no existe.");
-        }
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        return menuRepository.findAll(pageable);
     }
 }

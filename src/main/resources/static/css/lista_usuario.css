@@ -22,7 +22,7 @@
         .menu-container {
             background-color: #333;
             padding: 20px;
-            width: 250px;
+            width: 150px;
             overflow-y: auto;
         }
         nav ul {
@@ -73,13 +73,20 @@
             border-collapse: collapse;
             
             position: relative;
+            
         }
         
         table th, table td {
             padding: 12px;
             text-align: center;
-            border: 1px solid #ddd;
+            
+            
         }
+        table td{
+            border : 1px solid #241f1e;
+        }
+
+        
         
         table th {
             background-color: #343a40;
@@ -108,4 +115,32 @@
         #formBuscarUsuario button {
             padding: 10px;
         }
-    
+
+        #segundo-menu{
+            display: flex; 
+            gap: 20px;
+             align-items: center;
+             margin-top: 20px;
+             margin-bottom: 20px;
+        }
+
+        #buscar-usuario-btn{
+
+            height: 20px;
+            width: 300px;
+
+             background: none; 
+             border: none;
+               font-size: 14px;
+            cursor: pointer;
+            background-color: rgb(76, 184, 76);
+
+        }
+
+        #buscar-btn{
+              background: none;
+               border: none; 
+               color: #007bff; 
+               font-size: 1.2em;
+             cursor: pointer;
+        }
