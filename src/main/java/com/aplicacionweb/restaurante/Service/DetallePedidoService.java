@@ -52,4 +52,19 @@ public class DetallePedidoService {
             detallePedidoRepository.save(detalle);  // Guarda el detalle desvinculado
         }
     }
+
+    public List<DetallePedido> obtenerTodosLosPedidos() {
+    List<DetallePedido> pedidos = detallePedidoRepository.findAll();
+    System.out.println("Pedidos encontrados: " + pedidos.size());  // Log
+    return pedidos;  
+}
+
+
+     public void eliminarDetallePedidoPorId(Long id) {
+        if (detallePedidoRepository.existsById(id)) {  // Verifica si el detalle de pedido existe
+            detallePedidoRepository.deleteById(id);  // Elimina el detalle de pedido por su ID
+        } else {
+            throw new RuntimeException("Detalle de pedido no encontrado con ID: " + id);  // Lanza excepción si no existe
+        }
+    }
 }

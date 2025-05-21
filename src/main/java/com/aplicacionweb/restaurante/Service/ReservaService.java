@@ -4,11 +4,13 @@ import com.aplicacionweb.restaurante.Models.Reservas.Reserva;
 import com.aplicacionweb.restaurante.Repository.ReservaRepository;
 
 import java.lang.module.ResolutionException;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,6 +32,12 @@ public class ReservaService {
     public List<Reserva> obtenerTodasLasReservas() {
         return reservaRepository.findAll();
     }
+
+    public Page<Reserva> obtenerReservasPaginadas(int page, int pageSize) {
+    PageRequest pageable = PageRequest.of(page, pageSize); // Crea un Pageable con la página y el tamaño
+    return reservaRepository.findAll(pageable); // Devuelve la página de reservas
+}
+
 
     public void eliminarReserva(Long id) {
         reservaRepository.deleteById(id); 
@@ -73,6 +81,24 @@ public class ReservaService {
     } else {
         throw new ResolutionException("Reserva no encontrada con ID " + id);
     }
+}
+
+public boolean existeConflictoDeReserva(Reserva nuevaReserva) {
+    List<Reserva> reservasExistentes = reservaRepository.findByMesaIdMesaAndFecha(
+            nuevaReserva.getMesa().getIdMesa(),
+            nuevaReserva.getFecha()
+    );
+
+    for (Reserva r : reservasExistentes) {
+        if (!r.getCancelada() && seCruzan(r.getHoraInicio(), r.getHoraFin(), nuevaReserva.getHoraInicio(), nuevaReserva.getHoraFin())) {
+            return true;
+        }
+    }
+    return false;
+}
+
+private boolean seCruzan(LocalTime inicio1, LocalTime fin1, LocalTime inicio2, LocalTime fin2) {
+    return !(fin1.isBefore(inicio2) || inicio1.isAfter(fin2));
 }
 
 }

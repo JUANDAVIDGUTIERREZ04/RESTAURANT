@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Controller
@@ -20,9 +21,9 @@ public class MesaController {
     // Mostrar las mesas disponibles
     @GetMapping("/disponibles")
     public String mostrarMesasDisponibles(Model model) {
-        List<Mesa> mesasDisponibles = mesaService.obtenerMesasDisponibles();
+        List<Mesa> mesasDisponibles = mesaService.obtenerTodasLasMesasConDisponibilidadActual();
         model.addAttribute("mesas", mesasDisponibles);
-        return "mesas/lista_mesas"; // Vista que lista las mesas disponibles
+        return "mesas/lista_mesas";
     }
 
     // Mostrar detalles de una mesa
@@ -39,28 +40,42 @@ public class MesaController {
 
     // Cambiar la disponibilidad de una mesa
     @PostMapping("/cambiarDisponibilidad/{id}")
-    public String cambiarDisponibilidad(@PathVariable Long id, @RequestParam boolean disponible, Model model) {
-        // Cambiar la disponibilidad de la mesa sin eliminarla
-        mesaService.cambiarDisponibilidad(id, disponible);
-        return "redirect:/mesas/disponibles"; // Redirigir a la lista de mesas disponibles
+    public String cambiarDisponibilidad(@PathVariable Long id, @RequestParam boolean disponible) {
+        Optional<Mesa> mesaOptional = mesaService.obtenerMesaPorId(id);
+
+        if (mesaOptional.isPresent()) {
+            Mesa mesa = mesaOptional.get();
+            // Cambiar la disponibilidad de la mesa
+            mesa.setDisponible(disponible);
+            // Guardar la mesa actualizada en la base de datos
+            mesaService.guardarMesa(mesa);
+        } else {
+            // Si no se encuentra la mesa, lanzar excepción o manejar el error de forma
+            // adecuada
+            throw new NoSuchElementException("Mesa no encontrada");
+        }
+
+        // Redirigir de vuelta a la lista de mesas disponibles o a otra página después
+        // de actualizar
+        return "redirect:/mesas/disponibles";
     }
 
     @GetMapping("/nuevo")
     public String formularioNuevaMesa(Model model) {
-        model.addAttribute("mesa", new Mesa());  // Inicializa un nuevo objeto Mesa
-        model.addAttribute("secciones", SeccionesDeMesas.values());  // Pasamos las secciones
-        return "/mesas/form_mesa";  // Vista para agregar una nueva mesa
+        model.addAttribute("mesa", new Mesa()); // Inicializa un nuevo objeto Mesa
+        model.addAttribute("secciones", SeccionesDeMesas.values()); // Pasamos las secciones
+        return "/mesas/form_mesa"; // Vista para agregar una nueva mesa
     }
 
     // Guardar una nueva mesa
     @PostMapping("/guardar")
     public String guardarMesa(@ModelAttribute Mesa mesa, Model model) {
-        mesa.setPrecio();  // Establecemos el precio según la sección seleccionada
-        mesaService.guardarMesa(mesa);  // Llama al servicio para guardar la mesa
+        mesa.setPrecio(); // Establecemos el precio según la sección seleccionada
+        mesaService.guardarMesa(mesa); // Llama al servicio para guardar la mesa
 
         // Agregar un mensaje de éxito al modelo
         model.addAttribute("mensaje", "Mesa registrada con éxito.");
-        return "mesas/form_mesa";  // Redirige de nuevo al formulario o muestra el mensaje de éxito
+        return "mesas/form_mesa"; // Redirige de nuevo al formulario o muestra el mensaje de éxito
     }
 
     // Eliminar una mesa

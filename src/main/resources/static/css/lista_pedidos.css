@@ -11,7 +11,9 @@ header {
     color: white;
     padding: 20px 100px 20px 80px;
     text-align: center;
-    width: 140%;
+    width: 100%;
+    height: 80px;
+
 }
 
 header h1 {
@@ -29,12 +31,14 @@ header h1 {
 
 .menu-container {
     width: 200px;
+    top:-46px;
     /* Cambiá este valor si querés más ancho */
     background-color: #343a40;
-    height: 100vh;
+    height:600px;
     transition: transform 0.3s ease;
     flex-shrink: 0;
     /* Impide que el menú se encoja */
+    position: relative;
 }
 
 nav ul {
@@ -70,7 +74,7 @@ nav ul li a:hover {
     background-color: #f2f1f1;
     padding: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    width: 100%;
+    width: 90%;
 
     margin: 0 auto;
     border-radius: 0px;
@@ -86,6 +90,8 @@ nav ul li a:hover {
 table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 10px;
+    
 }
 
 
@@ -93,7 +99,7 @@ table th,
 table td {
     padding: 12px;
     text-align: center;
-    border: 1px solid #ddd;
+    border: 1px solid #050505;
 }
 
 table th {
@@ -132,8 +138,8 @@ table tr:hover {
 
 /* Botón para mostrar/ocultar menú */
 #toggle-menu {
-    position: fixed;
-    top: 20px;
+    position: relative;
+    top: -80px;
     left: 20px;
     z-index: 1000;
     padding: 10px 15px;
@@ -151,3 +157,13 @@ table tr:hover {
     transform: translateX(-100%);
     transition: transform 0.3s ease; /* Añadir transición para que el deslizamiento sea suave */
 }
+
+#titulo-primero {
+
+            text-align: center;
+            color: rgb(255, 253, 253);
+            text-transform: uppercase;
+            position: relative;
+            top: 20px;
+            
+        }

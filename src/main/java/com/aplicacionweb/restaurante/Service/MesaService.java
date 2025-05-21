@@ -5,6 +5,8 @@ import com.aplicacionweb.restaurante.Repository.MesaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -18,6 +20,11 @@ public class MesaService {
     // Obtener todas las mesas disponibles
     public List<Mesa> obtenerMesasDisponibles() {
         return mesaRepository.findByDisponibleTrue();
+    }
+
+    // Obtener todas las mesas disponibles
+    public List<Mesa> todasLasMesas() {
+        return mesaRepository.findAll();
     }
 
     // Obtener una mesa por su ID
@@ -52,4 +59,31 @@ public class MesaService {
     public void eliminarMesa(Long id) {
         mesaRepository.deleteById(id);
     }
+
+    public List<Mesa> obtenerTodasLasMesasConDisponibilidadActual() {
+    List<Mesa> mesas = mesaRepository.findAllWithReservas(); // Usar JOIN FETCH aquí (ver más abajo)
+    LocalDate hoy = LocalDate.now();
+    LocalTime ahora = LocalTime.now();
+
+    for (Mesa mesa : mesas) {
+        boolean hayReservaActiva = false;
+
+        if (mesa.getReservas() != null) {
+            hayReservaActiva = mesa.getReservas().stream().anyMatch(reserva ->
+                !reserva.getCancelada() &&
+                reserva.getFecha().equals(hoy) &&
+                ahora.isAfter(reserva.getHoraInicio()) &&
+                ahora.isBefore(reserva.getHoraFin())
+            );
+        }
+
+        // Mostrar ocupación en otra propiedad (sin modificar 'disponible' original)
+        mesa.setDisponible(mesa.getDisponible() && !hayReservaActiva); 
+        // Disponible solo si está marcada como disponible y no tiene reservas activas
+    }
+
+    return mesas;
+}
+
+
 }

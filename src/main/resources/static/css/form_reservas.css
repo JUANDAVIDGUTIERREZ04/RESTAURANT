@@ -238,3 +238,16 @@ button:hover {
     text-align: center; /* Centra el texto dentro del div */
     border-radius: 10px; /* Opcional: para redondear los bordes */
 }
+
+/* Estilos que solo se aplican al formulario con ID 'reservaForm' */
+
+
+/* Estilo para el formulario dentro del modal */
+.modal-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    background-color: rgba(42, 43, 56, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}

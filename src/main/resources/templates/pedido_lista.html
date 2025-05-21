@@ -9,13 +9,12 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/lista_pedidos.css">
-
 </head>
 
 <body>
 
     <header>
-        <h1>Panel de Administración</h1>
+        <h1 id="titulo-primero">LISTA DE PEDIDOS</h1>
     </header>
 
     <button id="toggle-menu">☰</button>
@@ -24,10 +23,11 @@
         <div class="menu-container">
             <nav>
                 <ul>
-                    <li><a href="/listaPedidos"><i class="fas fa-utensils"></i>PEDIDOS</a></li>
-                    <li><a href="/usuarios/activos"><i class="fas fa-users"></i>USUARIOS</a></li>
+                    <li><a href="/carrito/todos-los-pedidos"><i class="fas fa-utensils"></i> PEDIDOS</a></li>
+                    <li><a href="/usuarios/activos"><i class="fas fa-users"></i> USUARIOS</a></li>
                     <li><a href="/adminMenu/listar"><i class='bx bx-bowl-hot'></i> MENUS</a></li>
                     <li><a href="/reservas/listaReserva"><i class='fas fa-calendar-check'></i> RESERVAS</a></li>
+                    <li><a href="/mesas/disponibles"><i class="fas fa-table menu-icon"></i> MESAS</a></li>
                     <li><a href="/opcionAdmin"><i class='bx bx-arrow-back'></i> SALIR</a></li>
                 </ul>
             </nav>
@@ -37,61 +37,80 @@
             <div class="tabla-container">
                 <h1>Lista de Pedidos</h1>
 
+                <!-- Mostrar mensaje de éxito o error -->
+                <div th:if="${mensaje != null}" class="alert alert-success">
+                    <span th:text="${mensaje}"></span>
+                </div>
+                <div th:if="${error != null}" class="alert alert-danger">
+                    <span th:text="${error}"></span>
+                </div>
+
                 <table>
                     <thead>
                         <tr>
-                            <th>ID Pedido</th>
-                            <th>Fecha y hora</th>
-                            <th>Dia</th>
-                            <th>Estado</th>
-                            <th>Cambiar estado</th>
-
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
                             <th>Total</th>
-                            <th>Menú</th>
-                            <th>Usuario Id</th>
-                            <th>Nombre de cliente</th>
-                            <th>Tipo de entrega</th>
-
-                            <th>Total</th>
-
-                            <th>Acciones</th> <!-- Columna de acciones --
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Mostrar los pedidos -->
-                        <tr th:each="pedido : ${pedidos}">
-                            <td th:text="${pedido.id_pedido}"></td>
-                            <td th:text="${#dates.format(pedido.fecha, 'dd/MM/yyyy HH:mm')}"></td>
-                            <td th:text="${pedido.diaSemana}"></td>
-                            <td th:text="${pedido.estado}"></td>
+                            <th>Fecha y Hora</th>
+                            <th>Día de la Semana</th>
+                            <th>Tipo de Entrega</th>
+                            <th>Dirección</th>
+                            <th>Método de Pago</th>
+                            <th>ID Usuario</th>
+                            <th>Acciones</th> <!-- Nueva columna de acciones -->
+                            <!-- Nueva columna para el ID del usuario -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="detalle : ${todosPedidos}">
                             <td>
-                                <form th:action="@{/cambiarEstado/{id}(id=${pedido.id_pedido})}" method="post">
-                                    <button type="submit" class="btn btn-warning">
-                                        <i class="fas fa-sync-alt"></i> Cambiar Estado
+                                <span th:text="${detalle.carritoItem.menu.nombreDePlato}"></span>
+                            </td>
+
+                            <td>
+                                <span th:text="${detalle.carritoItem.cantidad}"></span>
+                            </td>
+                            <td>
+                                <span th:text="${detalle.carritoItem.menu.precio}"></span>
+                            </td>
+                            <td>
+                                <span th:text="${detalle.carritoItem.subtotal}"></span>
+                            </td>
+                            <td>
+                                <span th:text="${detalle.fechaHora}"></span>
+                            </td>
+                            <td>
+                                <span th:text="${detalle.diaSemana}"></span>
+                            </td>
+                            <td>
+                                <span th:text="${detalle.tipoEntrega}"></span>
+                            </td>
+                            <td>
+                                <span th:text="${detalle.direccion}"></span>
+                            </td>
+                            <td>
+                                <span th:text="${detalle.metodoDePago}"></span>
+                            </td>
+                            <td>
+                                <!-- Mostrar el ID del usuario que hizo el pedido -->
+                                <span th:text="${detalle.carritoItem.usuario.id}"></span>
+                                <!-- Aquí se debe referenciar al usuario -->
+                            </td>
+
+                            <td>
+                                <form th:action="@{/carrito/eliminar-pedido/{id}(id=${detalle.id})}" method="post">
+                                    <button type="submit" class="btn-eliminar" title="Eliminar Pedido">
+                                        <i class="fas fa-trash-alt"></i> <!-- Ícono de eliminar -->
                                     </button>
                                 </form>
 
 
-                            </td>
-
-
-                            <td th:text="${pedido.cantidad}"></td>
-
-
-                            <td th:text="${pedido.menu.nombreDePlato}"></td>
-                            <td th:text="${pedido.usuario.id}"></td>
-                            <td th:text="${pedido.usuario.nombre}"></td>
-                            <td th:text="${pedido.tipoEntregaPedido}"></td>
-                            <td th:text="${pedido.total}"></td>
-                            <td>
-                                <!-- Botón de eliminar con enlace -->
-                                <form th:action="@{/pedidos/eliminar/{id}(id=${pedido.id_pedido})}" method="post">
-                                    <button type="submit" class="btn btn-danger">Eliminar</button>
-                                </form>
-                            </td>
+                            </td> <!-- Aquí agregamos el ícono de eliminar -->
 
                         </tr>
-                        </tbody>
+                    </tbody>
+
                 </table>
             </div>
         </div>
@@ -100,12 +119,11 @@
     <script>
         const toggleButton = document.getElementById('toggle-menu');
         const menu = document.getElementsByClassName('menu-container')[0]; // Usa la clase en lugar del id
-    
+
         toggleButton.addEventListener('click', () => {
             menu.classList.toggle('hidden');
         });
     </script>
-    
 
 </body>
 

@@ -3,15 +3,19 @@ package com.aplicacionweb.restaurante.Controllers;
 import com.aplicacionweb.restaurante.Models.Mesas.Mesa;
 import com.aplicacionweb.restaurante.Models.Reservas.Reserva;
 import com.aplicacionweb.restaurante.Repository.MesaRepository;
+import com.aplicacionweb.restaurante.Service.EmailService;
 import com.aplicacionweb.restaurante.Service.MesaService;
 import com.aplicacionweb.restaurante.Service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -29,65 +33,93 @@ public class ReservaController {
 
     private MesaRepository mesaRepository;
 
-    @GetMapping
-    public String mostrarFormulario(Model model) {
-        model.addAttribute("reserva", new Reserva());
-        model.addAttribute("mesas", mesaService.obtenerMesasDisponibles()); // Asumiendo que tienes un servicio para
-                                                                            // obtener las mesas disponibles
-        return "form_reserva"; // Vista del formulario
-    }
+    @Autowired
+    private EmailService emailService;
 
-    @PostMapping("/registrar")
-    public String guardarReserva(@ModelAttribute Reserva reserva, RedirectAttributes redirectAttributes) {
-        try {
-            // Verificar si el objeto reserva tiene mesa
-            if (reserva.getMesa() != null && reserva.getMesa().getIdMesa() != null) {
-                Mesa mesaSeleccionada = mesaRepository.findById(reserva.getMesa().getIdMesa()).orElse(null);
+   @GetMapping("/listaReserva")
+public String listarReservas(@RequestParam(defaultValue = "0") int page, Model model) {
+    int pageSize = 5; // Establece el tamaño de la página
+    // Obtener las reservas paginadas desde el servicio
+    Page<Reserva> reservasPage = reservaService.obtenerReservasPaginadas(page, pageSize);
 
-                if (mesaSeleccionada != null) {
-                    // Asignar la mesa seleccionada a la reserva
-                    reserva.setMesa(mesaSeleccionada);
+    // Obtener las mesas disponibles desde el servicio
+    List<Mesa> mesas = mesaService.obtenerMesasDisponibles();  // Aquí se agregan las mesas disponibles
 
-                    // Asignar el precio de la mesa a la reserva
-                    reserva.setPrecio(reserva.getMesa().getPrecio());
+    // Pasar los datos a la vista
+    model.addAttribute("reservas", reservasPage.getContent());
+    model.addAttribute("totalPages", reservasPage.getTotalPages());
+    model.addAttribute("currentPage", page);
+    model.addAttribute("mesas", mesas); // Atributo de mesas
 
-                    // Si es necesario, también puedes llamar a setPrecio para ajustar el precio en
-                    // caso de algún cambio
-                    mesaSeleccionada.setPrecio();
-                } else {
-                    // En caso de que la mesa no se encuentre
-                    redirectAttributes.addFlashAttribute("errorReserva", "Mesa no encontrada.");
-                    return "redirect:/reservas";
-                }
-            }
+    return "reserva_lista"; // Nombre de la vista
+}
 
-            // Si la reserva no tiene estado, se asigna "no pagada" por defecto
-            if (reserva.getEstadoReserva() == null || reserva.getEstadoReserva().isEmpty()) {
-                reserva.setEstadoReserva("no pagada");
-            }
 
-            // Guardar la reserva
-            reservaService.guardarReserva(reserva);
-
-            // Mensaje de éxito
-            redirectAttributes.addFlashAttribute("registroReserva", "¡Reserva realizada con éxito!");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorReserva",
-                    "Hubo un problema al realizar la reserva. Intente nuevamente.");
-            e.printStackTrace(); // Imprimir el error para depuración
+   @PostMapping("/registrar")
+public String guardarReserva(
+        @ModelAttribute Reserva reserva,
+        @RequestParam("rangoHorario") String rangoHorario,
+        RedirectAttributes redirectAttributes) {
+    try {
+        // Procesar el rango de horario y asignarlo a horaInicio y horaFin
+        String[] partesHorario = rangoHorario.split("-");
+        if (partesHorario.length == 2) {
+            // Convertir las cadenas de texto a LocalTime
+            reserva.setHoraInicio(LocalTime.parse(partesHorario[0]));
+            reserva.setHoraFin(LocalTime.parse(partesHorario[1]));
+        } else {
+            redirectAttributes.addFlashAttribute("errorReserva", "Horario inválido.");
+            return "redirect:/reservas";
         }
 
-        return "redirect:/reservas"; // Redirigir de nuevo al formulario
+        // Verificar si el objeto reserva tiene mesa
+        if (reserva.getMesa() != null && reserva.getMesa().getIdMesa() != null) {
+            Mesa mesaSeleccionada = mesaRepository.findById(reserva.getMesa().getIdMesa()).orElse(null);
+
+            if (mesaSeleccionada != null) {
+                // Asignar la mesa seleccionada a la reserva
+                reserva.setMesa(mesaSeleccionada);
+
+                // Asignar el precio de la mesa a la reserva
+                reserva.setPrecio(reserva.getMesa().getPrecio());
+            } else {
+                // En caso de que la mesa no se encuentre
+                redirectAttributes.addFlashAttribute("errorReserva", "Mesa no encontrada.");
+                return "redirect:/reservas";
+            }
+        }
+
+        // ⚠️ Validar conflicto de horario
+        if (reservaService.existeConflictoDeReserva(reserva)) {
+            redirectAttributes.addFlashAttribute("errorReserva", "Ya existe una reserva para esa mesa en ese horario.");
+            return "redirect:/reservas";
+        }
+
+        // Si la reserva no tiene estado, se asigna "no pagada" por defecto
+        if (reserva.getEstadoReserva() == null || reserva.getEstadoReserva().isEmpty()) {
+            reserva.setEstadoReserva("no pagada");
+        }
+
+        // Guardar la reserva
+        reservaService.guardarReserva(reserva);
+
+        // Llamar al método para enviar el correo de confirmación
+        enviarCorreoReserva(reserva); 
+        System.out.println("Enviando correo de confirmación para la reserva: " + reserva.getEmail());
+
+        // Mensaje de éxito
+        redirectAttributes.addFlashAttribute("registroReserva", "¡Reserva realizada con éxito!");
+    } catch (Exception e) {
+        redirectAttributes.addFlashAttribute("errorReserva", "Hubo un problema al realizar la reserva. Intenta nuevamente.");
+        e.printStackTrace(); // Imprimir el error para depuración
     }
 
-    @GetMapping("/listaReserva")
-    public String listaReserva(Model model) {
-        List<Reserva> reservas = reservaService.obtenerTodasLasReservas();
-        List<Mesa> mesas = mesaService.obtenerMesasDisponibles();
-        model.addAttribute("reservas", reservas);
-        model.addAttribute("mesas", mesas);
-        return "reserva_lista"; // Vista para mostrar la lista de reservas
-    }
+    return "redirect:/reservas"; // Redirigir de nuevo al formulario
+}
+
+
+
+    
 
     @PostMapping("/eliminar/{id}")
     public String eliminarReserva(@PathVariable Long id) {
@@ -155,6 +187,25 @@ public class ReservaController {
         reservaService.guardarReserva(reservaExistente);
 
         return "redirect:/reservas/listaReserva"; // Redirige de vuelta a la lista de reservas
+    }
+
+    private void enviarCorreoReserva(Reserva reserva) {
+        // Crear el mensaje de correo
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(reserva.getEmail());
+        message.setSubject("Confirmación de Reserva");
+        message.setText("Estimado " + reserva.getNombre() + ",\n\n" +
+                "Tu reserva ha sido confirmada con los siguientes detalles:\n" +
+                "Fecha: " + reserva.getFecha() + "\n" +
+                "Hora de Inicio: " + reserva.getHoraInicio() + "\n" +
+                "Hora de Fin: " + reserva.getHoraFin() + "\n" +
+                "Número de Personas: " + reserva.getNumeroPersonas() + "\n" +
+                "Mesa: " + (reserva.getMesa() != null ? "Mesa " + reserva.getMesa().getNumeroMesa() : "No asignada") + "\n" +
+                "Motivo: " + reserva.getMotivo() + "\n\n" +
+                "Gracias por elegirnos,\nRestaurante");
+
+        // Enviar el correo
+        emailService.sendEmail(message);
     }
 }
 

@@ -10,24 +10,55 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="/css/lista_reservas.css">
+
+    <style>
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 10px 15px;
+            text-decoration: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .pagination a.active {
+            background-color: #0056b3;
+        }
+
+        .pagination a:hover {
+            background-color: #0056b3;
+        }
+
+        .pagination a:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 
 <body>
 
     <header>
-        <h1>Panel de Administración - Reservas</h1>
+        <h1>Reservas</h1>
+        <button id="toggle-menu">☰</button>
     </header>
 
-    <button id="toggle-menu">☰</button>
+    
 
     <div class="main-container">
         <div id="menu-container">
             <nav>
                 <ul>
-                    <li><a href="/listaPedidos"><i class="fas fa-utensils"></i>PEDIDOS</a></li>
+                    <li><a href="/carrito/todos-los-pedidos"><i class="fas fa-utensils"></i>PEDIDOS</a></li>
                     <li><a href="/usuarios/activos"><i class="fas fa-users"></i>USUARIOS</a></li>
                     <li><a href="/adminMenu/listar"><i class='bx bx-bowl-hot'></i> MENUS</a></li>
                     <li><a href="/reservas/listaReserva"><i class='fas fa-calendar-check'></i> RESERVAS</a></li>
+                    <li><a href="/mesas/disponibles"><i class="fas fa-table menu-icon"></i> MESAS</a></li>
                     <li><a href="/opcionAdmin"><i class='bx bx-arrow-back'></i> SALIR</a></li>
                 </ul>
             </nav>
@@ -35,8 +66,7 @@
 
         <div class="content">
             <div class="tabla-container">
-                <h2>LISTA DE RESERVAS</h2>
-
+                
                 <!-- Contenedor del formulario de búsqueda -->
                 <div class="search-container">
                     <form action="/reservas/buscar" method="get">
@@ -129,6 +159,16 @@ data-estadoReserva=${reserva.estadoReserva}" onclick="openModal(this)">
                         </tr>
                     </tbody>
                 </table>
+
+                <!-- Controles de Paginación -->
+                <div class="pagination">
+                    <a th:href="@{/reservas/listaReserva(page=${currentPage - 1})}" th:if="${currentPage > 0}">← Anterior</a>
+                    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <a th:href="@{/reservas/listaReserva(page=${i})}" th:text="${i + 1}"
+                            th:classappend="${i == currentPage} ? 'active' : ''"></a>
+                    </span>
+                    <a th:href="@{/reservas/listaReserva(page=${currentPage + 1})}" th:if="${currentPage < totalPages - 1}">Siguiente →</a>
+                </div>
             </div>
         </div>
     </div>
@@ -230,7 +270,6 @@ data-estadoReserva=${reserva.estadoReserva}" onclick="openModal(this)">
             const actionUrl = '/reservas/actualizar/' + reserva.id;
             document.getElementById('editarReserva').action = actionUrl;
         }
-
 
         var modal = document.getElementById("editModal");
         var span = document.getElementsByClassName("close")[0];

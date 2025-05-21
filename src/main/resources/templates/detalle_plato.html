@@ -80,58 +80,6 @@
 
 
 
-
-                    <!-- Botón de Comprar ahora -->
-<form th:action="@{/pedidos}" method="post">
-    <input type="hidden" name="menuId" th:value="${menu.id}" />
-    <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
-    <!-- Selección de tipo de entrega -->
-    <select name="tipoEntrega" required>
-        <option value="DOMICILIO">Domicilio</option>
-        <option value="PERSONALMENTE">Personalmente</option>
-    </select>
-
-    <!-- MÉTODO DE PAGO (nuevo campo obligatorio) -->
-    <select name="metodoDePago" required>
-        <option value="" disabled selected>Selecciona método de pago</option>
-        <option value="EFECTIVO">Efectivo</option>
-        <option value="TARJETA_CREDITO">Tarjeta de Crédito</option>
-        <option value="TARJETA_DEBITO">Tarjeta de Débito</option>
-        <option value="NEQUI">Nequi</option>
-        <option value="DAVIPLATA">Daviplata</option>
-    </select>
-    <button type="button" class="btn-realizar-pedido" id="openModalBtn">Comprar ahora</button>
-</form>
-
-<!-- Modal para el formulario de pedido -->
-<div id="pedidoModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" id="closeModalBtn">&times;</span>
-        <h2>Formulario de Pedido</h2>
-        <form action="/pedidos" method="post">
-            <input type="hidden" name="menuId" th:value="${menu.id}" />
-            <label for="cantidad">Cantidad:</label>
-            <input type="number" name="cantidad" value="1" min="1" required />
-            <label for="tipoEntrega">Tipo de entrega:</label>
-            <select name="tipoEntrega" required>
-                <option value="DOMICILIO">Domicilio</option>
-                <option value="PERSONALMENTE">Personalmente</option>
-            </select>
-            <label for="metodoDePago">Método de pago:</label>
-            <select name="metodoDePago" required>
-                <option value="" disabled selected>Selecciona método de pago</option>
-                <option value="EFECTIVO">Efectivo</option>
-                <option value="TARJETA_CREDITO">Tarjeta de Crédito</option>
-                <option value="TARJETA_DEBITO">Tarjeta de Débito</option>
-                <option value="NEQUI">Nequi</option>
-                <option value="DAVIPLATA">Daviplata</option>
-            </select>
-            <button type="submit" class="btn-realizar-pedido">Realizar Pedido</button>
-        </form>
-    </div>
-</div>
-
-
                     <!-- Formulario para agregar al carrito -->
                     <!-- Formulario para agregar al carrito -->
                     <form th:action="@{/carrito/agregar}" method="post" class="form-carrito">

@@ -7,13 +7,15 @@
     <title>Formulario de Reserva</title>
     <link rel="stylesheet" href="/css/form_reservas.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-        integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+        />
 
     <style>
         .error {
             color: red;
             font-size: 0.9em;
         }
+
+      
     </style>
 </head>
 
@@ -43,52 +45,65 @@
     <main>
         <div class="card">
             <h1 class="title">Formulario de Reserva</h1>
-            <form id="reservaForm" action="/reservas/registrar" method="POST">
+            <form class="reserva-act" id="reservaForm" action="/reservas/registrar" method="POST">
                 <!-- Fecha de reserva generada automáticamente -->
                 <input type="hidden" id="fechaReserva" name="fechaReserva">
 
-                <div class="field">
+                <div class="fila">
                     <label for="nombre">Nombre:</label>
                     <input type="text" id="nombre" name="nombre" class="input-field" required>
                     <div id="nombreError" class="error"></div>
                 </div>
 
-                <div class="field">
+                <div class="fila">
                     <label for="telefono">Teléfono:</label>
                     <input type="tel" id="telefono" name="telefono" class="input-field" required>
                     <div id="telefonoError" class="error"></div>
                 </div>
 
-                <div class="field">
+                <div class="fila">
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" class="input-field" required>
                     <div id="emailError" class="error"></div>
                 </div>
 
-                <div class="field">
+                <div class="fila">
                     <label for="fecha">Fecha:</label>
                     <input type="date" id="fecha" name="fecha" class="input-field" required>
                     <div id="fechaError" class="error"></div>
                 </div>
 
-                <div class="field">
-                    <label for="horaInicio">Comienza:</label>
-                    <input type="time" id="horaInicio" name="horaInicio" class="input-field" required>
-                </div>
+                <div class="fila">
+    <label for="rangoHorario">Horario:</label>
+    <select id="rangoHorario" name="rangoHorario" class="input-field" required>
+        <option value="" disabled selected>Selecciona un rango</option>
+        <option value="07:00-09:00">7:00 AM - 9:00 AM</option>
+        <option value="09:00-10:00">9:00 AM - 10:00 AM</option>
+        <option value="10:00-11:00">10:00 AM - 11:00 AM</option>
+        <option value="11:00-12:00">11:00 AM - 12:00 PM</option>
+        <option value="12:00-13:00">12:00 PM - 1:00 PM</option>
+        <option value="13:00-14:00">1:00 PM - 2:00 PM</option>
+        <option value="14:00-15:00">2:00 PM - 3:00 PM</option>
+        <option value="15:00-16:00">3:00 PM - 4:00 PM</option>
+        <option value="16:00-17:00">4:00 PM - 5:00 PM</option>
+        <option value="17:00-18:00">5:00 PM - 6:00 PM</option>
+        <option value="18:00-19:00">6:00 PM - 7:00 PM</option>
+        <option value="19:00-20:00">7:00 PM - 8:00 PM</option>
+        <option value="20:00-21:00">8:00 PM - 9:00 PM</option>
+        <option value="21:00-22:00">9:00 PM - 10:00 PM</option>
+        <option value="22:00-23:00">10:00 PM - 11:00 PM</option>
+    </select>
+</div>
 
-                <div class="field">
-                    <label for="horaFin">Termina:</label>
-                    <input type="time" id="horaFin" name="horaFin" class="input-field" required>
-                </div>
 
 
-                <div class="field">
+                <div class="fila">
                     <label for="numeroPersonas">Número de Personas:</label>
                     <input type="number" id="numeroPersonas" name="numeroPersonas" class="input-field" required min="1">
                     <div id="numeroPersonasError" class="error"></div>
                 </div>
 
-                <div class="field">
+                <div class="fila">
                     <label for="mesa">Mesa (Opcional):</label>
                     <select id="mesa" name="mesa.idMesa" class="input-field" required>
                         <option value="" disabled selected>Selecciona una mesa</option>
@@ -100,7 +115,7 @@
                     <div id="mesaError" class="error"></div>
                 </div>
 
-                <div class="field">
+                <div class="fila">
                     <label for="motivo">Motivo:</label>
                     <select id="motivo" name="motivo" required>
                         <option value="Cumpleaños">Cumpleaños</option>
@@ -112,7 +127,7 @@
                     </select>
                 </div>
 
-                <div class="field">
+                <div class="fila">
                     <label for="restricciones">Restricciones:</label>
                     <select id="restricciones" name="restricciones" onchange="mostrarTextoRestricciones()">
                         <option value="">Seleccionar</option>
@@ -126,7 +141,7 @@
                         placeholder="Especificar restricciones" style="display: none;">
                 </div>
 
-                <div class="field">
+                <div class="fila">
                     <label for="metodoDePago">Método de Pago:</label>
                     <select id="metodoDePago" name="metodoDePago" class="input-field" required>
                         <option value="" disabled selected>Selecciona un método</option>
@@ -138,7 +153,7 @@
                     </select>
                 </div>
 
-                <div class="field">
+                <div class="fila">
                     <label for="origenReserva">Origen de la Reserva:</label>
                     <select id="origenReserva" name="origenReserva" class="input-field" required>
                         <option value="" disabled selected>Selecciona el origen</option>
@@ -148,7 +163,7 @@
                     </select>
                 </div>
 
-                <div class="field">
+                <div class="fila">
                     <label>
                         <input type="checkbox" name="clienteRecurrente" value="true">
                         ¿Es cliente recurrente?
@@ -256,6 +271,8 @@ L
             const inputTexto = document.getElementById("restriccionesTexto");
             inputTexto.style.display = select.value === "Otro" ? "block" : "none";
         }
+
+        
     </script>
 </body>
 

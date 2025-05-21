@@ -208,4 +208,29 @@ public String finalizarCompra(@RequestParam("tipoEntrega") String tipoEntrega,
 
         return "redirect:/carrito/lista"; // Redirigir a la lista del carrito
     }
+
+
+     @GetMapping("/todos-los-pedidos")
+    public String verTodosLosPedidos(Model model) {
+        // Obtener todos los detalles de los pedidos
+        List<DetallePedido> detallesPedidos = detallePedidoService.obtenerTodosLosPedidos();
+        
+        model.addAttribute("todosPedidos", detallesPedidos);  // Pasar los detalles a la vista
+        
+        return "pedido_lista";  // Vista donde se muestran todos los pedidos
+    }
+
+    // Eliminar un detalle de pedido por su ID
+    @PostMapping("/eliminar-pedido/{id}")
+    public String eliminarDetallePedido(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            // Llamar al servicio para eliminar el detalle de pedido
+            detallePedidoService.eliminarDetallePedidoPorId(id);
+            redirectAttributes.addFlashAttribute("mensaje", "Detalle de pedido eliminado con éxito.");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+        
+        return "redirect:/carrito/todos-los-pedidos";  // Redirigir a la vista de todos los pedidos
+    }
 }

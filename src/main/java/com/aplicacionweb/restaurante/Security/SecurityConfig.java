@@ -24,7 +24,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(authorize -> authorize
             .requestMatchers("/registro","/detalle-plato/{menuId}" ,"/login", "/", "/css/**",
              "/js/**", "/registrar", "/images/**", "/modoInvitado","/prediccionReservas/**", "/imagenes/**","/adminMenu/listar", 
-             "/reservas/registrar**","/reservas/**,/detalle-plato,").permitAll() // Permitir acceso a estas rutas sin autenticación
+             "/reservas/**,/detalle-plato,").permitAll() // Permitir acceso a estas rutas sin autenticación
             .requestMatchers("/pedidos","/perfil","/restaurante").hasAnyRole("USER","ADMIN") // Solo admin puede acceder a rutas específicas
             .requestMatchers("/opcionAdmin","/cambiarEstado", "/mesas/**").hasRole("ADMIN") // Solo usuario normal
             .anyRequest().authenticated() // Resto de las rutas requieren autenticación
