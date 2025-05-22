@@ -54,6 +54,11 @@ public String listarReservas(@RequestParam(defaultValue = "0") int page, Model m
     return "reserva_lista"; // Nombre de la vista
 }
 
+@GetMapping("/formReservas")
+    public String mostrarReservas() {
+        return "form_reserva";
+    }
+
 
    @PostMapping("/registrar")
 public String guardarReserva(

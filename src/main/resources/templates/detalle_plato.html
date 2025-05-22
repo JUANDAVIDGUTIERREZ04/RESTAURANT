@@ -85,7 +85,7 @@
                     <form th:action="@{/carrito/agregar}" method="post" class="form-carrito">
                         <input type="hidden" name="menuId" th:value="${menu.id}" />
 
-                        <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" />
+                        <input type="number" name="cantidad" value="1" min="1" class="cantidad-input" placeholder="escribe la cantidad de tu plato"/>
                         <button type="submit" class="btn-carrito">
                             <i class="bi bi-cart"></i> Agregar al Carrito
                         </button>

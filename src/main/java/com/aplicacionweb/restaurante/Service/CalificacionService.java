@@ -22,12 +22,15 @@ public class CalificacionService {
     // Método para agregar una calificación
     public void agregarCalificacion(Long menuId, User usuario, int estrellas) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new RuntimeException("Menú no encontrado"));
-        Calificacion calificacion = new Calificacion();
-        calificacion.setMenu(menu);
-        calificacion.setUsuario(usuario);
-        calificacion.setEstrellas(estrellas);
+        Calificacion calificacion = calificacionRepository.findByUsuarioAndMenu(usuario, menu)
+        .orElse(new Calificacion());
 
-        calificacionRepository.save(calificacion);
+calificacion.setMenu(menu);
+calificacion.setUsuario(usuario);
+calificacion.setEstrellas(estrellas);
+
+calificacionRepository.save(calificacion);
+
 
         // Recalcular el promedio de calificaciones
         recalcularPromedio(menu);

@@ -62,6 +62,10 @@ ul {
     /* Se alinea al borde izquierdo */
     position: fixed;
 
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16;
+    text-transform: uppercase;
+
 }
 
 .menu-izquierda li {
@@ -106,6 +110,8 @@ a:hover {
     /* Sombra luminosa */
 
 }
+
+
 
 /* Detalles del plato */
 .detalle-plato {

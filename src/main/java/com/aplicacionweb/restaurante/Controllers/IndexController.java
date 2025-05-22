@@ -21,7 +21,9 @@ import com.aplicacionweb.restaurante.Service.PedidoService;
 import com.aplicacionweb.restaurante.Service.UserService;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -56,14 +58,27 @@ public class IndexController {
     }
 
     @GetMapping("/modoInvitado")
-    public String mostrarInicioTodos(Model model) {
+public String mostrarInicioTodos(Model model) {
+    // Obtener todos los menús
+    List<Menu> menus = menuService.obtenerTodosLosMenus();
+    model.addAttribute("menus", menus);
 
-        // Obtener todos los menús
-        List<Menu> menus = menuService.obtenerTodosLosMenus();
-        model.addAttribute("menus", menus);
+    // Crear un mapa para almacenar el promedio de calificación por ID del menú
+    Map<Long, Double> calificacionesPromedio = new HashMap<>();
 
-        return "index"; // Retornar la vista
+    for (Menu menu : menus) {
+        // Calcular el promedio de calificación
+        double promedio = (menu.getCalificacionPromedio() != null) ? menu.getCalificacionPromedio() : 0.0;
+        calificacionesPromedio.put(menu.getId(), promedio);
     }
+
+    // Pasar el mapa de calificaciones promedio al modelo
+    model.addAttribute("calificacionesPromedio", calificacionesPromedio);
+
+    return "index";
+}
+
+
 
     // Método que maneja la realización de un pedido
     @PostMapping("/pedidos")
