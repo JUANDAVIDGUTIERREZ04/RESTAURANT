@@ -167,3 +167,55 @@ table tr:hover {
             top: 20px;
             
         }
+
+
+/* Contenedor de la paginación */
+.paginacion {
+    display: flex;
+    justify-content: center; /* Centra los elementos */
+    align-items: center;
+    margin-top: 20px;  /* Espacio encima de la paginación */
+    margin-bottom: 20px; /* Espacio debajo de la paginación */
+}
+
+/* Botones de la paginación */
+.paginacion-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 0 5px;
+    background-color: #007bff; /* Fondo azul */
+    color: white; /* Texto blanco */
+    text-decoration: none; /* Eliminar subrayado */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+/* Efecto hover sobre los botones */
+.paginacion-btn:hover {
+    background-color: #0056b3; /* Color más oscuro al pasar el mouse */
+}
+
+/* Estado activo o seleccionado del botón */
+.paginacion-btn.active {
+    background-color: #28a745; /* Fondo verde para la página actual */
+    cursor: default; /* No cambia el cursor cuando se pasa sobre la página activa */
+}
+
+/* El primer y último botón de la paginación */
+.paginacion-btn:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.paginacion-btn:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* Indicador de texto para la página actual */
+.paginacion span {
+    margin: 0 10px;
+    font-size: 16px;
+    font-weight: bold;
+}

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -211,14 +213,20 @@ public String finalizarCompra(@RequestParam("tipoEntrega") String tipoEntrega,
 
 
      @GetMapping("/todos-los-pedidos")
-    public String verTodosLosPedidos(Model model) {
-        // Obtener todos los detalles de los pedidos
-        List<DetallePedido> detallesPedidos = detallePedidoService.obtenerTodosLosPedidos();
-        
-        model.addAttribute("todosPedidos", detallesPedidos);  // Pasar los detalles a la vista
-        
-        return "pedido_lista";  // Vista donde se muestran todos los pedidos
-    }
+public String verTodosLosPedidos(@RequestParam(defaultValue = "0") int page, Model model) {
+    int pageSize = 5;  // Establece el tamaño de la página
+    PageRequest pageable = PageRequest.of(page, pageSize);  // Crear Pageable con la página y tamaño deseado
+
+    // Obtener los pedidos paginados desde el servicio
+    Page<DetallePedido> detallesPedidosPage = detallePedidoService.obtenerPedidosPaginados(pageable);
+
+    // Pasar los datos a la vista
+    model.addAttribute("todosPedidos", detallesPedidosPage.getContent());  // Pedidos en la página actual
+    model.addAttribute("totalPages", detallesPedidosPage.getTotalPages());  // Total de páginas
+    model.addAttribute("currentPage", page);  // Página actual
+
+    return "pedido_lista";  // Vista donde se muestran todos los pedidos
+}
 
     // Eliminar un detalle de pedido por su ID
     @PostMapping("/eliminar-pedido/{id}")

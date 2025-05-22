@@ -103,6 +103,8 @@ a:hover {
 h1 {
     color: hsl(0, 0%, 3%); /* Título en dorado */
     text-align: center; /* Centrado */
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-transform: uppercase;
 }
 
 table {
@@ -112,7 +114,8 @@ table {
             position: relative;
             text-align: center;
             margin: 0 auto; /* Esto la centra horizontalmente */
-            font-size: 12px;
+            font-size: 15px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             
         }
         

@@ -280,3 +280,7 @@ button:hover {
 .modal.show .modal-content {
     transform: scale(1); /* Expande al tamaño completo cuando se muestra */
 }
+
+.btn btn-primary{
+    background-color: orangered;
+}

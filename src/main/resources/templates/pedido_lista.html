@@ -45,6 +45,7 @@
                     <span th:text="${error}"></span>
                 </div>
 
+                <!-- Tabla de pedidos -->
                 <table>
                     <thead>
                         <tr>
@@ -59,7 +60,6 @@
                             <th>Método de Pago</th>
                             <th>ID Usuario</th>
                             <th>Acciones</th> <!-- Nueva columna de acciones -->
-                            <!-- Nueva columna para el ID del usuario -->
                         </tr>
                     </thead>
                     <tbody>
@@ -93,9 +93,7 @@
                                 <span th:text="${detalle.metodoDePago}"></span>
                             </td>
                             <td>
-                                <!-- Mostrar el ID del usuario que hizo el pedido -->
                                 <span th:text="${detalle.carritoItem.usuario.id}"></span>
-                                <!-- Aquí se debe referenciar al usuario -->
                             </td>
 
                             <td>
@@ -104,21 +102,33 @@
                                         <i class="fas fa-trash-alt"></i> <!-- Ícono de eliminar -->
                                     </button>
                                 </form>
-
-
-                            </td> <!-- Aquí agregamos el ícono de eliminar -->
-
+                            </td>
                         </tr>
                     </tbody>
-
                 </table>
+
+                <!-- Paginación -->
+                <div class="paginacion">
+                    <!-- Botón de "Anterior" -->
+                    <span th:if="${currentPage > 0}">
+                        <a th:href="@{/todos-los-pedidos(page=${currentPage - 1})}" class="paginacion-btn"><< Anterior</a>
+                    </span>
+
+                    <!-- Mostrar el número de la página actual y el total de páginas -->
+                    <span th:text="${currentPage + 1}"></span> de <span th:text="${totalPages}"></span>
+
+                    <!-- Botón de "Siguiente" -->
+                    <span th:if="${currentPage < totalPages - 1}">
+                        <a th:href="@{/todos-los-pedidos(page=${currentPage + 1})}" class="paginacion-btn">Siguiente >></a>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         const toggleButton = document.getElementById('toggle-menu');
-        const menu = document.getElementsByClassName('menu-container')[0]; // Usa la clase en lugar del id
+        const menu = document.getElementsByClassName('menu-container')[0];
 
         toggleButton.addEventListener('click', () => {
             menu.classList.toggle('hidden');

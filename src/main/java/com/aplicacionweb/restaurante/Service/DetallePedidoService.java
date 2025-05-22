@@ -4,6 +4,8 @@ import com.aplicacionweb.restaurante.Models.DetallePedido;
 import com.aplicacionweb.restaurante.Models.CarritoItem;
 import com.aplicacionweb.restaurante.Repository.DetallePedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -53,10 +55,8 @@ public class DetallePedidoService {
         }
     }
 
-    public List<DetallePedido> obtenerTodosLosPedidos() {
-    List<DetallePedido> pedidos = detallePedidoRepository.findAll();
-    System.out.println("Pedidos encontrados: " + pedidos.size());  // Log
-    return pedidos;  
+    public Page<DetallePedido> obtenerPedidosPaginados(Pageable pageable) {
+    return detallePedidoRepository.findAll(pageable);
 }
 
 

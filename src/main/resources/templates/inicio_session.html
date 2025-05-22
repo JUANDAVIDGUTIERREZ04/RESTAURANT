@@ -96,40 +96,25 @@
                         </a>
 
 
-                        <div th:each="menu : ${menus}">
-                            <div class="calificacion">
-                                <!-- Estrella llena -->
-                                <span th:if="${menu.calificacionPromedio >= 1}" class="bi bi-star-fill"></span>
-                                <!-- Estrella media -->
-                                <span th:if="${menu.calificacionPromedio >= 0.5 and menu.calificacionPromedio < 1}"
-                                    class="bi bi-star-half"></span>
-                                <!-- Estrella vacía -->
-                                <span th:if="${menu.calificacionPromedio < 0.5}" class="bi bi-star"></span>
+                        <div class="calificacion">
+                            <!-- Estrellas llenas -->
+                            <span class="star full"></span>
+                            <span class="star full"></span>
+                            <span class="star full"></span>
+                            <span class="star full"></span>
+                            <span class="star full"></span>
 
-                                <!-- Repetir este bloque para 5 estrellas -->
-                                <span th:if="${menu.calificacionPromedio >= 2}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 1.5 and menu.calificacionPromedio < 2}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 1.5}" class="bi bi-star"></span>
+                            <!-- Estrellas medias -->
+                            <span class="star half"></span>
 
-                                <span th:if="${menu.calificacionPromedio >= 3}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 2.5 and menu.calificacionPromedio < 3}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 2.5}" class="bi bi-star"></span>
-
-                                <span th:if="${menu.calificacionPromedio >= 4}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 3.5 and menu.calificacionPromedio < 4}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 3.5}" class="bi bi-star"></span>
-
-                                <span th:if="${menu.calificacionPromedio >= 5}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 4.5 and menu.calificacionPromedio < 5}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 4.5}" class="bi bi-star"></span>
-                            </div>
+                            <!-- Estrellas vacías -->
+                            <span class="star empty"></span>
                         </div>
 
                         <br>
+                         <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
+                                <button type="submit" class="btn-realizar-pedido">Ver</button>
+                            </form>
                     </div>
                 </div>
             </div>
@@ -148,40 +133,27 @@
                             <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
                         </a>
 
-                        <div th:each="menu : ${menus}">
-                            <div class="calificacion">
-                                <!-- Estrella llena -->
-                                <span th:if="${menu.calificacionPromedio >= 1}" class="bi bi-star-fill"></span>
-                                <!-- Estrella media -->
-                                <span th:if="${menu.calificacionPromedio >= 0.5 and menu.calificacionPromedio < 1}"
-                                    class="bi bi-star-half"></span>
-                                <!-- Estrella vacía -->
-                                <span th:if="${menu.calificacionPromedio < 0.5}" class="bi bi-star"></span>
+                        <div class="calificacion">
+                            <!-- Estrellas llenas -->
+                            <span class="star full"></span>
+                            <span class="star full"></span>
+                            <span class="star full"></span>
+                            <span class="star full"></span>
+                            <span class="star full"></span>
 
-                                <!-- Repetir este bloque para 5 estrellas -->
-                                <span th:if="${menu.calificacionPromedio >= 2}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 1.5 and menu.calificacionPromedio < 2}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 1.5}" class="bi bi-star"></span>
+                            <!-- Estrellas medias -->
+                            <span class="star half"></span>
 
-                                <span th:if="${menu.calificacionPromedio >= 3}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 2.5 and menu.calificacionPromedio < 3}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 2.5}" class="bi bi-star"></span>
-
-                                <span th:if="${menu.calificacionPromedio >= 4}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 3.5 and menu.calificacionPromedio < 4}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 3.5}" class="bi bi-star"></span>
-
-                                <span th:if="${menu.calificacionPromedio >= 5}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 4.5 and menu.calificacionPromedio < 5}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 4.5}" class="bi bi-star"></span>
-                            </div>
+                            <!-- Estrellas vacías -->
+                            <span class="star empty"></span>
                         </div>
 
+
+
                         <br>
+                         <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
+                                <button type="submit" class="btn-realizar-pedido">Ver</button>
+                            </form>
                     </div>
                 </div>
             </div>
@@ -200,40 +172,25 @@
                             <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
                         </a>
 
-                        <div th:each="menu : ${menus}">
-                            <div class="calificacion">
-                                <!-- Estrella llena -->
-                                <span th:if="${menu.calificacionPromedio >= 1}" class="bi bi-star-fill"></span>
-                                <!-- Estrella media -->
-                                <span th:if="${menu.calificacionPromedio >= 0.5 and menu.calificacionPromedio < 1}"
-                                    class="bi bi-star-half"></span>
-                                <!-- Estrella vacía -->
-                                <span th:if="${menu.calificacionPromedio < 0.5}" class="bi bi-star"></span>
+                        <div class="calificacion">
+                            <!-- Estrellas llenas -->
+                            <span class="star full"></span>
+                            <span class="star full"></span>
+                            <span class="star full"></span>
+                            <span class="star full"></span>
+                            <span class="star full"></span>
 
-                                <!-- Repetir este bloque para 5 estrellas -->
-                                <span th:if="${menu.calificacionPromedio >= 2}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 1.5 and menu.calificacionPromedio < 2}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 1.5}" class="bi bi-star"></span>
+                            <!-- Estrellas medias -->
+                            <span class="star half"></span>
 
-                                <span th:if="${menu.calificacionPromedio >= 3}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 2.5 and menu.calificacionPromedio < 3}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 2.5}" class="bi bi-star"></span>
-
-                                <span th:if="${menu.calificacionPromedio >= 4}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 3.5 and menu.calificacionPromedio < 4}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 3.5}" class="bi bi-star"></span>
-
-                                <span th:if="${menu.calificacionPromedio >= 5}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 4.5 and menu.calificacionPromedio < 5}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 4.5}" class="bi bi-star"></span>
-                            </div>
+                            <!-- Estrellas vacías -->
+                            <span class="star empty"></span>
                         </div>
 
                         <br>
+                         <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
+                                <button type="submit" class="btn-realizar-pedido">Ver</button>
+                            </form>
                     </div>
                 </div>
             </div>
@@ -252,40 +209,20 @@
                             <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
                         </a>
 
-                        <div th:each="menu : ${menus}">
-                            <div class="calificacion">
-                                <!-- Estrella llena -->
-                                <span th:if="${menu.calificacionPromedio >= 1}" class="bi bi-star-fill"></span>
-                                <!-- Estrella media -->
-                                <span th:if="${menu.calificacionPromedio >= 0.5 and menu.calificacionPromedio < 1}"
-                                    class="bi bi-star-half"></span>
-                                <!-- Estrella vacía -->
-                                <span th:if="${menu.calificacionPromedio < 0.5}" class="bi bi-star"></span>
+                        <div class="calificacion">
+                            <!-- Estrellas llenas -->
+                            <span class="star full"></span>
+                            <span class="star full"></span>
+                            <span class="star full"></span>
+                            <span class="star full"></span>
+                            <span class="star full"></span>
 
-                                <!-- Repetir este bloque para 5 estrellas -->
-                                <span th:if="${menu.calificacionPromedio >= 2}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 1.5 and menu.calificacionPromedio < 2}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 1.5}" class="bi bi-star"></span>
-
-                                <span th:if="${menu.calificacionPromedio >= 3}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 2.5 and menu.calificacionPromedio < 3}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 2.5}" class="bi bi-star"></span>
-
-                                <span th:if="${menu.calificacionPromedio >= 4}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 3.5 and menu.calificacionPromedio < 4}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 3.5}" class="bi bi-star"></span>
-
-                                <span th:if="${menu.calificacionPromedio >= 5}" class="bi bi-star-fill"></span>
-                                <span th:if="${menu.calificacionPromedio >= 4.5 and menu.calificacionPromedio < 5}"
-                                    class="bi bi-star-half"></span>
-                                <span th:if="${menu.calificacionPromedio < 4.5}" class="bi bi-star"></span>
-                            </div>
                         </div>
 
                         <br>
+                         <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
+                                <button type="submit" class="btn-realizar-pedido">Ver</button>
+                            </form>
                     </div>
                 </div>
             </div>
