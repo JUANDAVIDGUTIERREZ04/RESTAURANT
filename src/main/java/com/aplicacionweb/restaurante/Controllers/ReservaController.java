@@ -3,13 +3,13 @@ package com.aplicacionweb.restaurante.Controllers;
 import com.aplicacionweb.restaurante.Models.Mesas.Mesa;
 import com.aplicacionweb.restaurante.Models.Reservas.Reserva;
 import com.aplicacionweb.restaurante.Repository.MesaRepository;
-import com.aplicacionweb.restaurante.Service.EmailService;
+
 import com.aplicacionweb.restaurante.Service.MesaService;
 import com.aplicacionweb.restaurante.Service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
-import org.springframework.mail.SimpleMailMessage;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +33,7 @@ public class ReservaController {
 
     private MesaRepository mesaRepository;
 
-    @Autowired
-    private EmailService emailService;
+   
 
    @GetMapping("/listaReserva")
 public String listarReservas(@RequestParam(defaultValue = "0") int page, Model model) {
@@ -108,10 +107,8 @@ public String guardarReserva(
         // Guardar la reserva
         reservaService.guardarReserva(reserva);
 
-        // Llamar al método para enviar el correo de confirmación
-        enviarCorreoReserva(reserva); 
-        System.out.println("Enviando correo de confirmación para la reserva: " + reserva.getEmail());
-
+        
+        
         // Mensaje de éxito
         redirectAttributes.addFlashAttribute("registroReserva", "¡Reserva realizada con éxito!");
     } catch (Exception e) {
@@ -194,24 +191,7 @@ public String guardarReserva(
         return "redirect:/reservas/listaReserva"; // Redirige de vuelta a la lista de reservas
     }
 
-    private void enviarCorreoReserva(Reserva reserva) {
-        // Crear el mensaje de correo
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(reserva.getEmail());
-        message.setSubject("Confirmación de Reserva");
-        message.setText("Estimado " + reserva.getNombre() + ",\n\n" +
-                "Tu reserva ha sido confirmada con los siguientes detalles:\n" +
-                "Fecha: " + reserva.getFecha() + "\n" +
-                "Hora de Inicio: " + reserva.getHoraInicio() + "\n" +
-                "Hora de Fin: " + reserva.getHoraFin() + "\n" +
-                "Número de Personas: " + reserva.getNumeroPersonas() + "\n" +
-                "Mesa: " + (reserva.getMesa() != null ? "Mesa " + reserva.getMesa().getNumeroMesa() : "No asignada") + "\n" +
-                "Motivo: " + reserva.getMotivo() + "\n\n" +
-                "Gracias por elegirnos,\nRestaurante");
-
-        // Enviar el correo
-        emailService.sendEmail(message);
-    }
+   
 }
 
 
