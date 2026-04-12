@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recarga de saldo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            padding: 50px;
+        }
+        form {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 { text-align: center; color: #333; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover { background: #218838; }
+        .metodo { display: none; margin-top: 15px; background: #f7f7f7; padding: 15px; border-radius: 5px; }
+        .metodo h4 { margin-top: 0; color: #555; }
+    </style>
+</head>
+<body>
+
+<form action="/recargar" method="post" id="recargaForm">
+    <h2>Recargar saldo</h2>
+
+    <label>Monto:</label>
+    <input type="number" name="monto" required placeholder="Ingrese monto a recargar">
+
+    <label>Método de pago:</label>
+    <select name="metodoPago" id="metodoPago" onchange="mostrarCampos()">
+        <option value="">Seleccione</option>
+        <option value="PSE">PSE</option>
+        <option value="NEQUI">Nequi / Daviplata</option>
+        <option value="TARJETA">Tarjeta</option>
+        <option value="TRANSFERENCIA">Transferencia</option>
+    </select>
+
+    <!-- PSE -->
+    <div class="metodo" id="pse">
+        <h4>PSE</h4>
+        <select name="tipoPersona">
+            <option value="NATURAL">Persona Natural</option>
+            <option value="JURIDICA">Persona Jurídica</option>
+        </select>
+        <input type="text" name="documento" placeholder="Número de documento">
+        <select name="banco">
+            <option value="Bancolombia">Bancolombia</option>
+            <option value="Davivienda">Davivienda</option>
+            <option value="BBVA">BBVA</option>
+        </select>
+        <input type="email" name="email" placeholder="Correo">
+    </div>
+
+    <!-- NEQUI -->
+    <div class="metodo" id="nequi">
+        <h4>Nequi / Daviplata</h4>
+        <input type="text" name="celular" placeholder="Número celular">
+        <input type="text" name="otp" placeholder="Código OTP simulado">
+    </div>
+
+    <!-- TARJETA -->
+    <div class="metodo" id="tarjeta">
+        <h4>Tarjeta</h4>
+        <input type="text" name="numeroTarjeta" placeholder="Número tarjeta (16 dígitos)">
+        <input type="text" name="nombreTitular" placeholder="Nombre titular">
+        <input type="text" name="expiracion" placeholder="MM/YY">
+        <input type="text" name="cvv" placeholder="CVV">
+    </div>
+
+    <!-- TRANSFERENCIA -->
+    <div class="metodo" id="transferencia">
+        <h4>Transferencia bancaria</h4>
+        <input type="text" name="bancoDestino" placeholder="Banco destino">
+        <input type="text" name="cuenta" placeholder="Número cuenta">
+        <input type="text" name="titular" placeholder="Nombre titular">
+        <input type="text" name="comprobante" placeholder="Código de comprobante">
+    </div>
+
+    <button type="submit">Pagar / Recargar</button>
+</form>
+
+<script>
+    function mostrarCampos() {
+        const metodo = document.getElementById("metodoPago").value;
+        const divs = ["pse", "nequi", "tarjeta", "transferencia"];
+
+        divs.forEach(id => document.getElementById(id).style.display = "none");
+
+        if (metodo) document.getElementById(metodo.toLowerCase()).style.display = "block";
+    }
+
+    // Simulación visual de OTP para Nequi
+    document.getElementById("recargaForm").addEventListener("submit", function(e){
+        const metodo = document.getElementById("metodoPago").value;
+        if(metodo === "NEQUI"){
+            const otp = prompt("Ingrese OTP simulado: 1234");
+            document.querySelector("input[name='otp']").value = otp;
+        }
+    });
+</script>
+
+</body>
+</html>

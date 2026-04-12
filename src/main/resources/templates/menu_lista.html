@@ -72,6 +72,8 @@
                             <input class="input-menu" type="file" id="imagen" name="imagen" accept="image/*" required>
                         </div>
 
+
+
                         <button type="submit">Registrar Menú</button>
                     </form>
                 </div>
@@ -109,12 +111,17 @@
                                 </button>
                             </form>
                             <!-- Botón para editar (añadir la clase editBtn) -->
-                            <button type="button" class="editBtn" data-id="${item.id}"
-                                    data-nombre="${item.nombreDePlato}" data-descripcion="${item.descripcion}"
-                                    data-precio="${item.precio}" data-categoria="${item.categoria}"
-                                    data-imagen="${item.imagenUrl}">
+                            <button type="button" class="editBtn"
+                                    th:data-id="${item.id}"
+                                    th:data-nombre="${item.nombreDePlato}"
+                                    th:data-descripcion="${item.descripcion}"
+                                    th:data-precio="${item.precio}"
+                                    th:data-categoria="${item.categoria}"
+                                    th:data-imagen="${item.imagenUrl}"
+                                    >
                                 <i class="fas fa-edit" style="color: #007bff;"></i>
                             </button>
+
                         </td>
                     </tr>
                 </tbody>
@@ -183,6 +190,11 @@
                 <img id="editCurrentImage" src="" alt="Imagen actual" style="max-width: 100px;"/>
             </div>
 
+            <div>
+                <label for="editCalificacionPromedio">Calificacion Promedio</label>
+                <input class="input-menu" type="number" id="editCalificacionPromedio" name="editCalificacionPromedio" step="0.01" required>
+            </div>
+
             <input type="hidden" id="editMenuId" name="id">
             <button type="submit" id="submitBtn">Guardar Menú</button>
         </form>
@@ -234,6 +246,7 @@
             const precio = this.getAttribute('data-precio');
             const categoria = this.getAttribute('data-categoria');
             const imagenUrl = this.getAttribute('data-imagen');
+            const calificacionPromedio= this.getAttribute('data-calificacionPromedio');
 
             modalTitle.textContent = 'Editar Menú';
             submitBtn.textContent = 'Actualizar Menú';
@@ -244,6 +257,7 @@
             document.getElementById('editDescripcion').value = descripcion;
             document.getElementById('editPrecio').value = precio;
             document.getElementById('editCategoria').value = categoria;
+            document.getElementById('editCalificacionPromedio').value=calificacionPromedio;
 
             // Mostrar la imagen actual
             const currentImage = document.getElementById('editCurrentImage');

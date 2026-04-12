@@ -39,7 +39,10 @@ body {
 }
 
 .form-group {
-    margin-top: 1rem;
+    display: flex;           /* Activa Flexbox */
+    justify-content: center; /* Centra horizontalmente los botones */
+    gap: 1rem;               /* Espacio entre botones */
+    margin-top: 1rem;        /* Opcional: separación vertical desde elementos de arriba */
 }
 
 .field {
@@ -73,6 +76,7 @@ body {
     box-shadow: 0 8px 24px 0 rgb(255 235 167 / 20%);
     transition: all .3s ease-in-out;
     cursor: pointer;
+
 }
 
 .btn:hover {
@@ -116,4 +120,6 @@ body {
 .btn-carrito:hover {
     background-color: #0056b3; /* Azul más oscuro */
 }
+
+
 

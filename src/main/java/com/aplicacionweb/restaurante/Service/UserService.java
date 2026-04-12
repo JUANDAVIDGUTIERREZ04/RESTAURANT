@@ -4,11 +4,13 @@ import com.aplicacionweb.restaurante.Models.DTO.UserDto;
 import com.aplicacionweb.restaurante.Repository.UserRepository;
 import com.aplicacionweb.restaurante.Models.User;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -164,5 +166,16 @@ public Page<UserDto> buscarUsuariosPorIdConPaginacion(Long userId, Pageable page
         });
 }
 
+    @Transactional
+    public void descontarSaldo(User user, BigDecimal total) {
+
+        if (user.getSaldo() == null) {
+            user.setSaldo(BigDecimal.ZERO);
+        }
+
+        user.setSaldo(user.getSaldo().subtract(total));
+
+        userRepository.save(user);
+    }
 
 }

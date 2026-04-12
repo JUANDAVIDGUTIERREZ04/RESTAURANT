@@ -1,8 +1,12 @@
 /* Estilo base para el cuerpo de la página */
 body {
     font-family: Arial, sans-serif;
-    background-color: #87b65e;
+    background-color: #0d0d0d;
     color: #040404;
+    background-image: url("static/images/encabezado1.jpg");
+    background-size: cover;
+    background-position: center;  /* Centra la imagen */
+
 }
 
 header {
@@ -12,8 +16,8 @@ header {
     text-align: center; /* Centrar el texto */
     overflow: hidden; /* Oculta el desbordamiento */
 
-        background: linear-gradient(to right, rgba(51, 83, 211, 0.5), rgba(255, 165, 0, 0.5), rgba(12, 108, 79, 0.5));
-    
+    background: linear-gradient(to right, rgba(51, 83, 211, 0.5), rgba(255, 165, 0, 0.5), rgba(12, 108, 79, 0.5));
+
 }
 
 /* Menú de navegación */
@@ -30,7 +34,7 @@ nav {
 .logo {
     width: 40px;
     /* Tamaño adecuado */
-    height: 40vpx;
+    height: 40px;
     margin-left: 250px;
     /* Espacio entre la imagen y el texto */
 
@@ -63,7 +67,7 @@ ul {
     position: fixed;
 
     font-family: 'Times New Roman', Times, serif;
-    font-size: 16;
+    font-size: 16px;
     text-transform: uppercase;
 
 }
@@ -88,8 +92,6 @@ ul {
 }
 
 
-
-
 a {
     color: #fff;
     text-decoration: none;
@@ -112,7 +114,6 @@ a:hover {
 }
 
 
-
 /* Detalles del plato */
 .detalle-plato {
     margin: 50px auto;
@@ -120,6 +121,8 @@ a:hover {
     max-width: 1200px;
     display: flex;
     justify-content: center;
+
+
 }
 
 .menu-card {
@@ -281,7 +284,7 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    direction: rtl;  /* Esto hace que las estrellas se alineen de derecha a izquierda */
+    direction: rtl; /* Esto hace que las estrellas se alineen de derecha a izquierda */
 }
 
 .estrellas input[type="radio"] {
@@ -290,7 +293,7 @@ footer {
 
 .estrellas label {
     font-size: 2rem;
-    color: #ccc;  /* Color de la estrella desactivada */
+    color: #ccc; /* Color de la estrella desactivada */
     cursor: pointer;
     transition: color 0.3s ease;
 }
@@ -298,31 +301,31 @@ footer {
 /* Efecto cuando el usuario pasa el mouse por encima */
 .estrellas label:hover,
 .estrellas input[type="radio"]:checked ~ label {
-    color: #ffbf00;  /* Color de la estrella cuando el usuario pasa el mouse o la selecciona */
+    color: #ffbf00; /* Color de la estrella cuando el usuario pasa el mouse o la selecciona */
 }
 
 /* Estilo cuando el usuario pasa el ratón por encima */
 .estrellas label:hover,
 .estrellas input[type="radio"]:checked ~ label {
-    color: #ffbf00;  /* Resalta de color amarillo */
+    color: #ffbf00; /* Resalta de color amarillo */
 }
 
 /* Estilo para mostrar las estrellas según la calificación seleccionada */
 .estrellas input[type="radio"]:checked ~ label {
-    color: #ffbf00;  /* Cambiar color a amarillo cuando se hace check */
+    color: #ffbf00; /* Cambiar color a amarillo cuando se hace check */
 }
 
 /* Modal de pedido */
 /* Estilo del Modal */
 .modal {
-    display: none;  /* Ocultar el modal por defecto */
+    display: none; /* Ocultar el modal por defecto */
     position: fixed;
     z-index: 1; /* Asegúrate de que esté encima de otros elementos */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);  /* Fondo oscuro */
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo oscuro */
     padding-top: 60px;
 }
 
@@ -350,3 +353,172 @@ footer {
     text-decoration: none;
     cursor: pointer;
 }
+
+.menu-category {
+    position: relative;
+    margin: 20px 0;
+    background: #fff;
+    padding: 50px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+
+}
+
+.imagenes-platos {
+    flex-direction: column;
+    align-items: center;
+}
+
+.imagenes-platos img {
+    width: 100%;
+    height: auto;
+}
+
+/* Cambiar disposición de las tarjetas de menú */
+.menu-container {
+    grid-template-columns: 1fr;
+}
+
+.menu-card {
+
+    padding: 15px;
+    font-size: 14px;
+}
+
+.menu-card h3 {
+    font-size: 18px;
+}
+
+.menu-card p {
+    font-size: 14px;
+}
+
+.cantidad-input {
+    width: 30px;
+    padding: 4px;
+}
+
+
+
+.imagen-menu{
+   width: 30%;
+}
+
+/* =======================
+   SECCIÓN RELACIONADOS
+======================= */
+.relacionados {
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+}
+
+.menu-category-relacionado h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+    text-transform: uppercase;
+    border-bottom: 2px solid #ffbf00;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+/* Contenedor de tarjetas */
+.menu-container-relacionado {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start; /* Izquierda */
+}
+
+/* Tarjeta individual */
+.menu-card-relacionado {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 15px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menu-card-relacionado:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+.menu-card-relacionado h3 {
+    font-size: 1.2rem;
+    margin: 10px 0 5px;
+    text-align: center;
+    color: #222;
+}
+
+.menu-card-relacionado p {
+    font-size: 0.95rem;
+    color: #555;
+    text-align: center;
+}
+
+.menu-card-relacionado .precio {
+    font-weight: bold;
+    color: #ff6600;
+    margin-bottom: 10px;
+}
+
+.imagen-menu-relacionado {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+/* Calificación con estrellas */
+.menu-card-relacionado .calificacion {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.menu-card-relacionado .calificacion .star {
+    font-size: 1rem;
+    color: #ffbf00; /* Dorado */
+    margin: 0 2px;
+}
+
+/* Botón VER */
+.menu-card-relacionado .btn-realizar-pedido {
+    background-color: #ff6600;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+}
+
+.menu-card-relacionado .btn-realizar-pedido:hover {
+    background-color: #e65c00;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .menu-container-relacionado {
+        justify-content: center;
+    }
+
+    .menu-card-relacionado {
+        width: 45%;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-card-relacionado {
+        width: 100%;
+    }
+}
+

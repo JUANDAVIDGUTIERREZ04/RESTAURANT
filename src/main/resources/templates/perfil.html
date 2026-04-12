@@ -26,9 +26,15 @@
         <div class="container">
             <div class="d-flex justify-content-center gap-4 flex-wrap">
                 <a class="btn btn-oro" href="/restaurante">Inicio</a>
-                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <div >
                     <a class="btn btn-azul" href="/opcionAdmin">Solo Administrador</a>
                 </div>
+
+                <div >
+                    <a class="btn btn-azul" href="/recarga">Recargar saldo</a>
+                </div>
+
+            </div>
                 <a class="btn btn-gris" href="/logout">Cerrar sesión</a>
             </div>
         </div>
@@ -96,8 +102,8 @@
                             <div class="mb-3">
                                 <label for="role" class="form-label">Rol:</label>
                                 <select id="role" name="role" class="form-select">
-                                    <option value="ROLE_USER" th:selected="${user.role == 'USER'}">Usuario</option>
-                                    <option value="ROLE_ADMIN" th:selected="${user.role == 'ADMIN'}">Administrador
+                                    <option value="USER" th:selected="${user.role == 'USER'}">Usuario</option>
+                                    <option value="ADMIN" th:selected="${user.role == 'ADMIN'}">Administrador
                                     </option>
                                 </select>
                             </div>

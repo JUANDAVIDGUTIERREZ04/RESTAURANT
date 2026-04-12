@@ -14,6 +14,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 
 @Entity
 @Getter
@@ -34,16 +36,17 @@ public class CarritoItem {
 
     private Integer cantidad;
 
-    private Double subtotal;
+    private BigDecimal subtotal;
 
     @Column(nullable = false)
     private boolean activo = true; 
 
     @PrePersist
     @PreUpdate
+
     public void calcularSubtotal() {
         if (menu != null && cantidad != null) {
-            this.subtotal = menu.getPrecio() * cantidad;
+            this.subtotal = menu.getPrecio().multiply(BigDecimal.valueOf(cantidad));
         }
     }
 

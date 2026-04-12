@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -59,7 +60,7 @@ public class Pedido {
     private Menu menu;
 
     @Column(nullable = false)
-    private Double total;
+    private BigDecimal total;
 
     @PrePersist
     protected void onCreate() {
@@ -72,18 +73,25 @@ public class Pedido {
 
     // Método para establecer el precio según el tipo de entrega
     public void tipoEntrega() {
-        if (this.tipoEntregaPedido != null) {
+        if (this.tipoEntregaPedido != null && this.menu != null && this.menu.getPrecio() != null) {
+
+            BigDecimal precio = this.menu.getPrecio();
+            BigDecimal cantidadBD = BigDecimal.valueOf(this.cantidad);
+
+            BigDecimal subtotal = precio.multiply(cantidadBD);
+
             switch (this.tipoEntregaPedido) {
                 case DOMICILIO:
-                    // Si el tipo de entrega es Domicilio, asignamos un precio adicional (por ejemplo, 5.0)
-                    this.total = this.cantidad * this.menu.getPrecio() + 5000;
+                    BigDecimal recargo = BigDecimal.valueOf(5000);
+                    this.total = subtotal.add(recargo);
                     break;
+
                 case PERSONALMENTE:
-                    // Si el tipo de entrega es Personalmente, no hay costo adicional
-                    this.total = this.cantidad * this.menu.getPrecio();
+                    this.total = subtotal;
                     break;
+
                 default:
-                    this.total = this.cantidad * this.menu.getPrecio();
+                    this.total = subtotal;
                     break;
             }
         }

@@ -94,16 +94,20 @@
                         </a>
 
 
-                        <div class="calificacion">
-                            <!-- Estrellas llenas -->
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-
-
+                        <div class="calificacion"
+                             th:attr="data-rating=${calificacionesPromedio[menu.id]}">
+                            <span class="star"></span>
+                            <span class="star"></span>
+                            <span class="star"></span>
+                            <span class="star"></span>
+                            <span class="star"></span>
                         </div>
+
+                        <small class="text-muted"
+                               th:text="${#numbers.formatDecimal(calificacionesPromedio[menu.id],1,1)} + ' ⭐'">
+                            0.0 ⭐
+                        </small>
+
 
 
 
@@ -133,20 +137,20 @@
                             <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
                         </a>
 
-                        <div class="calificacion">
-                            <!-- Estrellas llenas -->
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-
-                            <!-- Estrellas medias -->
-                            <span class="star half"></span>
-
-                            <!-- Estrellas vacías -->
-                            <span class="star empty"></span>
+                        <div class="calificacion"
+                             th:attr="data-rating=${calificacionesPromedio[menu.id]}">
+                            <span class="star"></span>
+                            <span class="star"></span>
+                            <span class="star"></span>
+                            <span class="star"></span>
+                            <span class="star"></span>
                         </div>
+
+                        <small class="text-muted"
+                               th:text="${#numbers.formatDecimal(calificacionesPromedio[menu.id],1,1)} + ' ⭐'">
+                            0.0 ⭐
+                        </small>
+
                         <br>
 
 
@@ -178,20 +182,20 @@
                             <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
                         </a>
 
-                        <div class="calificacion">
-                            <!-- Estrellas llenas -->
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-
-                            <!-- Estrellas medias -->
-                            <span class="star half"></span>
-
-                            <!-- Estrellas vacías -->
-                            <span class="star empty"></span>
+                        <div class="calificacion"
+                             th:attr="data-rating=${calificacionesPromedio[menu.id]}">
+                            <span class="star"></span>
+                            <span class="star"></span>
+                            <span class="star"></span>
+                            <span class="star"></span>
+                            <span class="star"></span>
                         </div>
+
+                        <small class="text-muted"
+                               th:text="${#numbers.formatDecimal(calificacionesPromedio[menu.id],1,1)} + ' ⭐'">
+                            0.0 ⭐
+                        </small>
+
 
 
 
@@ -223,18 +227,20 @@
                                 <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
                             </a>
 
-                            <div class="calificacion">
-                                <!-- Estrellas llenas -->
-                                <span class="star full"></span>
-                                <span class="star full"></span>
-                                <span class="star full"></span>
-
-                                <!-- Estrellas medias -->
-                                <span class="star half"></span>
-
-                                <!-- Estrellas vacías -->
-                                <span class="star empty"></span>
+                            <div class="calificacion"
+                                 th:attr="data-rating=${calificacionesPromedio[menu.id]}">
+                                <span class="star"></span>
+                                <span class="star"></span>
+                                <span class="star"></span>
+                                <span class="star"></span>
+                                <span class="star"></span>
                             </div>
+
+                            <small class="text-muted"
+                                   th:text="${#numbers.formatDecimal(calificacionesPromedio[menu.id],1,1)} + ' ⭐'">
+                                0.0 ⭐
+                            </small>
+
                             <br>
 
                             <!-- Formulario para realizar pedido -->

@@ -52,4 +52,11 @@ public class MenuService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         return menuRepository.findAll(pageable);
     }
+
+    public List<Menu> buscarPorCategoria(String categoria) {
+        return menuRepository.findByCategoriaIgnoreCase(categoria);
+    }
+
+
+
 }

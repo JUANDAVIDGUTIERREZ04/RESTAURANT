@@ -638,9 +638,35 @@ footer {
 }
 
 /* Calificacion de plato*/
-.calificacion i {
-    color: gold;
-    /* Color dorado para las estrellas */
-    font-size: 20px;
-    /* Tamaño de las estrellas */
+
+
+.rating {
+    --rating: 0;
+    font-size: 1.5rem;
+    font-family: Arial, sans-serif;
+    display: inline-block;
+    color: #ccc;
+    position: relative;
+    line-height: 1;      /* para alinear verticalmente */
+    text-align: center;  /* centro horizontal */
 }
+
+.rating::before {
+    content: "★★★★★";  /* estrellas de fondo */
+    display: block;
+}
+
+.rating::after {
+    content: "★★★★★";  /* estrellas doradas */
+    color: gold;
+    position: absolute;
+    top: 0;
+    left: 50%;                    /* empezar desde el centro */
+    transform: translateX(-50%);  /* centrar horizontal */
+    overflow: hidden;
+    width: calc(var(--rating) / 5 * 100%);
+    white-space: nowrap;           /* evitar salto de línea */
+}
+
+
+

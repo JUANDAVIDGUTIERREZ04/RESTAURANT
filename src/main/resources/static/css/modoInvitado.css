@@ -62,8 +62,8 @@ nav {
      /* Se posiciona de forma absoluta dentro del contenedor */
     top: 10px;
     left: -60px;
-    
-    
+
+
    /* Ajusta la distancia desde la parte superior */
     
     
@@ -240,8 +240,8 @@ footer {
 .menu-derecha  {
 
     position: relative;
-    left: 1200px;
-    position: fixed;
+    margin-left: -800px;
+
     top: 2px;
     
 }

@@ -14,229 +14,218 @@
 </head>
 
 <body>
-    <header>
-        <nav>
-            <ul class="menu-izquierda">
-                <li><a href="/perfil"><i class="fas fa-user"></i> Mi Perfil</a></li>
-                <li><a href="/restaurante"><i class="fas fa-home"></i> Inicio</a></li>
-                <li><a href="#seccion-menu"><i class="fas fa-utensils"></i> Menú</a></li>
-                <li><a href="/reservas/formReservas"><i class="fas fa-calendar-check"></i> Reservas</a></li>
-                <li><a href="/carrito/lista"><i class="fas fa-shopping-cart"></i> Carro de Compras </a></li>
-                <li><a href="/carrito/listaDetallePedido"><i class="fas fa-user"></i>Historial de compras</a></li>
-            </ul>
+<header>
+    <nav>
+        <ul class="menu-izquierda">
+            <li><a href="/perfil"><i class="fas fa-user"></i> Mi Perfil</a></li>
+            <li><a href="/restaurante"><i class="fas fa-home"></i> Inicio</a></li>
+            <li><a href="#seccion-menu"><i class="fas fa-utensils"></i> Menú</a></li>
+            <li><a href="/reservas/formReservas"><i class="fas fa-calendar-check"></i> Reservas</a></li>
+            <li><a href="/carrito/lista"><i class="fas fa-shopping-cart"></i> Carro de Compras </a></li>
+            <li><a href="/carrito/listaDetallePedido"><i class="fas fa-user"></i>Historial de compras</a></li>
+        </ul>
 
-            <ul class="menu-derecha">
-                <div id="perfil_bienvenida">
-                    <p th:text="'Bienvenido, ' + ${username}"></p>
-                </div>
-                <li>
-                    <a href="/carrito/detallePedido">
-                        <img src="/images/LOGO.jpg" alt="imagen-logo" class="logo">
+        <ul class="menu-derecha">
+            <div id="perfil_bienvenida">
+                <p th:text="'Bienvenido, ' + ${username}"></p>
+            </div>
+            <li>
+                <a href="/carrito/detallePedido">
+                    <img src="/images/LOGO.jpg" alt="imagen-logo" class="logo">
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="carrusel">
+        <div class="imagen-carrusel active">
+            <img src="/images/encabezado1.jpg" alt="Imagen 1"/>
+        </div>
+        <div class="imagen-carrusel">
+            <img src="/images/encabezado2.jpg" alt="Imagen 2"/>
+        </div>
+        <div class="imagen-carrusel">
+            <img src="/images/encabezado3.jpg" alt="Imagen 3"/>
+        </div>
+    </div>
+
+    <h1 class="titulo"> Tecno Restaurant</h1>
+</header>
+
+<main>
+
+    <!-- Bienvenida -->
+    <section class="bienvenida">
+        <h2>¡Bienvenidos a TecnoRestaurant!</h2>
+        <p>Disfruta de una experiencia culinaria única con nuestros deliciosos platos.</p>
+        <div class="imagenes-platos">
+            <img src="images/plato1.jpg" alt="Plato 1"/>
+            <img src="images/plato2.jpg" alt="Plato 2"/>
+            <img src="images/plato3.jpg" alt="Plato 3"/>
+        </div>
+    </section>
+
+    <div id="mensaje" th:if="${mensaje}" class="alert alert-success">
+        <p th:text="${mensaje}"></p>
+    </div>
+
+    <!-- Menú -->
+    <section id="menu">
+        <h1>Menú</h1>
+
+        <!-- Botones de selección de categorías -->
+        <div id="seccion-menu" class="categorias-menu">
+            <a href="#entrada" class="btn-categoria">ENTRADA <i class='bx bx-bowl-hot'></i> </i></a>
+            <a href="#plato-principal" class="btn-categoria">PLATO PRINCIPAL <i class='bx bx-bowl-rice'></i></a>
+            <a href="#postre" class="btn-categoria">POSTRE <i class='bx bx-cake'></i></a>
+            <a href="#bebidas" class="btn-categoria">BEBIDAS <i class="bi bi-cup-straw"></i></a>
+        </div>
+
+        <!-- Sección Entradas -->
+        <div id="entrada" class="menu-category">
+            <h2>Entradas</h2>
+            <div class="menu-container">
+                <div th:each="menu : ${menus}" th:if="${menu.categoria == 'Entradas'}" class="menu-card">
+                    <h3 th:text="${menu.nombreDePlato}"></h3>
+                    <p>Precio: $<span th:text="${menu.precio}"></span></p>
+                    <p th:text="${menu.descripcion}"></p>
+
+                    <!-- Enlace envolviendo la imagen para redirigir al detalle -->
+                    <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
+                        <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato"/>
                     </a>
-                </li>
-            </ul>
-        </nav>
 
-        <div class="carrusel">
-            <div class="imagen-carrusel active">
-                <img src="/images/encabezado1.jpg" alt="Imagen 1" />
-            </div>
-            <div class="imagen-carrusel">
-                <img src="/images/encabezado2.jpg" alt="Imagen 2" />
-            </div>
-            <div class="imagen-carrusel">
-                <img src="/images/encabezado3.jpg" alt="Imagen 3" />
+
+                    <div class="rating" th:style="'--rating:' + ${menu.calificacionPromedioCalculado}"></div>
+
+
+
+                    <br>
+                    <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
+                        <button type="submit" class="btn-realizar-pedido">Ver</button>
+                    </form>
+                </div>
             </div>
         </div>
 
-        <h1 class="titulo"> Tecno Restaurant</h1>
-    </header>
+        <!-- Sección Platos Principales -->
+        <div class="menu-category">
+            <h2>Platos Principales</h2>
+            <div id="plato-principal" class="menu-container">
+                <div th:each="menu : ${menus}" th:if="${menu.categoria == 'Platos principales'}" class="menu-card">
+                    <h3 th:text="${menu.nombreDePlato}"></h3>
+                    <p>Precio: $<span th:text="${menu.precio}"></span></p>
+                    <p th:text="${menu.descripcion}"></p>
 
-    <main>
+                    <!-- Enlace envolviendo la imagen para redirigir al detalle -->
+                    <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
+                        <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato"/>
+                    </a>
 
-        <!-- Bienvenida -->
-        <section class="bienvenida">
-            <h2>¡Bienvenidos a TecnoRestaurant!</h2>
-            <p>Disfruta de una experiencia culinaria única con nuestros deliciosos platos.</p>
-            <div class="imagenes-platos">
-                <img src="images/plato1.jpg" alt="Plato 1" />
-                <img src="images/plato2.jpg" alt="Plato 2" />
-                <img src="images/plato3.jpg" alt="Plato 3" />
+                    <div class="calificacion">
+                        <!-- Estrellas llenas -->
+                        <span class="star full"></span>
+                        <span class="star full"></span>
+                        <span class="star full"></span>
+                        <span class="star full"></span>
+                        <span class="star full"></span>
+
+                        <!-- Estrellas medias -->
+                        <span class="star half"></span>
+
+                        <!-- Estrellas vacías -->
+                        <span class="star empty"></span>
+                    </div>
+
+
+                    <br>
+                    <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
+                        <button type="submit" class="btn-realizar-pedido">Ver</button>
+                    </form>
+                </div>
             </div>
-        </section>
-
-        <div id="mensaje" th:if="${mensaje}" class="alert alert-success">
-            <p th:text="${mensaje}"></p>
         </div>
 
-        <!-- Menú -->
-        <section id="menu">
-            <h1>Menú</h1>
+        <!-- Sección Postres -->
+        <div id="postre" class="menu-category">
+            <h2>Postres</h2>
+            <div class="menu-container">
+                <div th:each="menu : ${menus}" th:if="${menu.categoria == 'Postres'}" class="menu-card">
+                    <h3 th:text="${menu.nombreDePlato}"></h3>
+                    <p>Precio: $<span th:text="${menu.precio}"></span></p>
+                    <p th:text="${menu.descripcion}"></p>
 
-            <!-- Botones de selección de categorías -->
-            <div id="seccion-menu" class="categorias-menu">
-                <a href="#entrada" class="btn-categoria">ENTRADA <i class='bx bx-bowl-hot'></i> </i></a>
-                <a href="#plato-principal" class="btn-categoria">PLATO PRINCIPAL <i class='bx bx-bowl-rice'></i></a>
-                <a href="#postre" class="btn-categoria">POSTRE <i class='bx bx-cake'></i></a>
-                <a href="#bebidas" class="btn-categoria">BEBIDAS <i class="bi bi-cup-straw"></i></a>
-            </div>
+                    <!-- Enlace envolviendo la imagen para redirigir al detalle -->
+                    <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
+                        <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato"/>
+                    </a>
 
-            <!-- Sección Entradas -->
-            <div id="entrada" class="menu-category">
-                <h2>Entradas</h2>
-                <div class="menu-container">
-                    <div th:each="menu : ${menus}" th:if="${menu.categoria == 'Entradas'}" class="menu-card">
-                        <h3 th:text="${menu.nombreDePlato}"></h3>
-                        <p>Precio: $<span th:text="${menu.precio}"></span></p>
-                        <p th:text="${menu.descripcion}"></p>
-
-                        <!-- Enlace envolviendo la imagen para redirigir al detalle -->
-                        <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
-                            <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                        </a>
-
-
-                        <div class="calificacion">
-                            <!-- Estrellas llenas -->
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-
-                            <!-- Estrellas medias -->
-                            <span class="star half"></span>
-
-                            <!-- Estrellas vacías -->
-                            <span class="star empty"></span>
-                        </div>
-
-                        <br>
-                         <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
-                                <button type="submit" class="btn-realizar-pedido">Ver</button>
-                            </form>
+                    <div class="calificacion"
+                         th:attr="data-rating=${menu.calificacionPromedioCalculado}">
                     </div>
+
+
+                    <br>
+                    <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
+                        <button type="submit" class="btn-realizar-pedido">Ver</button>
+                    </form>
                 </div>
             </div>
+        </div>
 
-            <!-- Sección Platos Principales -->
-            <div class="menu-category">
-                <h2>Platos Principales</h2>
-                <div id="plato-principal" class="menu-container">
-                    <div th:each="menu : ${menus}" th:if="${menu.categoria == 'Platos principales'}" class="menu-card">
-                        <h3 th:text="${menu.nombreDePlato}"></h3>
-                        <p>Precio: $<span th:text="${menu.precio}"></span></p>
-                        <p th:text="${menu.descripcion}"></p>
+        <!-- Sección Bebidas -->
+        <div id="bebidas" class="menu-category">
+            <h2>Bebidas</h2>
+            <div class="menu-container">
+                <div th:each="menu : ${menus}" th:if="${menu.categoria == 'Bebidas'}" class="menu-card">
+                    <h3 th:text="${menu.nombreDePlato}"></h3>
+                    <p>Precio: $<span th:text="${menu.precio}"></span></p>
+                    <p th:text="${menu.descripcion}"></p>
 
-                        <!-- Enlace envolviendo la imagen para redirigir al detalle -->
-                        <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
-                            <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                        </a>
+                    <!-- Enlace envolviendo la imagen para redirigir al detalle -->
+                    <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
+                        <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato"/>
+                    </a>
 
-                        <div class="calificacion">
-                            <!-- Estrellas llenas -->
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
+                    <div class="calificacion">
+                        <!-- Estrellas llenas -->
+                        <span class="star full"></span>
+                        <span class="star full"></span>
+                        <span class="star full"></span>
+                        <span class="star full"></span>
+                        <span class="star full"></span>
 
-                            <!-- Estrellas medias -->
-                            <span class="star half"></span>
-
-                            <!-- Estrellas vacías -->
-                            <span class="star empty"></span>
-                        </div>
-
-
-
-                        <br>
-                         <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
-                                <button type="submit" class="btn-realizar-pedido">Ver</button>
-                            </form>
                     </div>
+
+                    <br>
+                    <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
+                        <button type="submit" class="btn-realizar-pedido">Ver</button>
+                    </form>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- Sección Postres -->
-            <div id="postre" class="menu-category">
-                <h2>Postres</h2>
-                <div class="menu-container">
-                    <div th:each="menu : ${menus}" th:if="${menu.categoria == 'Postres'}" class="menu-card">
-                        <h3 th:text="${menu.nombreDePlato}"></h3>
-                        <p>Precio: $<span th:text="${menu.precio}"></span></p>
-                        <p th:text="${menu.descripcion}"></p>
+</main>
 
-                        <!-- Enlace envolviendo la imagen para redirigir al detalle -->
-                        <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
-                            <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                        </a>
+<footer>
+    <p>&copy; 2025 TecnoRestaurant. Todos los derechos reservados.</p>
+</footer>
 
-                        <div class="calificacion">
-                            <!-- Estrellas llenas -->
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="/js/scripts.js"></script>
 
-                            <!-- Estrellas medias -->
-                            <span class="star half"></span>
+<script>
 
-                            <!-- Estrellas vacías -->
-                            <span class="star empty"></span>
-                        </div>
+    document.querySelectorAll('.calificacion').forEach(el => {
+        el.style.setProperty('--rating', el.dataset.rating);
+    });
+</script>
 
-                        <br>
-                         <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
-                                <button type="submit" class="btn-realizar-pedido">Ver</button>
-                            </form>
-                    </div>
-                </div>
-            </div>
+</script>
 
-            <!-- Sección Bebidas -->
-            <div id="bebidas" class="menu-category">
-                <h2>Bebidas</h2>
-                <div class="menu-container">
-                    <div th:each="menu : ${menus}" th:if="${menu.categoria == 'Bebidas'}" class="menu-card">
-                        <h3 th:text="${menu.nombreDePlato}"></h3>
-                        <p>Precio: $<span th:text="${menu.precio}"></span></p>
-                        <p th:text="${menu.descripcion}"></p>
 
-                        <!-- Enlace envolviendo la imagen para redirigir al detalle -->
-                        <a th:href="@{/detalle-plato/{menuId}(menuId=${menu.id})}">
-                            <img th:src="@{${menu.imagenUrl}}" alt="Imagen de Plato" />
-                        </a>
-
-                        <div class="calificacion">
-                            <!-- Estrellas llenas -->
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-                            <span class="star full"></span>
-
-                        </div>
-
-                        <br>
-                         <form th:action="@{/detalle-plato/{menuId}(menuId=${menu.id})}" method="get">
-                                <button type="submit" class="btn-realizar-pedido">Ver</button>
-                            </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer>
-        <p>&copy; 2025 TecnoRestaurant. Todos los derechos reservados.</p>
-    </footer>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/scripts.js"></script>
 </body>
 
 </html>

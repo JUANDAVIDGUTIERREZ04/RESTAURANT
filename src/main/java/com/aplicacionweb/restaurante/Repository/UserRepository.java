@@ -4,6 +4,7 @@ package com.aplicacionweb.restaurante.Repository;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,9 @@ public interface UserRepository extends JpaRepository<User,Long > {
     //buscar usuario por nombre
     
     User findByUsername(String username);
+
+    // Nuevo método para usar con Optional
+    Optional<User> findOptionalByUsername(String username);
     //buscar usuario por correo
     boolean existsByUsername(String username);
 

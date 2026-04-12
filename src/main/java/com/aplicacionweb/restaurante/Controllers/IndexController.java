@@ -1,5 +1,6 @@
 package com.aplicacionweb.restaurante.Controllers;
 
+import com.aplicacionweb.restaurante.Service.CalificacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +21,7 @@ import com.aplicacionweb.restaurante.Service.MenuService;
 import com.aplicacionweb.restaurante.Service.PedidoService;
 import com.aplicacionweb.restaurante.Service.UserService;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +39,9 @@ public class IndexController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CalificacionService calificacionService;
 
     // Método que muestra la página de inicio
     @GetMapping("/restaurante")
@@ -57,40 +62,44 @@ public class IndexController {
         return "inicio_session"; // Retornar la vista
     }
 
+
+
     @GetMapping("/modoInvitado")
-public String mostrarInicioTodos(Model model) {
-    // Obtener todos los menús
-    List<Menu> menus = menuService.obtenerTodosLosMenus();
-    model.addAttribute("menus", menus);
+    public String mostrarInicioTodos(Model model) {
 
-    // Crear un mapa para almacenar el promedio de calificación por ID del menú
-    Map<Long, Double> calificacionesPromedio = new HashMap<>();
+        List<Menu> menus = menuService.obtenerTodosLosMenus();
+        model.addAttribute("menus", menus);
 
-    for (Menu menu : menus) {
-        // Calcular el promedio de calificación
-        double promedio = (menu.getCalificacionPromedio() != null) ? menu.getCalificacionPromedio() : 0.0;
-        calificacionesPromedio.put(menu.getId(), promedio);
+        Map<Long, Double> calificacionesPromedio = new HashMap<>();
+
+        for (Menu menu : menus) {
+            calificacionesPromedio.put(
+                    menu.getId(),
+                    calificacionService.obtenerPromedio(menu.getId())
+            );
+        }
+
+        model.addAttribute("calificacionesPromedio", calificacionesPromedio);
+
+        return "index";
     }
 
-    // Pasar el mapa de calificaciones promedio al modelo
-    model.addAttribute("calificacionesPromedio", calificacionesPromedio);
-
-    return "index";
-}
 
 
 
-    // Método que maneja la realización de un pedido
     @PostMapping("/pedidos")
     public String realizarPedido(@RequestParam Long menuId, @RequestParam Integer cantidad,
-            @RequestParam TipoEntregaPedido tipoEntrega, @RequestParam MetodoDePago metodoDePago, Model model, RedirectAttributes redirectAttributes) {
+                                 @RequestParam TipoEntregaPedido tipoEntrega,
+                                 @RequestParam MetodoDePago metodoDePago,
+                                 Model model, RedirectAttributes redirectAttributes) {
+
         // Obtener el usuario autenticado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName(); // Nombre del usuario autenticado
+        String username = authentication.getName();
 
         if (username == null) {
             model.addAttribute("error", "Debes estar logueado para hacer un pedido.");
-            return "redirect:/login"; // Redirigir a login si no está autenticado
+            return "redirect:/login";
         }
 
         // Buscar el usuario en la base de datos
@@ -102,15 +111,30 @@ public String mostrarInicioTodos(Model model) {
 
         // Obtener el menú por ID
         Optional<Menu> optionalMenu = menuService.getMenuById(menuId);
+
         if (optionalMenu.isPresent()) {
             Menu menu = optionalMenu.get();
+
+            // Calcular total correctamente con BigDecimal
+            BigDecimal total = menu.getPrecio().multiply(BigDecimal.valueOf(cantidad));
+
+            // Validar saldo
+            if (usuario.getSaldo() == null || usuario.getSaldo().compareTo(total) < 0) {
+                redirectAttributes.addFlashAttribute("error", "Saldo insuficiente para realizar el pedido.");
+                return "redirect:/detalle-plato/" + menu.getId();
+            }
+
+            // Descontar saldo
+            userService.descontarSaldo(usuario, total);
+
+            // Crear pedido
             Pedido pedido = new Pedido();
             pedido.setFecha(new Date());
             pedido.setCantidad(cantidad);
             pedido.setTipoEntregaPedido(tipoEntrega);
-            pedido.setTotal(menu.getPrecio() * cantidad);
+            pedido.setTotal(total);
             pedido.setMenu(menu);
-            pedido.setUsuario(usuario); // Asociar el pedido al usuario autenticado
+            pedido.setUsuario(usuario);
             pedido.setMetodoDePago(metodoDePago);
 
             // Guardar el pedido
@@ -118,14 +142,15 @@ public String mostrarInicioTodos(Model model) {
 
             redirectAttributes.addFlashAttribute("mensaje",
                     "Pedido del plato: " + menu.getNombreDePlato() + " realizado con éxito!");
-            return "redirect:/detalle-plato/" + menu.getId();// Redirigir a la página de inicio con el mensaje de éxito
+
+            return "redirect:/detalle-plato/" + menu.getId();
+
         } else {
             model.addAttribute("error", "Menú no encontrado.");
-            return "inicio_session"; // Si no se encuentra el menú, mostrar un error
+            return "inicio_session";
         }
     }
 
-    // Método para mostrar los detalles de un plato específico
     @GetMapping("/detalle-plato/{menuId}")
     public String mostrarDetallePedido(@PathVariable Long menuId, Model model) {
         // Obtener el plato (menú) usando el ID
@@ -133,11 +158,24 @@ public String mostrarInicioTodos(Model model) {
 
         if (menuOptional.isPresent()) {
             Menu menu = menuOptional.get();
-            model.addAttribute("menu", menu); // Pasa el plato al modelo
-            return "detalle_plato"; // Retorna la vista de detalle del pedido
+
+            // Agregar el plato al modelo
+            model.addAttribute("menu", menu);
+
+            // Obtener todos los menús de la misma categoría
+            List<Menu> relacionados = menuService.buscarPorCategoria(menu.getCategoria());
+
+            // Filtrar para excluir el plato actual
+            relacionados.removeIf(m -> m.getId().equals(menuId));
+
+            // Agregar los relacionados al modelo
+            model.addAttribute("relacionados", relacionados);
+
+            return "detalle_plato"; // Retorna la vista de detalle
         } else {
             model.addAttribute("error", "Plato no encontrado.");
-            return "restaurante"; // Redirige a la página principal si no se encuentra el plato
+            return "inicio_session"; // Si no se encuentra, redirige a inicio
         }
     }
+
 }

@@ -1,5 +1,6 @@
 package com.aplicacionweb.restaurante.Controllers;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,9 +100,9 @@ public class CarritoController {
 
         List<CarritoItem> itemsCarrito = carritoService.obtenerListaCarrito(usuario);
 
-        double subtotal = itemsCarrito.stream()
-                .mapToDouble(CarritoItem::getSubtotal)
-                .sum();
+        BigDecimal subtotal = itemsCarrito.stream()
+                .map(CarritoItem::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         int cantidadTotalIcono = itemsCarrito.stream()
                 .mapToInt(CarritoItem::getCantidad)
