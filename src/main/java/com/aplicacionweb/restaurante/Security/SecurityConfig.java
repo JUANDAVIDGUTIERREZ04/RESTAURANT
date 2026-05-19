@@ -21,16 +21,25 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF si es necesario (ten cuidado con esto)
-        .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/registro","/detalle-plato/{menuId}" ,"/login", "/", "/recargar","/css/**",
-             "/js/**", "/registrar", "/images/**", "/modoInvitado","/prediccionReservas/**", "/imagenes/**","/adminMenu/listar",
-                    "/reservas/**", "/detalle-plato"
-            ).permitAll() // Permitir acceso a estas rutas sin autenticación
-            .requestMatchers("/pedidos","/perfil","/restaurante").hasAnyRole("USER","ADMIN") // Solo admin puede acceder a rutas específicas
-            .requestMatchers("/opcionAdmin","/cambiarEstado", "/mesas/**").hasRole("ADMIN") // Solo usuario normal
-            .anyRequest().authenticated() // Resto de las rutas requieren autenticación
-        )
-        .formLogin(form -> form
+            .authorizeHttpRequests(authorize -> authorize
+                    // 1. Recursos estáticos y rutas 100% públicas primero
+                    .requestMatchers(
+                            "/", "/login", "/registro", "/registrar", "/modoInvitado", "/recargar",
+                            "/css/**", "/js/**", "/images/**", "/imagenes/**",
+                            "/detalle-plato", "/detalle-plato/{menuId}", "/adminMenu/listar"
+                    ).permitAll()
+
+                    // 2. Rutas del Administrador (Mover arriba para asegurar evaluación estricta)
+                    .requestMatchers("/opcionAdmin", "/cambiarEstado", "/mesas/**", "/prediccionReservas/**").hasRole("ADMIN")
+
+                    // 3. Rutas compartidas o de usuario común
+                    .requestMatchers("/pedidos", "/perfil", "/restaurante", "/reservas/**").hasAnyRole("USER", "ADMIN")
+
+                    // 4. Todo lo demás requiere estar logueado
+                    .anyRequest().authenticated()
+            )
+
+            .formLogin(form -> form
             .loginPage("/login") // Página de inicio de sesión personalizada
             .defaultSuccessUrl("/restaurante", true) // Redirige a /perfil después del login exitoso (si es un usuario normal)
             .permitAll() // Permitir el acceso a la página de inicio de sesión

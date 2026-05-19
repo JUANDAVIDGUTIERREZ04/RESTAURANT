@@ -29,7 +29,8 @@ public class PrediccionReservaService {
     @PostConstruct
     public void init() {
         try {
-            InputStream modelStream = new ClassPathResource("nuevoModel.model").getInputStream();
+            InputStream modelStream =
+                    new ClassPathResource("redNeuronalReservas.model").getInputStream();
             classifier = (Classifier) weka.core.SerializationHelper.read(modelStream);
 
             InputStream arffStream = new ClassPathResource("reservaNuevoModelo.arff").getInputStream();

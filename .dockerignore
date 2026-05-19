@@ -5,3 +5,5 @@ Dockerfile
 .idea/
 *.iml
 target/
+.mvn/
+mvnw*

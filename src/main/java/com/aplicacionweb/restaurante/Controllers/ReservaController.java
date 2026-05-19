@@ -53,8 +53,15 @@ public String listarReservas(@RequestParam(defaultValue = "0") int page, Model m
     return "reserva_lista"; // Nombre de la vista
 }
 
-@GetMapping("/formReservas")
-    public String mostrarReservas() {
+    @GetMapping("/formReservas")
+    public String mostrarReservas(Model model) {
+
+        // Obtener mesas disponibles
+        List<Mesa> mesas = mesaService.obtenerMesasDisponibles();
+
+        // Enviar mesas a la vista
+        model.addAttribute("mesas", mesas);
+
         return "form_reserva";
     }
 

@@ -107,10 +107,14 @@
                     <label for="mesa">Mesa (Opcional):</label>
                     <select id="mesa" name="mesa.idMesa" class="input-field" required>
                         <option value="" disabled selected>Selecciona una mesa</option>
-                        <tr th:each="mesa : ${mesas}">
-                            <option th:value="${mesa.idMesa}"
-                                th:text="'Mesa ' + ${mesa.numeroMesa} + ' (Capacidad: ' + ${mesa.capacidad} + ', Precio: ' + ${mesa.precio} + ', Sección: ' + ${mesa.seccion} + ')'" />
-                        </tr>
+
+                        <option th:each="mesa : ${mesas}"
+                                th:value="${mesa.idMesa}"
+                                th:text="'Mesa ' + ${mesa.numeroMesa} +
+            ' (Capacidad: ' + ${mesa.capacidad} +
+            ', Precio: ' + ${mesa.precio} +
+            ', Sección: ' + ${mesa.seccion} + ')'">
+                        </option>
                     </select>
                     <div id="mesaError" class="error"></div>
                 </div>

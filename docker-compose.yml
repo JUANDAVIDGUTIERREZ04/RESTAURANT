@@ -2,29 +2,35 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:15
+    image: postgres:18
     container_name: postgres-restaurante
     environment:
       POSTGRES_DB: RESTAURANTE
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: estudiante
+      POSTGRES_PASSWORD: juan
     ports:
-      - "5432:5432"
+      - "5433:5432" # CAMBIADO: Usas 5433 en Windows para no chocar con tu Postgres nativo
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
+    healthcheck: # NUEVO: Verifica si Postgres ya acepta conexiones
+      test: ["CMD-SHELL", "pg_isready -U postgres -d RESTAURANTE"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   app:
     build: .
     image: restaurante-app
     container_name: springboot-restaurante
     depends_on:
-      - db
+      db:
+        condition: service_healthy # CAMBIADO: Espera a que el healthcheck de 'db' sea exitoso
     ports:
-      - "9292:9292"
+      - "9595:9595" # CAMBIADO: Si tu Spring usa el puerto 9595, debe ser "9595:9595"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/RESTAURANTE
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: estudiante
+      SPRING_DATASOURCE_PASSWORD: juan
     volumes:
       - ./src/main/resources/static/images:/app/static/images
 
