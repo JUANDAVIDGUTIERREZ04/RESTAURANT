@@ -31,6 +31,8 @@ public class ReservaPrediccionController {
     @GetMapping("/formulario")
     public String mostrarFormulario(Model model) {
         model.addAttribute("reservaDTO", new ReservaDTO());
+        model.addAttribute("precisionModelo",
+                prediccionReservaService.getPrecisionModelo());
         return "form_prediccion_reserva";
     }
 
@@ -50,6 +52,8 @@ public class ReservaPrediccionController {
             model.addAttribute("resultado", estado);
             model.addAttribute("probabilidad", probabilidad);
             model.addAttribute("reservaDTO", reservaDTO);
+            model.addAttribute("precisionModelo",
+                    prediccionReservaService.getPrecisionModelo());
 
         } catch (Exception e) {
             model.addAttribute("error", "Error al realizar la predicción: " + e.getMessage());
@@ -59,80 +63,138 @@ public class ReservaPrediccionController {
     }
 
     @GetMapping("/ver/{id}")
-public String predecirDesdeReserva(@PathVariable Long id, Model model) {
-    ReservaDTO dto = new ReservaDTO();
+    public String predecirDesdeReserva(@PathVariable Long id, Model model) {
 
-    try {
-        Optional<Reserva> optionalReserva = reservaService.findById(id);
+        ReservaDTO dto = new ReservaDTO();
 
-        if (optionalReserva.isEmpty()) {
-            model.addAttribute("error", "No se encontró la reserva con ID: " + id);
-            model.addAttribute("reservaDTO", dto);
-            return "resultado_prediccion";
-        }
+        try {
 
-        Reserva reserva = optionalReserva.get();
+            Optional<Reserva> optionalReserva = reservaService.findById(id);
 
-        // Construcción del DTO
-        dto.setNumeroPersonas(reserva.getNumeroPersonas());
-        dto.setMetodoDePago(reserva.getMetodoDePago().toString());
-        dto.setClienteRecurrente(reserva.getClienteRecurrente());
-        dto.setAnticipacion(reserva.getAnticipacion().intValue());
+            if (optionalReserva.isEmpty()) {
+                model.addAttribute("error", "No se encontró la reserva con ID: " + id);
+                model.addAttribute("reservaDTO", dto);
 
-        // Día en inglés (asegurarse de usar el Locale.ENGLISH)
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", Locale.ENGLISH); // Forzar inglés
-        String diaEnIngles = reserva.getFecha().format(formatter); // Ej: "Monday"
+                // AGREGAR ESTO
+                model.addAttribute("precisionModelo",
+                        prediccionReservaService.getPrecisionModelo());
 
-        // Imprimir el valor de diaEnIngles para depurar
-        System.out.println("Día en inglés obtenido: " + diaEnIngles);
-        
-        // Traducir el día al español
-        String diaEnEspanol = traducirDiaSemana(diaEnIngles); // Ej: "LUNES"
-        
-        // Verificar si la traducción fue exitosa
-        if (diaEnEspanol == null || diaEnEspanol.isEmpty()) {
-            model.addAttribute("error", "No se pudo traducir el día de la semana. Día en inglés: " + diaEnIngles);
-            model.addAttribute("reservaDTO", dto);
-            return "resultado_prediccion";
-        }
-
-        dto.setDiaSemana(diaEnEspanol);
-
-        // Validación de campos
-        if (dto.getNumeroPersonas() == 0 || dto.getMetodoDePago() == null || dto.getDiaSemana() == null) {
-            model.addAttribute("error", "Datos incompletos en la reserva para la predicción.");
-            model.addAttribute("reservaDTO", dto);
-            return "resultado_prediccion";
-        }
-
-        // Predicción
-        String resultadoCompleto = prediccionReservaService.predecirEstadoReserva(dto);
-
-        if (resultadoCompleto.contains("Estado predicho:") && resultadoCompleto.contains("Probabilidad de cancelación:")) {
-            String[] partes = resultadoCompleto.split("\\|");
-
-            if (partes.length < 2) {
-                throw new IllegalArgumentException("Formato de resultado inválido. No se encontraron las partes esperadas.");
+                return "resultado_prediccion";
             }
 
-            String probabilidadTexto = partes[1].split(":")[1].trim().replace("%", "").replace(",", ".");
-            double probabilidad = Double.parseDouble(probabilidadTexto);
+            Reserva reserva = optionalReserva.get();
+
+            // Construcción del DTO
+            dto.setNumeroPersonas(reserva.getNumeroPersonas());
+            dto.setMetodoDePago(reserva.getMetodoDePago().toString());
+            dto.setClienteRecurrente(reserva.getClienteRecurrente());
+            dto.setAnticipacion(reserva.getAnticipacion().intValue());
+
+            // Día en inglés
+            DateTimeFormatter formatter =
+                    DateTimeFormatter.ofPattern("EEEE", Locale.ENGLISH);
+
+            String diaEnIngles = reserva.getFecha().format(formatter);
+
+            System.out.println("Día en inglés obtenido: " + diaEnIngles);
+
+            // Traducir el día
+            String diaEnEspanol = traducirDiaSemana(diaEnIngles);
+
+            if (diaEnEspanol == null || diaEnEspanol.isEmpty()) {
+
+                model.addAttribute("error",
+                        "No se pudo traducir el día de la semana. Día en inglés: "
+                                + diaEnIngles);
+
+                model.addAttribute("reservaDTO", dto);
+
+                // AGREGAR ESTO
+                model.addAttribute("precisionModelo",
+                        prediccionReservaService.getPrecisionModelo());
+
+                return "resultado_prediccion";
+            }
+
+            dto.setDiaSemana(diaEnEspanol);
+
+            // Validación
+            if (dto.getNumeroPersonas() == 0
+                    || dto.getMetodoDePago() == null
+                    || dto.getDiaSemana() == null) {
+
+                model.addAttribute("error",
+                        "Datos incompletos en la reserva para la predicción.");
+
+                model.addAttribute("reservaDTO", dto);
+
+                // AGREGAR ESTO
+                model.addAttribute("precisionModelo",
+                        prediccionReservaService.getPrecisionModelo());
+
+                return "resultado_prediccion";
+            }
+
+            // Predicción
+            String resultadoCompleto =
+                    prediccionReservaService.predecirEstadoReserva(dto);
+
+            if (resultadoCompleto.contains("Estado predicho:")
+                    && resultadoCompleto.contains("Probabilidad de cancelación:")) {
+
+                String[] partes = resultadoCompleto.split("\\|");
+
+                if (partes.length < 2) {
+                    throw new IllegalArgumentException(
+                            "Formato de resultado inválido.");
+                }
+
+                String probabilidadTexto =
+                        partes[1]
+                                .split(":")[1]
+                                .trim()
+                                .replace("%", "")
+                                .replace(",", ".");
+
+                double probabilidad =
+                        Double.parseDouble(probabilidadTexto);
+
+                model.addAttribute("reservaDTO", dto);
+                model.addAttribute("resultado", resultadoCompleto);
+                model.addAttribute("probabilidad", probabilidad);
+
+                // =========================
+                // AGREGAR ESTO
+                // =========================
+                model.addAttribute("precisionModelo",
+                        prediccionReservaService.getPrecisionModelo());
+
+            } else {
+
+                model.addAttribute("error",
+                        "El formato de la predicción es incorrecto.");
+
+                model.addAttribute("reservaDTO", dto);
+
+                // AGREGAR ESTO
+                model.addAttribute("precisionModelo",
+                        prediccionReservaService.getPrecisionModelo());
+            }
+
+        } catch (Exception e) {
+
+            model.addAttribute("error",
+                    "Error al realizar la predicción: " + e.getMessage());
 
             model.addAttribute("reservaDTO", dto);
-            model.addAttribute("resultado", resultadoCompleto);
-            model.addAttribute("probabilidad", probabilidad);
-        } else {
-            model.addAttribute("error", "El formato de la predicción es incorrecto.");
-            model.addAttribute("reservaDTO", dto);
+
+            // AGREGAR ESTO
+            model.addAttribute("precisionModelo",
+                    prediccionReservaService.getPrecisionModelo());
         }
 
-    } catch (Exception e) {
-        model.addAttribute("error", "Error al realizar la predicción: " + e.getMessage());
-        model.addAttribute("reservaDTO", dto);
+        return "resultado_prediccion";
     }
-
-    return "resultado_prediccion";
-}
 
 // Método para traducir los días de la semana de inglés a español
 private String traducirDiaSemana(String diaEnIngles) {

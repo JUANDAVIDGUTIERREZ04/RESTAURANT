@@ -22,6 +22,7 @@ public class PrediccionReservaService {
 
     private Classifier classifier;
     private Instances estructuraDatos;
+    private String precisionModelo;
 
     @Autowired
     private PrediccionRepository prediccionRepository;
@@ -29,16 +30,29 @@ public class PrediccionReservaService {
     @PostConstruct
     public void init() {
         try {
+
             InputStream modelStream =
                     new ClassPathResource("redNeuronalReservas.model").getInputStream();
+
             classifier = (Classifier) weka.core.SerializationHelper.read(modelStream);
 
-            InputStream arffStream = new ClassPathResource("reservaNuevoModelo.arff").getInputStream();
+            InputStream arffStream =
+                    new ClassPathResource("reservaNuevoModelo.arff").getInputStream();
+
             DataSource source = new DataSource(arffStream);
+
             estructuraDatos = source.getDataSet();
-            estructuraDatos.setClassIndex(estructuraDatos.numAttributes() - 1); // Atributo "cancelada"
+
+            estructuraDatos.setClassIndex(estructuraDatos.numAttributes() - 1);
+
+            // LEER PRECISIÓN
+            InputStream precisionStream =
+                    new ClassPathResource("precision_modelo.txt").getInputStream();
+
+            precisionModelo = new String(precisionStream.readAllBytes()).trim();
+
         } catch (Exception e) {
-            throw new RuntimeException("Error al cargar modelo o estructura ARFF", e);
+            throw new RuntimeException("Error al cargar modelo", e);
         }
     }
 
@@ -97,5 +111,13 @@ public class PrediccionReservaService {
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Valor inválido para número: " + valor, e);
         }
+    }
+
+    public String getPrecisionModelo() {
+        return precisionModelo;
+    }
+
+    public void setPrecisionModelo(String precisionModelo) {
+        this.precisionModelo = precisionModelo;
     }
 }

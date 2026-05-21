@@ -38,11 +38,10 @@
         </p>
     </div>
 
-    <!-- Mostrar probabilidad -->
-    <div th:if="${probabilidad != null}">
-        <p>Probabilidad de que se cancele:
-            <strong><span th:text="${probabilidad + '%'}"></span></strong>
-        </p>
+        <div class="alert alert-success text-center">
+            <strong>Precisión del modelo:</strong>
+            <span th:text="${precisionModelo}"></span>%
+        </div>
     </div>
 
     <!-- Tabla de atributos usados -->
