@@ -222,30 +222,45 @@ button:hover {
 
 /*PAGINACION*/
 
+/* =========================
+   PAGINACIÓN MEJORADA
+========================= */
 .pagination {
-    margin-top: 20px;
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
 }
 
-.pagination ul {
-    display: flex;
-    list-style: none;
-    gap: 10px;
-    padding: 0;
-}
-
-.pagination li a {
-    padding: 8px 12px;
-    background-color: #eee;
-    color: #333;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.pagination li.active a {
-    background-color: #007BFF;
+/* links */
+.pagination a {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 6px;
+    background: #343a40;
     color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+/* hover */
+.pagination a:hover {
+    background: #ff6600;
+    transform: scale(1.1);
+}
+
+/* página activa */
+.pagination a.active {
+    background: gold;
+    color: black;
+    box-shadow: 0 0 10px rgba(255,215,0,0.8);
+}
+
+/* botones anterior/siguiente */
+.pagination a[th\\:if] {
+    background: #222;
 }
 
 /* =========================

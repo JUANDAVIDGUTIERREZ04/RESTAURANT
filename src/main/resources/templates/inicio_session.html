@@ -96,7 +96,6 @@
                     </a>
 
 
-                    <div class="rating" th:style="'--rating:' + ${menu.calificacionPromedioCalculado}"></div>
 
 
 
@@ -162,6 +161,21 @@
 
                     <div class="calificacion"
                          th:attr="data-rating=${menu.calificacionPromedioCalculado}">
+                    </div>
+
+                    <div class="calificacion">
+                        <!-- Estrellas llenas -->
+                        <span class="star full"></span>
+                        <span class="star full"></span>
+                        <span class="star full"></span>
+                        <span class="star full"></span>
+                        <span class="star full"></span>
+
+                        <!-- Estrellas medias -->
+                        <span class="star half"></span>
+
+                        <!-- Estrellas vacías -->
+                        <span class="star empty"></span>
                     </div>
 
 

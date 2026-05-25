@@ -123,7 +123,7 @@ public String guardarReserva(
         e.printStackTrace(); // Imprimir el error para depuración
     }
 
-    return "redirect:/reservas"; // Redirigir de nuevo al formulario
+    return "redirect:/reservas/formReservas"; // Redirigir de nuevo al formulario
 }
 
 
